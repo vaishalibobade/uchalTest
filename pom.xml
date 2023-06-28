@@ -15,7 +15,7 @@
 	<name>uchal</name>
 	<description>Uchal Project</description>
 	<properties>
-		<java.version>8</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -34,6 +34,7 @@
 			<scope>test</scope>
 		</dependency>
 
+
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<!--	<dependency>
 			<groupId>mysql</groupId>
@@ -43,7 +44,7 @@
 -->
 		<!--
 		https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
-		 <dependency>
+		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
 			<version>11.2.3.jre8</version>
