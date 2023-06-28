@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'uchalTest'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E4D06CBE4DC94F929FBB06C313BC4E95 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ABECF80FF36D41D683BFCC836CC49277 }}
           package: '*.jar'
