@@ -60,7 +60,7 @@ public class ImageUploader {
      ObjectMapper objectMapper = new ObjectMapper();
      try {
 		UserDetailsModel userDetailsModel = objectMapper.readValue(jsonString, UserDetailsModel.class);
-		userDetailsModel.setAdharImage(new FileSystemResource(new File("D:/image2.png")).getContentAsByteArray());
+//		userDetailsModel.setAdharImage(new FileSystemResource(new File("D:/image2.png")).getContentAsByteArray());
          jsonString = objectMapper.writeValueAsString(userDetailsModel);
          body.add("data", jsonString);
 

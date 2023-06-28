@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +23,6 @@ import com.uchal.model.UserStatusModel;
 import com.uchal.repository.LoginDetailsRepository;
 import com.uchal.repository.UserDetailsRepository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 
 @Service
 public class UserDetailsService {
