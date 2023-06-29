@@ -14,12 +14,13 @@ import com.uchal.repository.EmpVendorAssociationRepository;
 @Service
 public class EmpVendorAssociationService {
 	  private final EmpVendorAssociationRepository empVendorAssociationRepository;
+	  private final EmpVendorAssociationMapper empVendorAssociationMapper;
 		private static final Logger logger = LogManager.getLogger(LoginController.class);
 
 	    @Autowired
-	    public EmpVendorAssociationService(EmpVendorAssociationRepository empVendorAssociationRepository) {
+	    public EmpVendorAssociationService(EmpVendorAssociationRepository empVendorAssociationRepository,EmpVendorAssociationMapper empVendorAssociationMapper) {
 	        this.empVendorAssociationRepository = empVendorAssociationRepository;
-//	        this.empVendorAssociationMapper=empVendorAssociationMapper;
+	        this.empVendorAssociationMapper=empVendorAssociationMapper;
 	    }
 	    public EmpVendorAssociation saveEmpVendorAssociationDetails (EmpVendorAssociation empVendorAssociationDetails)
 	    {
@@ -30,11 +31,11 @@ public class EmpVendorAssociationService {
 	    
 	    public EmpVendorAssociationModel savePaymentDetails (EmpVendorAssociationModel empVendorAssociationModel)
 	    {
-	    	EmpVendorAssociationMapper empVendorAssociationMapper=new EmpVendorAssociationMapper();
+//	    	EmpVendorAssociationMapper empVendorAssociationMapper=new EmpVendorAssociationMapper();
 	    	EmpVendorAssociation empVendorAssociation = empVendorAssociationRepository.save(empVendorAssociationMapper.mapToEntity(empVendorAssociationModel));
 	    
 	    	
-	    	
+//	    	
 	    	if (empVendorAssociation ==null)
 	    	{
 	    		throw new ApiException("Error while saving Details", 404);

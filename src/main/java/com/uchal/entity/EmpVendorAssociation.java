@@ -13,44 +13,35 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
-
 @Entity
 @Table(name = "empvendor_association")
 public class EmpVendorAssociation {
-
+  
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-
   private int vendorId;
-
   private int employeeId;
-
   private int amount_paid;
   private int duration_days;
-
+  
   @ManyToOne
   @JoinColumn(name = "user_status", nullable = false)
   private MasterUserStatus userStatus;
-
   
   private int createdBy;
-
   private LocalDateTime createdOn;
-
-
   private int updatedBy;
-
   private LocalDateTime updatedOn;
-
   private Date start_date;
   private Date end_date;
-
-  @OneToOne
+  
+  @ManyToOne
   @JoinColumn(name = "payment_status")
   private MasterPaymentStatus paymentStatus;
-  
+
+
   // Default constructor, getters, and setters
 
 public int getId() {

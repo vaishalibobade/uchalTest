@@ -1,6 +1,7 @@
 package com.uchal.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +30,10 @@ public MasterUserStatusService(MasterUserStatusRepository  masterUserStatusRepos
 public List<MasterUserStatus> getAllMasterUserStatuses() {
     return masterUserStatusRepository.findAll();
 }
-
+public MasterUserStatus getMasterUserStatusById(int id) {
+    return masterUserStatusRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid user status ID"));
+}
 
 public MasterUserStatus createMasterUserStatus(MasterUserStatus masterUserStatus) {
     return masterUserStatusRepository.save(masterUserStatus);

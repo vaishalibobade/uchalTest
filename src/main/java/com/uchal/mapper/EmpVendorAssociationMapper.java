@@ -1,43 +1,59 @@
 package com.uchal.mapper;
 
-import com.uchal.entity.EmpVendorAssociation;
-import com.uchal.model.EmpVendorAssociationModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.uchal.entity.EmpVendorAssociation;
+import com.uchal.entity.MasterPaymentStatus;
+import com.uchal.entity.MasterUserStatus;
+import com.uchal.model.EmpVendorAssociationModel;
+import com.uchal.service.MasterPaymentStatusService;
+import com.uchal.service.MasterUserStatusService;
+
+@Component
 public class EmpVendorAssociationMapper {
-	
-	
-	
-	public EmpVendorAssociationModel mapToModel( EmpVendorAssociation empVendorAssociation)
-	
+	private final MasterPaymentStatusService masterPaymentStatusService;
+private final MasterUserStatusService masterUserStatusService;
+	@Autowired
+	public EmpVendorAssociationMapper(MasterPaymentStatusService masterPaymentStatusService,MasterUserStatusService masterUserStatusService) {
+		this.masterPaymentStatusService = masterPaymentStatusService;
+        this.masterUserStatusService=masterUserStatusService;
+	}
+
+	public EmpVendorAssociationModel mapToModel(EmpVendorAssociation empVendorAssociation)
+
 	{
-		EmpVendorAssociationModel empVendorAssociationModel=new EmpVendorAssociationModel();
-		
+		EmpVendorAssociationModel empVendorAssociationModel = new EmpVendorAssociationModel();
+
 		empVendorAssociationModel.setAmountPaid(empVendorAssociation.getAmount_paid());
 		empVendorAssociationModel.setDurationDays(empVendorAssociation.getDuration_days());
 		empVendorAssociationModel.setEndDate(empVendorAssociation.getEnd_date());
-//		empVendorAssociationModel.setPaymentstatus(empVendorAssociation.getPaymentStatus());
+		empVendorAssociationModel.setPaymentstatus(empVendorAssociation.getPaymentStatus().getId());
 		empVendorAssociationModel.setStartDate(empVendorAssociation.getStart_date());
 		empVendorAssociationModel.setUserId(empVendorAssociation.getEmployeeId());
-//		empVendorAssociationModel.setUserStatus(empVendorAssociation.getUserStatus());
-		
+		empVendorAssociationModel.setUserStatus(empVendorAssociation.getUserStatus().getId());
+
 		return empVendorAssociationModel;
-		
-		
-		
+
 	}
-	
-	public EmpVendorAssociation  mapToEntity(EmpVendorAssociationModel empVendorAssociationModel)
-	{
-		EmpVendorAssociation empVendorAssociation =new EmpVendorAssociation();
-		
+
+	public EmpVendorAssociation mapToEntity(EmpVendorAssociationModel empVendorAssociationModel) {
+		EmpVendorAssociation empVendorAssociation = new EmpVendorAssociation();
+
 		empVendorAssociation.setAmount_paid(empVendorAssociationModel.getAmountPaid());
 		empVendorAssociation.setDuration_days(empVendorAssociationModel.getDurationDays());
 		empVendorAssociation.setEnd_date(empVendorAssociationModel.getEndDate());
-//		empVendorAssociation.setPaymentstatus(empVendorAssociationModel.getPaymentStatus());
+		MasterPaymentStatus paymentstatus = masterPaymentStatusService
+				.getPaymentStatusById(empVendorAssociationModel.getPaymentstatus());
+//		paymentstatus.setId(empVendorAssociationModel.getPaymentstatus());
+		empVendorAssociation.setPaymentStatus(paymentstatus);
 		empVendorAssociation.setStart_date(empVendorAssociationModel.getStartDate());
 		empVendorAssociation.setEmployeeId(empVendorAssociationModel.getUserId());
-//		empVendorAssociation.setUserStatus(empVendorAssociationModel.getUserStatus());
-		
+		MasterUserStatus userStatus = masterUserStatusService.getMasterUserStatusById(empVendorAssociationModel.getUserStatus());
+//		userStatus.setId(empVendorAssociationModel.getUserStatus());
+		empVendorAssociation.setUserStatus(userStatus);
+		System.out.println(empVendorAssociation);
+
 		return empVendorAssociation;
 	}
 

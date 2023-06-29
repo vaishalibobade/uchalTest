@@ -30,20 +30,22 @@ public class PaymentController {
 	@Autowired
 	private static final Logger logger = LogManager.getLogger(LoginController.class);
 
-	public PaymentController(SessionManager sessionManager,LoginDetailsService loginDetailsService,EmpVendorAssociationService empVendorAssociationService) {
+	public PaymentController(SessionManager sessionManager, LoginDetailsService loginDetailsService,
+			EmpVendorAssociationService empVendorAssociationService) {
 		this.sessionManager = sessionManager;
-		this.loginDetailsService=loginDetailsService;
-		this.empVendorAssociationService=empVendorAssociationService;
+		this.loginDetailsService = loginDetailsService;
+		this.empVendorAssociationService = empVendorAssociationService;
 
 	}
 
 	@PostMapping("/payment")
-	 	public ResponseEntity<ApiResponse<EmpVendorAssociationModel>> makePayment(@RequestBody EmpVendorAssociationModel empVendorAssociationModel,
+	public ResponseEntity<ApiResponse<EmpVendorAssociationModel>> makePayment(
+			@RequestBody EmpVendorAssociationModel empVendorAssociationModel,
 			@RequestHeader("Authorization") String token) {
-		
+//System.out.println(empVendorAssociationModel.getAmountPaid());
 		HttpStatus httpStatus;
 		String message = null;
-		EmpVendorAssociationModel paymentDetails=null;
+		EmpVendorAssociationModel paymentDetails = null;
 		UserDetailsModel user = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
@@ -59,24 +61,21 @@ public class PaymentController {
 				logger.error("Logged In User is not Admin or Vendor  !!!!!!!!!!!!!!!!!! Throw Exception");
 				throw new ApiException("Only Vendor or Admin can make  payment .....!!", 404);
 			}
-			
-			
-			empVendorAssociationModel=	empVendorAssociationService.savePaymentDetails(empVendorAssociationModel);
-		if (empVendorAssociationModel==null)
-		{
-			httpStatus=HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		httpStatus=HttpStatus.OK;
-		
-	}
-		else {
-			httpStatus=HttpStatus.UNAUTHORIZED;
+
+			empVendorAssociationModel = empVendorAssociationService.savePaymentDetails(empVendorAssociationModel);
+			if (empVendorAssociationModel == null) {
+				httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+			httpStatus = HttpStatus.OK;
+			message="Payment Done Successfull !!!!!";
+
+		} else {
+			httpStatus = HttpStatus.UNAUTHORIZED;
 			// Invalid session token or unauthorized access
 			throw new ApiException("Invalid session token or unauthorized access", 404);
 		}
-		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, paymentDetails, token));
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, empVendorAssociationModel, token));
 
-	
-}
+	}
 
 }

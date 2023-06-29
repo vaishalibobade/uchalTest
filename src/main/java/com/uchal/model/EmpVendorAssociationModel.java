@@ -7,7 +7,7 @@ public class EmpVendorAssociationModel {
 	private int userId;
 	private int amountPaid;
 	private int durationDays;
-	private String userStatus;
+	private int userStatus;
 	private int paymentstatus;
 	private Date startDate;
 	private Date endDate;
@@ -29,10 +29,10 @@ public class EmpVendorAssociationModel {
 	public void setDurationDays(int durationDays) {
 		this.durationDays = durationDays;
 	}
-	public String getUserStatus() {
+	public int getUserStatus() {
 		return userStatus;
 	}
-	public void setUserStatus(String userStatus) {
+	public void setUserStatus(int userStatus) {
 		this.userStatus = userStatus;
 	}
 	public int getPaymentstatus() {
