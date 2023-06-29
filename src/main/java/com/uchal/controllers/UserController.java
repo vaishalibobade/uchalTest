@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uchal.entity.MasterUserStatus;
 import com.uchal.entity.UserDetails;
 import com.uchal.mapper.UserDetailsMapper;
 import com.uchal.model.ApiException;
@@ -26,6 +27,7 @@ import com.uchal.model.UserDetailsModel;
 import com.uchal.model.UserStatusModel;
 import com.uchal.repository.SessionManager;
 import com.uchal.service.LoginDetailsService;
+import com.uchal.service.MasterUserStatusService;
 import com.uchal.service.UserDetailsService;
 
 @RestController
@@ -35,18 +37,33 @@ public class UserController {
 	private final UserDetailsService userDetailsService;
 	private final LoginDetailsService loginDetailsService;
 	private SessionManager sessionManager;
+	private final MasterUserStatusService masterUserStatusService;
 
 	@Autowired
 	private static final Logger logger = LogManager.getLogger(LoginController.class);
 
 	public UserController(UserDetailsService userDetailsService, LoginDetailsService loginDetailsService,
-			SessionManager sessionManager) {
+			SessionManager sessionManager, MasterUserStatusService masterUserStatusService) {
 		this.userDetailsService = userDetailsService;
 		this.sessionManager = sessionManager;
 		this.loginDetailsService = loginDetailsService;
+		this.masterUserStatusService = masterUserStatusService;
 
 	}
 
+	@GetMapping("/UserStatusList")
+	public ResponseEntity<ApiResponse<List<MasterUserStatus>>> getAllUserStatus() {
+		System.out.println("User status List !!!!!!!!!!!!!!");
+		HttpStatus httpStatus = HttpStatus.OK;
+		String message = "User Status List Found";
+
+		List<MasterUserStatus> userStatus = masterUserStatusService.getAllMasterUserStatuses();
+		if (userStatus.isEmpty()) {
+			httpStatus = HttpStatus.NOT_FOUND;
+			message = "NO List for User Status Found";
+		}
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userStatus, null));
+	}
 
 	@PostMapping("/register")
 	public ResponseEntity<ApiResponse<UserDetailsModel>> registerUser(@RequestBody UserDetailsModel userDetailsModel,
@@ -54,20 +71,20 @@ public class UserController {
 		UserDetailsMapper mapper = new UserDetailsMapper();
 		HttpStatus httpStatus;
 		String message = null;
-	if (token!=null) {	
-		String sessionToken = token.substring(7); // Remove "Bearer " prefix
-		SessionToken session = sessionManager.getSessionToken(sessionToken);
-		if (session != null) {
-			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
-			System.out.println(session.getUserId());
-			System.out.println(loggedUser.getUserType());
-			if (loggedUser.getUserType().equals("E"))
+		if (token != null) {
+			String sessionToken = token.substring(7); // Remove "Bearer " prefix
+			SessionToken session = sessionManager.getSessionToken(sessionToken);
+			if (session != null) {
+				UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+				System.out.println(session.getUserId());
+				System.out.println(loggedUser.getUserType());
+				if (loggedUser.getUserType().equals("E"))
 
-				throw new ApiException("Only Vendor/ Admin can Register !!", 404);
-			userDetailsModel.setCreatedBy(loggedUser.getUserId());
+					throw new ApiException("Only Vendor/ Admin can Register !!", 404);
+				userDetailsModel.setCreatedBy(loggedUser.getUserId());
 
+			}
 		}
-	}
 
 		message = userDetailsService.validateUserDetails(userDetailsModel);
 		if (message == null) {
@@ -87,10 +104,6 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userDetailsModel, token));
 
 	}
-	
-	
-	
-	
 
 	@PutMapping("/update")
 	public ResponseEntity<ApiResponse<UserDetailsModel>> updateUser(@RequestBody UserDetailsModel userDetailsModel,
@@ -169,10 +182,8 @@ public class UserController {
 
 	}
 
-
 	@GetMapping("/veiwAll")
 	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllUser(@RequestHeader("Authorization") String token) {
-		UserDetailsMapper mapper = new UserDetailsMapper();
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<UserDetails> userList = null;
@@ -198,6 +209,7 @@ public class UserController {
 //				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;
 				message = "User found";
+				System.out.println(userList.size());
 			}
 
 		} else {
@@ -208,11 +220,6 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
 	}
-	
-	
-	
-	
-	
 
 	@PutMapping("/updateStatus")
 	public ResponseEntity<ApiResponse<UserDetailsModel>> updateStatus(@RequestBody UserStatusModel userStatusModel,
@@ -223,7 +230,6 @@ public class UserController {
 		UserDetailsModel user = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
-
 		if (session != null) {
 			// User is authenticated, process the protected resource request
 //        @SuppressWarnings("removal")
@@ -257,7 +263,6 @@ public class UserController {
 	@PutMapping("/unlockUser/{id}")
 	public ResponseEntity<ApiResponse<UserDetailsModel>> unlockUser(@PathVariable("id") int id,
 			@RequestHeader("Authorization") String token) {
-		UserDetailsMapper mapper = new UserDetailsMapper();
 		HttpStatus httpStatus;
 		String message = null;
 		UserDetailsModel user = null;
@@ -271,18 +276,15 @@ public class UserController {
 			if (loggedUser.getUserType().equals("E")) {
 				logger.error("Logged In User is not Admin or Vendor !!!!!!!!!!!!!!!!!! Throw Exception");
 				throw new ApiException("Only Admin/Vendor can unlock user .....!!", 404);
-			}			
-				
-			user=userDetailsService.unlockUser(loggedUser.getUserId(),id);
-			if (user!=null)
-			{
+			}
+
+			user = userDetailsService.unlockUser(loggedUser.getUserId(), id);
+			if (user != null) {
 				httpStatus = HttpStatus.OK;
 				message = "User Unlocked Successfully !!";
-			}
-			else 
-			{ 
+			} else {
 				httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-				message = "User is not locked  !!"; 
+				message = "User is not locked  !!";
 			}
 
 		} else {
@@ -292,10 +294,5 @@ public class UserController {
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, user, token));
 	}
-	
-	
-	
-	
-	
 
 }

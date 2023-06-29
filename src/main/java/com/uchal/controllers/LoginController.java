@@ -108,6 +108,7 @@ public class LoginController {
 			loginDetailsresponse = user;
 
 		}
+		loginDetailsresponse.setPassword(null);
 		return ResponseEntity.status(httpStatus)
 				.body(new ApiResponse<>(httpStatus, message, loginDetailsresponse, token));
 
