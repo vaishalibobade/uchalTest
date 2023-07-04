@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 @RestController
 @Component
+@CrossOrigin(origins = "*")
 public class LoginController {
 	private SessionManager sessionManager;
 	private static final Logger logger = LogManager.getLogger(LoginController.class);
