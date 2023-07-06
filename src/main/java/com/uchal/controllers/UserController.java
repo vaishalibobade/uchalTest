@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uchal.entity.MasterUserStatus;
@@ -33,7 +34,8 @@ import com.uchal.service.UserDetailsService;
 
 @RestController
 @Component
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+
 @RequestMapping("/user")
 public class UserController {
 	private final UserDetailsService userDetailsService;

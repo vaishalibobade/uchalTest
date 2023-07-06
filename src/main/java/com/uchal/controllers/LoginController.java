@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uchal.entity.LoginDetails;
@@ -24,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 
 @RestController
 @Component
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class LoginController {
 	private SessionManager sessionManager;
 	private static final Logger logger = LogManager.getLogger(LoginController.class);
