@@ -3,7 +3,8 @@ package com.uchal.model;
 import java.sql.Date;
 
 public class EmpVendorAssociationModel {
-
+ 
+	private int id;
 	private int userId;
 	private int amountPaid;
 	private int durationDays;
@@ -11,7 +12,8 @@ public class EmpVendorAssociationModel {
 	private int paymentstatus;
 	private Date startDate;
 	private Date endDate;
-	public int getUserId() {
+	private int vendorId;
+	public int getUserId() { 
 		return userId;
 	}
 	public void setUserId(int userId) {
@@ -52,6 +54,18 @@ public class EmpVendorAssociationModel {
 	}
 	public void setEndDate(Date date) {
 		this.endDate = date;
+	}
+	public int getVendorId() {
+		return vendorId;
+	}
+	public void setVendorId(int vendorId) {
+		this.vendorId = vendorId;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

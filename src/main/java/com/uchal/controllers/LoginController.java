@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uchal.entity.LoginDetails;
+import com.uchal.model.ApiException;
 import com.uchal.model.ApiResponse;
 import com.uchal.model.LoginRequest;
 import com.uchal.model.LoginResponse;
@@ -92,25 +93,22 @@ public class LoginController {
 					LoginDetails loginDetails = loginDetailsService.updateLoginAttempts(request.getUsername());
 					// Authentication failed
 					loginResponse.setAuthenticated(false);
-					httpStatus = HttpStatus.UNAUTHORIZED;
-					message = "Invalid Username/Password !!";
-					loginDetailsresponse = loginDetails;
+					throw new ApiException("Invalid Username/Password !!", 404);
 				}
 			}
 			if (!loginDetailsService.validateUserToLogin(user)) {
 				loginResponse.setAuthenticated(false);
-				httpStatus = HttpStatus.UNAUTHORIZED;
-				message = "Account is Locked !!";
-				loginDetailsresponse = user;
+				throw new ApiException("Account is Locked !!", 404);
+
 
 			}
 		} catch (Exception e) {
 			loginResponse.setAuthenticated(false);
 			httpStatus = HttpStatus.UNAUTHORIZED;
-			message = "Invalid Username/Password !!";
-			loginDetailsresponse = user;
+			throw new ApiException("Invalid Username/Password !!", 404);
 
 		}
+		if (loginDetailsresponse!=null)
 		loginDetailsresponse.setPassword(null);
 		return ResponseEntity.status(httpStatus)
 				.body(new ApiResponse<>(httpStatus, message, loginDetailsresponse, token));

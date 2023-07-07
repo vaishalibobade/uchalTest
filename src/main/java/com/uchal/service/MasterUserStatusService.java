@@ -49,6 +49,4 @@ public void deleteMasterUserStatus(int id) {
 
 
 
-
-
 }

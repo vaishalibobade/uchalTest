@@ -1,5 +1,6 @@
 package com.uchal.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,14 +16,13 @@ public class MasterUserType {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
-  
-  private String user_type;
+  @Column(name = "user_type")
+  private String userType;
   
   private String abreviation;
   
-  @ManyToOne
-  @JoinColumn(name = "user_belongTo")
-  private MasterUserStatus user_belongTo;
+  @Column(name = "user_belongTo")
+  private String userBelongTo;
 
   // Default constructor, getters, and setters
 
@@ -38,11 +38,11 @@ public class MasterUserType {
   }
 
   public String getUserType() {
-    return user_type;
+    return userType;
   }
 
   public void setUserType(String user_type) {
-    this.user_type = user_type;
+    this.userType = user_type;
   }
 
   public String getAbreviation() {
@@ -53,11 +53,11 @@ public class MasterUserType {
     this.abreviation = abreviation;
   }
 
-  public MasterUserStatus getUserBelongTo() {
-    return user_belongTo;
+  public String getUserBelongTo() {
+    return userBelongTo;
   }
 
-  public void setUserBelongTo(MasterUserStatus user_belongTo) {
-    this.user_belongTo = user_belongTo;
+  public void setUserBelongTo(String user_belongTo) {
+    this.userBelongTo = user_belongTo;
   }
 }

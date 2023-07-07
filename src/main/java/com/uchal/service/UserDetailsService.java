@@ -1,7 +1,6 @@
 package com.uchal.service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,251 +22,220 @@ import com.uchal.model.UserStatusModel;
 import com.uchal.repository.LoginDetailsRepository;
 import com.uchal.repository.UserDetailsRepository;
 
-
 @Service
 public class UserDetailsService {
-    private final UserDetailsRepository userDetailsRepository;
+	private final UserDetailsRepository userDetailsRepository;
 	private final LoginDetailsRepository loginDetailsRepository;
 	private final LoginDetailsService loginDetailsService;
+	private final MasterUserTypeService masterUserTypeService;
 	private static final Logger logger = LogManager.getLogger(LoginController.class);
 
+	@Autowired
+	private EntityManager entityManager;
 
-
-    @Autowired
-    private EntityManager entityManager;
-
-    public UserDetailsService(UserDetailsRepository userDetailsRepository,LoginDetailsRepository loginDetailsRepository,LoginDetailsService loginDetailsService) {
-        this.userDetailsRepository = userDetailsRepository;
-		this.loginDetailsRepository = loginDetailsRepository ;
+	public UserDetailsService(MasterUserTypeService masterUserTypeService, UserDetailsRepository userDetailsRepository,
+			LoginDetailsRepository loginDetailsRepository, LoginDetailsService loginDetailsService) {
+		this.userDetailsRepository = userDetailsRepository;
+		this.loginDetailsRepository = loginDetailsRepository;
 		this.loginDetailsService = loginDetailsService;
-        
-    }
+		this.masterUserTypeService = masterUserTypeService;
 
-    public UserDetails saveUserDetails(UserDetails userDetails) {    	
-        return userDetailsRepository.save(userDetails);
-    }
+	}
 
-    public UserDetails getUserDetailsById(int userId) {
-        return userDetailsRepository.findById(userId).orElse(null);
-    }
+	public UserDetails saveUserDetails(UserDetails userDetails) {
+		return userDetailsRepository.save(userDetails);
+	}
 
-    public List<UserDetails> getAllUserDetails() {
-        return userDetailsRepository.findAll();
-    }
+	public UserDetails getUserDetailsById(int userId) {
+		return userDetailsRepository.findById(userId).orElse(null);
+	}
 
-    public void deleteUserDetails(int userId) {
-        userDetailsRepository.deleteById(userId);
-    }
+	public List<UserDetails> getAllUserDetails() {
+		return userDetailsRepository.findAll();
+	}
 
-    // Other methods as needed
-    
-    public UserDetails getUserDetailsByUsername(String username) {
-    	return userDetailsRepository.findByFirstName(username);
-    	
-    }
-    
-    public boolean checkIfAdharExist(long adharNumber)
-    {
-    	if(userDetailsRepository.findAllByAdharNumber(adharNumber).isEmpty())
-    	{
-    		return false;
-    	}
-    	return true;
-    }
-    
-    
-    public boolean checkIfMobileExist(long mobileNumber)
-    {
-    	if(userDetailsRepository.findAllByMobileNumber(mobileNumber).isEmpty())
-    	{
-    		return false;
-    	}
-    	return true;
-    }
-    
-    
-    
-    
-    
-    public String validateUserDetails(UserDetailsModel userDetailsModel)
-    {
-    	String message=null;
-    	
-    	if (loginDetailsService.checkUsernameExist(userDetailsModel.getUsername()))
-		{
-     		message = "Username is Already Exists";
+	public void deleteUserDetails(int userId) {
+		userDetailsRepository.deleteById(userId);
+	}
+
+	// Other methods as needed
+
+	public UserDetails getUserDetailsByUsername(String username) {
+		return userDetailsRepository.findByFirstName(username);
+
+	}
+	
+	
+	public List<Object[]> getAllEmployeeDetailsWithAssociation(int vendorId)
+	{
+		return userDetailsRepository.getEmployeeDetailsByVendorId(vendorId);
+	}
+
+	public List<UserDetails> getAllUserDetailsByType(String userType) {
+		return userDetailsRepository.findByUserType(userType);
+	}
+
+//    public List<UserDetails> getAllLockedUsers() {
+//        return userDetailsRepository.findByUserType();
+//    }
+
+	public boolean checkIfAdharExist(long adharNumber) {
+		if (userDetailsRepository.findAllByAdharNumber(adharNumber).isEmpty()) {
+			return false;
 		}
-    	
-     	if (checkIfAdharExist(userDetailsModel.getAdharNumber()))
-		{
-     		message = "Adhar Number is Already Exists";
+		return true;
+	}
+
+	public boolean checkIfMobileExist(long mobileNumber) {
+		if (userDetailsRepository.findAllByMobileNumber(mobileNumber).isEmpty()) {
+			return false;
 		}
-         if (checkIfMobileExist(userDetailsModel.getMobileNumber()))
-         {
-        	 message="Mobile Number is Already Exist";
-         }
+		return true;
+	}
+
+	public String validateUserDetails(UserDetailsModel userDetailsModel) {
+		String message = null;
+
+		if (loginDetailsService.checkUsernameExist(userDetailsModel.getUsername())) {
+			message = "Username is Already Exists";
+		}
+
+		if (checkIfAdharExist(userDetailsModel.getAdharNumber())) {
+			message = "Adhar Number is Already Exists";
+		}
+		if (checkIfMobileExist(userDetailsModel.getMobileNumber())) {
+			message = "Mobile Number is Already Exist";
+		}
 //         System.out.println(message);
-         return message;
-    }
-    
-    
-    public UserDetails updateUser( UserDetails updatedUser)
-    {
-    	Optional<UserDetails> user = userDetailsRepository.findById(updatedUser.getUserId());
-        UserDetails existingUser=user.get();
-        // Update the properties of the existingUser entity with the new values from updatedUser
-        existingUser.setFirstName(updatedUser.getFirstName());
-        existingUser.setAdharImage(updatedUser.getAdharImage());
-        existingUser.setUserType(updatedUser.getUserType());
-        existingUser.setAdharNumber(updatedUser.getAdharNumber());   
-        existingUser.setBloodgroup(updatedUser.getBloodgroup());
-        existingUser.setCity(updatedUser.getCity());
-        existingUser.setCountry(updatedUser.getCountry());
-        existingUser.setLastName(updatedUser.getLastName());
-        existingUser.setMiddleName(updatedUser.getMiddleName());
-        existingUser.setMobileNumber(updatedUser.getMobileNumber());
-        existingUser.setState(updatedUser.getState());
-        existingUser.setStreetDetail(updatedUser.getStreetDetail());
-        existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
-        existingUser.setUpdatedOn(updatedUser.getUpdatedOn());
-        
-        // Save the updated entity
-        return userDetailsRepository.save(existingUser);
-    }
-    
-    
-    public String validateUpdateUserDetails(UserDetails userDetails)
-    {
-    	System.out.println("In validate fun start");
-        	String message=null;
-        	if(userDetailsRepository.findById(userDetails.getUserId()).isEmpty())
-        	{
+		return message;
+	}
 
-            	System.out.println("In validate fun start 1");
-        		message="User not found with ID: "+userDetails.getUserId();
-        	}
-         	if (!userDetailsRepository.findByAdharIdNotEqual(userDetails.getUserId(),userDetails.getAdharNumber()).isEmpty() && message==null)
-    		{
-         		message = "Adhar Number is Already Exists";
-    		}
-         	if (!userDetailsRepository.findByMobileIdNotEqual(userDetails.getUserId(),userDetails.getMobileNumber()).isEmpty() && message==null)
-             {
-            	 message="Mobile Number is Already Exist";
-             }
-    	System.out.println("In validate fun");
-    	return message;
-    	
-    	
-    	
-    }
-    
-    @Transactional
-	public UserDetails registerUser(UserDetailsModel model)
-    {   	UserDetails userDetails= new UserDetails();
-	 		LoginDetails loginDetails= new LoginDetails();
+	public UserDetails updateUser(UserDetails updatedUser) {
+		Optional<UserDetails> user = userDetailsRepository.findById(updatedUser.getUserId());
+		UserDetails existingUser = user.get();
+		// Update the properties of the existingUser entity with the new values from
+		// updatedUser
+		existingUser.setFirstName(updatedUser.getFirstName());
+		existingUser.setAdharImage(updatedUser.getAdharImage());
+		existingUser.setUserType(updatedUser.getUserType());
+		existingUser.setAdharNumber(updatedUser.getAdharNumber());
+		existingUser.setBloodgroup(updatedUser.getBloodgroup());
+		existingUser.setCity(updatedUser.getCity());
+		existingUser.setCountry(updatedUser.getCountry());
+		existingUser.setLastName(updatedUser.getLastName());
+		existingUser.setMiddleName(updatedUser.getMiddleName());
+		existingUser.setMobileNumber(updatedUser.getMobileNumber());
+		existingUser.setState(updatedUser.getState());
+		existingUser.setStreetDetail(updatedUser.getStreetDetail());
+		existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
+		existingUser.setUpdatedOn(updatedUser.getUpdatedOn());
+
+		// Save the updated entity
+		return userDetailsRepository.save(existingUser);
+	}
+
+	public String validateUpdateUserDetails(UserDetails userDetails, UserDetails loggeduser) {
+		String message = null;
+		if (loggeduser.getUserId() != userDetails.getUserId() && masterUserTypeService
+				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()) == false) {
+
+			return "you are not Authorised to update details !!!!!!";
+		}
+		if (userDetailsRepository.findById(userDetails.getUserId()).isEmpty()) {
+
+			System.out.println("In validate fun start 1");
+			message = "User not found with ID: " + userDetails.getUserId();
+		}
+		if (!userDetailsRepository.findByAdharIdNotEqual(userDetails.getUserId(), userDetails.getAdharNumber())
+				.isEmpty() && message == null) {
+			message = "Adhar Number is Already Exists";
+		}
+		if (!userDetailsRepository.findByMobileIdNotEqual(userDetails.getUserId(), userDetails.getMobileNumber())
+				.isEmpty() && message == null) {
+			message = "Mobile Number is Already Exist";
+		}
+		System.out.println("In validate fun");
+		return message;
+
+	}
+
+	@Transactional
+	public UserDetails registerUser(UserDetailsModel model) {
+		UserDetails userDetails = new UserDetails();
+		LoginDetails loginDetails = new LoginDetails();
 
 		UserDetailsMapper usermapper = new UserDetailsMapper();
-try {
-	userDetails=usermapper.mapToEntity(model);
-	userDetails.setCreatedOn(LocalDateTime.now());
+		try {
+			userDetails = usermapper.mapToEntity(model);
+			userDetails.setCreatedOn(LocalDateTime.now());
 
-	
-	
-	
-	
-    	loginDetails.setUsername(model.getUsername());
-    	loginDetails.setPassword(model.getPassword());
-    	loginDetails.setUserStatus("A");
-    	loginDetails.setLoginAttempts(0);
+			loginDetails.setUsername(model.getUsername());
+			loginDetails.setPassword(model.getPassword());
+			loginDetails.setUserStatus("A");
+			loginDetails.setLoginAttempts(0);
 //    	user.setLoginDetails(loginDetails);
 //    	UserDetails mergedUserDetails = entityManager.merge(user);
-    	loginDetails.setUserDetails(userDetails);
+			loginDetails.setUserDetails(userDetails);
 
 //    	user.setLoginDetails(loginDetails);
 
-    	
-    	
-   
+			// Establish the one-to-one relationship
+			userDetails.setLoginDetails(loginDetails);
+			loginDetails.setUserDetails(userDetails);
 
-    	// Establish the one-to-one relationship
-    	userDetails.setLoginDetails(loginDetails);
-    	loginDetails.setUserDetails(userDetails);
-
-    	// Save the records
-    	logger.error("tring to save UserDetails");
+			// Save the records
+			logger.error("tring to save UserDetails");
 //    	String enableIdentityInsertSql = "SET IDENTITY_INSERT user_details ON";
 //    	entityManager.createNativeQuery(enableIdentityInsertSql).executeUpdate();
 
-
-    	userDetailsRepository.save(userDetails);
-    	
-    	
-    
-
+			userDetailsRepository.save(userDetails);
 
 //    	user=userDetailsRepository.save(user);
 //    	loginDetailsRepository.save(loginDetails);
-    	logger.error("saved UserDetails");
+			logger.error("saved UserDetails");
 
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 
-}
-catch (Exception e) {
-System.out.println(e);
-}
-    	
 //String disableIdentityInsertSql = "SET IDENTITY_INSERT user_details OFF";
 //entityManager.createNativeQuery(disableIdentityInsertSql).executeUpdate();
-    	return userDetails;
-    }
-    
-    
-    public UserDetails updateCurrentStatus (UserStatusModel status)
-    {
-    	
-    	UserDetails user = getUserDetailsById (status.getUserId());
-    	 if (user != null)
-    	 {
-    		 user.setCurrentStatusId(status.getCurrentStatusId());
-    		 user.setUpdatedBy(status.getUpdatedBy());
-    		 user.setUpdatedOn(LocalDateTime.now());
-    		 logger.info(user);
-    		 logger.error("Saving user details...........");
-    		userDetailsRepository.save(user);
-    	 }
-    	 else
-    	 {
-    		 logger.error("User is not found");
-    		 logger.error("Throwing Runtime Exception ...........!!!!!!!!!");
-    		 throw new ApiException("User is not found",404);
+		return userDetails;
+	}
 
-    	 }
-    	
-    	
-    	
-    	
-    	return user;
-    	
-    }
-    
-    
-    public UserDetailsModel unlockUser (int loggedUID, int unlockId)
-    {
+	public UserDetails updateCurrentStatus(UserStatusModel status) {
+
+		UserDetails user = getUserDetailsById(status.getUserId());
+		if (user != null) {
+			user.setCurrentStatusId(status.getCurrentStatusId());
+			user.setUpdatedBy(status.getUpdatedBy());
+			user.setUpdatedOn(LocalDateTime.now());
+			logger.info(user);
+			logger.error("Saving user details...........");
+			userDetailsRepository.save(user);
+		} else {
+			logger.error("User is not found");
+			logger.error("Throwing Runtime Exception ...........!!!!!!!!!");
+			throw new ApiException("User is not found", 404);
+
+		}
+
+		return user;
+
+	}
+
+	public UserDetailsModel unlockUser(int loggedUID, int unlockId) {
 		UserDetailsMapper mapper = new UserDetailsMapper();
-		LoginDetails details=null;
-		UserDetailsModel userModel=null;
-    	UserDetails user=getUserDetailsById(unlockId);  
-    	if (loginDetailsService.getUserStatus(unlockId).equals("L"))
-    	{
-    	details =  loginDetailsService.setUserStatus(loggedUID,unlockId,"A");
-    	 userModel=mapper.mapToModel(user);
-    	}
-    	
-    	
-		return userModel;
-    	
-    }
-    
-    
-    
-}
+		LoginDetails details = null;
+		UserDetailsModel userModel = null;
+		UserDetails user = getUserDetailsById(unlockId);
+		if (loginDetailsService.getUserStatus(unlockId).equals("L")) {
+			details = loginDetailsService.setUserStatus(loggedUID, unlockId, "A");
+			userModel = mapper.mapToModel(user);
+		}
 
+		return userModel;
+
+	}
+
+}

@@ -21,14 +21,14 @@ public class ImageUploader {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        String url = "http://localhost:8090/user/register"; // Replace with your actual API endpoint URL
+        String url = "http://localhost:8090/user/update"; // Replace with your actual API endpoint URL
 
         // Create the RestTemplate
         RestTemplate restTemplate = new RestTemplate();
 
         // Prepare headers
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth("288bd47f-1a9d-4b51-b039-1723b7a356b5");
+        headers.setBearerAuth("d5c81a64-c837-4327-9675-736ea437bf1f");
 //        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -37,22 +37,22 @@ public class ImageUploader {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
       
      String jsonString = "{\n" +
-             "     \"userId\":\"\",\n" +
+             "     \"userId\":\"8\",\n" +
              "     \"firstName\":\"Parth\",\n" +
              "     \"lastName\": \"Surve\",\n" +
              "     \"middleName\":\"mahadeva\",\n" +
              "     \"city\":\"Punee\",\n" +
              "     \"state\": \"Maharashtraa\",\n" +
              "     \"country\": \"IN\",\n" +
-             "     \"mobileNumber\": \"5999784807\",\n" +
-             "     \"adharNumber\": \"445034970288\",\n" +
+             "     \"mobileNumber\": \"5999954807\",\n" +
+             "     \"adharNumber\": \"445009970288\",\n" +
              "     \"bloodgroup\": \"A\",\n" +
-             "     \"userType\": \"V\",\n" +
+             "     \"userType\": \"S\",\n" +
              "     \"createdBy\": \"2\",\n" +
              "     \"createdOn\": null,\n" +
              "     \"updatedBy\": \"1\",\n" +
              "     \"updatedOn\": null,\n" +
-             "     \"username\": \"Parth\",\n" +
+             "     \"username\": \"subvendor\",\n" +
              "     \"password\": \"Password\",\n" +
              "     \"currentStatusId\": \"2\",\n" +
              "     \"streetDetail\":\"near Spine Road ,Tata motors\"\n" +
@@ -67,19 +67,19 @@ public class ImageUploader {
          // Create the request entity
          HttpEntity<UserDetailsModel> requestEntity = new HttpEntity<>(userDetailsModel, headers);
          // Send the POST request
-         ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
-         String responseBody = response.getBody();
-         System.out.println(responseBody);
-         // Handle the response
-         if (response.getStatusCode().is2xxSuccessful()) {
-             System.out.println("Image uploaded successfully!");
-         } else {
-             System.out.println("Failed to upload image.");
-             System.out.println("Response: " + response.getBody());
-         }
+//         ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
+//         String responseBody = response.getBody();
+//         System.out.println(responseBody);
+//         // Handle the response
+//         if (response.getStatusCode().is2xxSuccessful()) {
+//             System.out.println("Image uploaded successfully!");
+//         } else {
+//             System.out.println("Failed to upload image.");
+//             System.out.println("Response: " + response.getBody());
+//         }
          
          
-//         restTemplate.put(url, requestEntity, String.class);
+         restTemplate.put(url, requestEntity, String.class);
 
 	} catch (JsonMappingException e) {
 		// TODO Auto-generated catch block

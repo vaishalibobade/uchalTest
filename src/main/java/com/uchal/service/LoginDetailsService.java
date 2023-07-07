@@ -24,6 +24,7 @@ public class LoginDetailsService {
         this.loginDetailsRepository = loginDetailsRepository;
     }
 
+    
     public LoginDetails saveLoginDetails(LoginDetails loginDetails) {
         return loginDetailsRepository.save(loginDetails);
     }

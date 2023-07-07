@@ -13,18 +13,20 @@ import com.uchal.service.MasterUserStatusService;
 @Component
 public class EmpVendorAssociationMapper {
 	private final MasterPaymentStatusService masterPaymentStatusService;
-private final MasterUserStatusService masterUserStatusService;
+	private final MasterUserStatusService masterUserStatusService;
+
 	@Autowired
-	public EmpVendorAssociationMapper(MasterPaymentStatusService masterPaymentStatusService,MasterUserStatusService masterUserStatusService) {
+	public EmpVendorAssociationMapper(MasterPaymentStatusService masterPaymentStatusService,
+			MasterUserStatusService masterUserStatusService) {
 		this.masterPaymentStatusService = masterPaymentStatusService;
-        this.masterUserStatusService=masterUserStatusService;
+		this.masterUserStatusService = masterUserStatusService;
 	}
 
 	public EmpVendorAssociationModel mapToModel(EmpVendorAssociation empVendorAssociation)
 
 	{
 		EmpVendorAssociationModel empVendorAssociationModel = new EmpVendorAssociationModel();
-
+		empVendorAssociationModel.setId(empVendorAssociation.getId());
 		empVendorAssociationModel.setAmountPaid(empVendorAssociation.getAmount_paid());
 		empVendorAssociationModel.setDurationDays(empVendorAssociation.getDuration_days());
 		empVendorAssociationModel.setEndDate(empVendorAssociation.getEnd_date());
@@ -32,6 +34,7 @@ private final MasterUserStatusService masterUserStatusService;
 		empVendorAssociationModel.setStartDate(empVendorAssociation.getStart_date());
 		empVendorAssociationModel.setUserId(empVendorAssociation.getEmployeeId());
 		empVendorAssociationModel.setUserStatus(empVendorAssociation.getUserStatus().getId());
+		empVendorAssociationModel.setVendorId(empVendorAssociation.getVendorId());
 
 		return empVendorAssociationModel;
 
@@ -39,7 +42,7 @@ private final MasterUserStatusService masterUserStatusService;
 
 	public EmpVendorAssociation mapToEntity(EmpVendorAssociationModel empVendorAssociationModel) {
 		EmpVendorAssociation empVendorAssociation = new EmpVendorAssociation();
-
+		empVendorAssociation.setId(empVendorAssociationModel.getId());
 		empVendorAssociation.setAmount_paid(empVendorAssociationModel.getAmountPaid());
 		empVendorAssociation.setDuration_days(empVendorAssociationModel.getDurationDays());
 		empVendorAssociation.setEnd_date(empVendorAssociationModel.getEndDate());
@@ -49,9 +52,11 @@ private final MasterUserStatusService masterUserStatusService;
 		empVendorAssociation.setPaymentStatus(paymentstatus);
 		empVendorAssociation.setStart_date(empVendorAssociationModel.getStartDate());
 		empVendorAssociation.setEmployeeId(empVendorAssociationModel.getUserId());
-		MasterUserStatus userStatus = masterUserStatusService.getMasterUserStatusById(empVendorAssociationModel.getUserStatus());
+		MasterUserStatus userStatus = masterUserStatusService
+				.getMasterUserStatusById(empVendorAssociationModel.getUserStatus());
 //		userStatus.setId(empVendorAssociationModel.getUserStatus());
 		empVendorAssociation.setUserStatus(userStatus);
+		empVendorAssociation.setVendorId(empVendorAssociationModel.getVendorId());
 		System.out.println(empVendorAssociation);
 
 		return empVendorAssociation;

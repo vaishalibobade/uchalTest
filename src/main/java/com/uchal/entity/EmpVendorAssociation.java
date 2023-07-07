@@ -20,7 +20,7 @@ public class EmpVendorAssociation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-
+   
   private int vendorId;
   private int employeeId;
   private int amount_paid;

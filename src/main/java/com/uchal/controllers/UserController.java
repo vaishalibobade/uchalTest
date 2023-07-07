@@ -41,33 +41,20 @@ public class UserController {
 	private final UserDetailsService userDetailsService;
 	private final LoginDetailsService loginDetailsService;
 	private SessionManager sessionManager;
-	private final MasterUserStatusService masterUserStatusService;
 
 	@Autowired
 	private static final Logger logger = LogManager.getLogger(LoginController.class);
 
 	public UserController(UserDetailsService userDetailsService, LoginDetailsService loginDetailsService,
-			SessionManager sessionManager, MasterUserStatusService masterUserStatusService) {
+			SessionManager sessionManager) {
 		this.userDetailsService = userDetailsService;
 		this.sessionManager = sessionManager;
 		this.loginDetailsService = loginDetailsService;
-		this.masterUserStatusService = masterUserStatusService;
+	
 
 	}
 
-	@GetMapping("/UserStatusList")
-	public ResponseEntity<ApiResponse<List<MasterUserStatus>>> getAllUserStatus() {
-		System.out.println("User status List !!!!!!!!!!!!!!");
-		HttpStatus httpStatus = HttpStatus.OK;
-		String message = "User Status List Found";
-
-		List<MasterUserStatus> userStatus = masterUserStatusService.getAllMasterUserStatuses();
-		if (userStatus.isEmpty()) {
-			httpStatus = HttpStatus.NOT_FOUND;
-			message = "NO List for User Status Found";
-		}
-		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userStatus, null));
-	}
+	
 
 	@PostMapping("/register")
 	public ResponseEntity<ApiResponse<UserDetailsModel>> registerUser(@RequestBody UserDetailsModel userDetailsModel,
@@ -115,20 +102,25 @@ public class UserController {
 
 		UserDetailsMapper mapper = new UserDetailsMapper();
 		HttpStatus httpStatus;
+		UserDetails loggedUser = null;
 		String message = null;
 //		System.out.println("in update");
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 		if (session != null) {
-			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+			 loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
 			System.out.println(session.getUserId());
 			System.out.println(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E") && loggedUser.getUserId() != userDetailsModel.getUserId())
 
 				throw new ApiException("Only Vendor/ Admin can update !!", 404);
+		
 		}
+		else {
+			throw new ApiException("Session cannot be null !!!!!!", 404);
 
-		message = userDetailsService.validateUpdateUserDetails(mapper.mapToEntity(userDetailsModel));
+		}
+		message = userDetailsService.validateUpdateUserDetails(mapper.mapToEntity(userDetailsModel),loggedUser);
 //		System.out.println("in update111");
 		if (message == null) {
 			UserDetails updatedUser = userDetailsService.updateUser(mapper.mapToEntity(userDetailsModel));
@@ -137,12 +129,12 @@ public class UserController {
 				message = "User Updated successfully";
 				httpStatus = HttpStatus.OK;
 			} else {
-				httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-				message = "Issue while updating User";
+				throw new ApiException("Issue while updating User", 404);
 			}
 		} else {
-			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			throw new ApiException(message, 404);
 		}
+		
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userDetailsModel, token));
 
 	}
@@ -170,8 +162,7 @@ public class UserController {
 
 			UserDetails userDetails = userDetailsService.getUserDetailsById(id);
 			if (userDetails == null) {
-				message = "User not found";
-				httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+				throw new ApiException("User not found", 404);
 			} else {
 				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;
@@ -207,8 +198,7 @@ public class UserController {
 
 			userList = userDetailsService.getAllUserDetails();
 			if (userList.isEmpty()) {
-				message = "No record found";
-				httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+				throw new ApiException("No record found", 404);
 			} else {
 //				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;
@@ -247,8 +237,7 @@ public class UserController {
 			}
 //			UserDetails userDetails = userDetailsService.getUserDetailsById(userStatusModel.getUserId());
 			if (userDetailsService.getUserDetailsById(userStatusModel.getUserId()) == null) {
-				message = "User not found";
-				httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+				throw new ApiException("User not found", 404);
 			} else {
 				userStatusModel.setUpdatedBy(loggedUser.getUserId());
 				UserDetails userDetails = userDetailsService.updateCurrentStatus(userStatusModel);
@@ -287,8 +276,7 @@ public class UserController {
 				httpStatus = HttpStatus.OK;
 				message = "User Unlocked Successfully !!";
 			} else {
-				httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-				message = "User is not locked  !!";
+				throw new ApiException("User is not locked  !!", 404);
 			}
 
 		} else {
@@ -298,5 +286,165 @@ public class UserController {
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, user, token));
 	}
+	
+	
+	@GetMapping("/veiwAllEmployee")
+	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllEmployee(@RequestHeader("Authorization") String token) {
+		HttpStatus httpStatus = HttpStatus.OK;
+		String message = null;
+		List<UserDetails> userList = null;
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		SessionToken session = sessionManager.getSessionToken(sessionToken);
+
+		if (session != null) {
+			// User is authenticated, process the protected resource request
+//        @SuppressWarnings("removal")
+//        return "Protected Resource for User: " + userId;
+			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+			logger.info(loggedUser.getUserId());
+			logger.info(loggedUser.getUserType());
+			if (loggedUser.getUserType().equals("E"))
+
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+
+			userList = userDetailsService.getAllUserDetailsByType("E");
+			if (userList.isEmpty()) {
+				throw new ApiException("No record found", 404);
+			} else {
+//				user = mapper.mapToModel(userDetails);
+				httpStatus = HttpStatus.OK;
+				message = "User found";
+				System.out.println(userList.size());
+			}
+
+		} else {
+			// Invalid session token or unauthorized access
+			throw new ApiException("Invalid session token or unauthorized access", 404);
+		}
+
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
+
+	}
+	
+	
+	
+	@GetMapping("/veiwAllSubVendor")
+	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllSubvendor(@RequestHeader("Authorization") String token) {
+		HttpStatus httpStatus = HttpStatus.OK;
+		String message = null;
+		List<UserDetails> userList = null;
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		SessionToken session = sessionManager.getSessionToken(sessionToken);
+
+		if (session != null) {
+			// User is authenticated, process the protected resource request
+//        @SuppressWarnings("removal")
+//        return "Protected Resource for User: " + userId;
+			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+			logger.info(loggedUser.getUserId());
+			logger.info(loggedUser.getUserType());
+			if (loggedUser.getUserType().equals("E"))
+
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+
+			userList = userDetailsService.getAllUserDetailsByType("S");
+			if (userList.isEmpty()) {
+				throw new ApiException("No record found", 404);
+			} else {
+//				user = mapper.mapToModel(userDetails);
+				httpStatus = HttpStatus.OK;
+				message = "User found";
+				System.out.println(userList.size());
+			}
+
+		} else {
+			// Invalid session token or unauthorized access
+			throw new ApiException("Invalid session token or unauthorized access", 404);
+		}
+
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
+
+	}
+
+
+	@GetMapping("/veiwAllVendor")
+	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllVendor(@RequestHeader("Authorization") String token) {
+		HttpStatus httpStatus = HttpStatus.OK;
+		String message = null;
+		List<UserDetails> userList = null;
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		SessionToken session = sessionManager.getSessionToken(sessionToken);
+
+		if (session != null) {
+			// User is authenticated, process the protected resource request
+//        @SuppressWarnings("removal")
+//        return "Protected Resource for User: " + userId;
+			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+			logger.info(loggedUser.getUserId());
+			logger.info(loggedUser.getUserType());
+			if (loggedUser.getUserType().equals("E") ||loggedUser.getUserType().equals("S"))
+
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+
+			userList = userDetailsService.getAllUserDetailsByType("V");
+			if (userList.isEmpty()) {
+				throw new ApiException("No record found", 404);
+			} else {
+//				user = mapper.mapToModel(userDetails);
+				httpStatus = HttpStatus.OK;
+				message = "User found";
+				System.out.println(userList.size());
+			}
+
+		} else {
+			// Invalid session token or unauthorized access
+			throw new ApiException("Invalid session token or unauthorized access", 404);
+		}
+
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
+
+	}
+
+	
+//	@GetMapping("/veiwAllLocked")
+//	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllLockedUser(@RequestHeader("Authorization") String token) {
+//		HttpStatus httpStatus = HttpStatus.OK;
+//		String message = null;
+//		List<UserDetails> userList = null;
+//		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+//		SessionToken session = sessionManager.getSessionToken(sessionToken);
+//
+//		if (session != null) {
+//			// User is authenticated, process the protected resource request
+////        @SuppressWarnings("removal")
+////        return "Protected Resource for User: " + userId;
+//			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+//			logger.info(loggedUser.getUserId());
+//			logger.info(loggedUser.getUserType());
+//			if (loggedUser.getUserType().equals("E"))
+//
+//				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+//
+//			userList = userDetailsService.getAllUserDetailsByType("E");
+//			if (userList.isEmpty()) {
+//				throw new ApiException("No record found", 404);
+//			} else {
+////				user = mapper.mapToModel(userDetails);
+//				httpStatus = HttpStatus.OK;
+//				message = "User found";
+//				System.out.println(userList.size());
+//			}
+//
+//		} else {
+//			// Invalid session token or unauthorized access
+//			throw new ApiException("Invalid session token or unauthorized access", 404);
+//		}
+//
+//		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
+//
+//	}
+//
+//	
+	
 
 }
