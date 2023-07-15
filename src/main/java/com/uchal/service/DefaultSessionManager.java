@@ -31,8 +31,9 @@ public class DefaultSessionManager implements SessionManager {
     }
 
     @Override
-    public void removeSession(String token) {
+    public boolean removeSession(String token) {
         sessionTokens.remove(token);
+        return true;
     }
 
     private String generateSessionToken() {

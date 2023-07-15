@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uchal.entity.EmpVendorAssociation;
 import com.uchal.entity.MasterPaymentStatus;
-import com.uchal.entity.MasterUserStatus;
 import com.uchal.entity.UserDetails;
 import com.uchal.model.ApiException;
 import com.uchal.model.ApiResponse;
@@ -148,7 +146,7 @@ public class PaymentController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, paymentList, null));
 
 	}
-	
+
 	@PutMapping("/updatePayment")
 	public ResponseEntity<ApiResponse<EmpVendorAssociationModel>> updatePayment(
 			@RequestBody EmpVendorAssociationModel empVendorAssociationModel,

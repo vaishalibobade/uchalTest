@@ -1,28 +1,28 @@
 package com.uchal.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uchal.entity.LoginDetails;
 import com.uchal.model.ApiException;
 import com.uchal.model.ApiResponse;
+import com.uchal.model.ChangePassword;
 import com.uchal.model.LoginRequest;
 import com.uchal.model.LoginResponse;
 import com.uchal.model.SessionToken;
-import com.uchal.model.UserDetailsModel;
 import com.uchal.repository.SessionManager;
 import com.uchal.service.LoginDetailsService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @RestController
 @Component
@@ -115,14 +115,53 @@ public class LoginController {
 
 	}
 
-//	@PutMapping("/changePassword/{username}")
-//	public ResponseEntity<ApiResponse<UserDetailsModel>> forgotPassword(@PathVariable("username") String username)
-//	{
-//		
-//		
-//	}
+	@PutMapping("/changePassword")
+	public ResponseEntity<ApiResponse<LoginDetails>> forgotPassword(@RequestBody ChangePassword  changePasswordModel)
+	{
+		String message=null;
+//		HttpStatus httpStatus = null;
+
+		LoginDetails user = loginDetailsService.getByUsername(changePasswordModel.getUsername());
+		if (user==null)
+			throw new ApiException("Invalid Username !!", 404);
+		
+		else
+		 user =	loginDetailsService.updatePassword(changePasswordModel);
+		if (user!=null)
+			message ="Password updated Successfully !!!";
+		else 
+			throw new ApiException("Issue while changing password ......", 404);
+
+
+		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, message, user, null));
+
+		
+	}
 	
 	
+	
+	
+	
+	
+
+
+	    @PostMapping("/logout")
+	    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+	        // Extract the token from the Authorization header
+	        String sessionToken = token.substring("Bearer ".length()).trim();
+	        
+	        // Call the session service to invalidate the session
+	        boolean success = sessionManager.removeSession(sessionToken);
+	        
+	        if (success) {
+	            return ResponseEntity.ok("Logged out successfully.");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                    .body("Failed to log out. Please try again.");
+	        }
+	    }
+	
+
 	
 	
 	
