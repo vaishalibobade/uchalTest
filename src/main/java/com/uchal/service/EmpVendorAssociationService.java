@@ -12,6 +12,7 @@ import com.uchal.controllers.LoginController;
 import com.uchal.entity.EmpVendorAssociation;
 import com.uchal.mapper.EmpVendorAssociationMapper;
 import com.uchal.model.ApiException;
+import com.uchal.model.DashboardStatusCount;
 import com.uchal.model.EmpVendorAssociationModel;
 import com.uchal.model.PaymentDetailsModel;
 import com.uchal.repository.EmpVendorAssociationRepository;
@@ -104,5 +105,84 @@ public class EmpVendorAssociationService {
 		return models;
 
 	}
+	
+	
+	
+	
+	public long getVendorCount(int id)
+	{
+		 return empVendorAssociationRepository.countByID(id);
+		
+		
+	}
+	
+	public long getEmployeeCount(int vendorId)
+	{
+		 return empVendorAssociationRepository.getEmployeeCountByVendorId(vendorId);
 
+	}
+	public  List<Object[]>  getStatusCount(int id)
+	{
+		 List<Object[]>  count= empVendorAssociationRepository.countByStatus(id);
+		 if (count ==null)
+				throw new ApiException("No record found !!", 404);
+		 return count;
+
+		
+		
+	}
+	
+	
+	public double getTaskCompletionPercentage(int employeeId)
+	{
+		Long completedCount = empVendorAssociationRepository.getCompletedStatusCountByEmployeeId(employeeId);
+		Long totalCount = empVendorAssociationRepository.getTotalStatusCountByEmployeeId(employeeId);
+
+		double percentage = (completedCount.doubleValue() / totalCount.doubleValue()) * 100;
+		return percentage;
+
+	}
+	
+	
+	public double getTaskCompletionPercentagefrAllEmployee()
+	{
+		Long completedCount = empVendorAssociationRepository.getAllCompletedStatusCount();
+		Long totalCount = empVendorAssociationRepository.getTotalStatusCount();
+
+		double percentage = (completedCount.doubleValue() / totalCount.doubleValue()) * 100;
+		return percentage;
+
+	}
+	
+	
+	
+	public  List<Object[]>  getStatusCountbyVendor(int vendorId)
+	{
+		 List<Object[]>  count= empVendorAssociationRepository.getEmployeeStatusCountByVendorId(vendorId);
+		 if (count ==null)
+				throw new ApiException("No record found !!", 404);
+		 
+		 
+		 
+		 return count;
+
+		
+		
+	}
+	
+	
+	public  List<Object[]>  getStatusCountbyAllVendor()
+	{
+		 List<Object[]>  count= empVendorAssociationRepository.getEmployeeStatusCountAllVendor();
+		 if (count ==null)
+				throw new ApiException("No record found !!", 404);
+		 
+		 
+		 
+		 return count;
+
+		
+		
+	}
+	
 }
