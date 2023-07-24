@@ -48,7 +48,7 @@ public class AddDetailsEntity {
 		return durationDays;
 	}
 	public void setDurationDays(int durationDays) {
-		durationDays = durationDays;
+		this.durationDays = durationDays;
 	}
 	public int getCreatedBy() {
 		return createdBy;

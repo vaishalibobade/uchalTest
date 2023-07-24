@@ -46,6 +46,8 @@ public class AddDetailsEntityController {
 	@PostMapping("/Save")
 	public ResponseEntity<ApiResponse<AddDetailsEntity>> addAddDetailsEntity(
 			@RequestBody AddDetailsEntity addDetailsEntity, @RequestHeader("Authorization") String token) {
+		System.out.println(addDetailsEntity.getDurationDays());
+
 		HttpStatus httpStatus;
 		String message = null;
 		if (token != null) {
@@ -62,6 +64,9 @@ public class AddDetailsEntityController {
 				addDetailsEntity.setCreatedBy(loggedUser.getUserId());
 			}
 		}
+//		addDetailsEntity.setDurationDays(90);
+		System.out.println(addDetailsEntity.getDurationDays());
+		
 		AddDetailsEntity savedEntity = addDetailsEntityService.saveAddDetails(addDetailsEntity);
 		if (savedEntity == null)
 			throw new ApiException("Error while Saving  Adds !!", 404);
@@ -72,12 +77,12 @@ public class AddDetailsEntityController {
 
 	@GetMapping("/AllAvailableAdds")
 	public ResponseEntity<ApiResponse<List<AddDetailsEntity>>> getAllAddDetailsEntities() {
-		String message =null;
+		String message = null;
 		List<AddDetailsEntity> entities = addDetailsEntityService.getAvailableAdds();
-		if (entities==null)
+		if (entities == null)
 			throw new ApiException("Adds are not found", 404);
 
-		message="Adds Found";
+		message = "Adds Found";
 		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, message, entities, null));
 	}
 }
