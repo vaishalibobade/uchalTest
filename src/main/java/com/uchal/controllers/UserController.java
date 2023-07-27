@@ -23,6 +23,8 @@ import com.uchal.entity.UserDetails;
 import com.uchal.mapper.UserDetailsMapper;
 import com.uchal.model.ApiException;
 import com.uchal.model.ApiResponse;
+import com.uchal.model.SearchUserModel;
+import com.uchal.model.SearchUserOutputModel;
 import com.uchal.model.SessionToken;
 import com.uchal.model.UserDetailsModel;
 import com.uchal.model.UserList;
@@ -281,9 +283,46 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
 	}
-	
-	
-	
+
+	@GetMapping("/searchUser")
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUser(
+			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
+		HttpStatus httpStatus = HttpStatus.OK;
+		String message = null;
+		List<SearchUserOutputModel> userList = null;
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		SessionToken session = sessionManager.getSessionToken(sessionToken);
+
+		if (session != null) {
+			// User is authenticated, process the protected resource request
+//        @SuppressWarnings("removal")
+//        return "Protected Resource for User: " + userId;
+			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+			logger.info(loggedUser.getUserId());
+			logger.info(loggedUser.getUserType());
+			if (loggedUser.getUserType().equals("E"))
+
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+
+			userList = userDetailsService.getSearchUserList(searchUserModel);
+			if (userList.isEmpty()) {
+				throw new ApiException("No record found", 404);
+			} else {
+//				user = mapper.mapToModel(userDetails);
+				httpStatus = HttpStatus.OK;
+				message = "User found";
+				System.out.println(userList.size());
+			}
+
+		} else {
+			// Invalid session token or unauthorized access
+			throw new ApiException("Invalid session token or unauthorized access", 404);
+		}
+
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
+
+	}
+
 	@GetMapping("/veiwAllList")
 	public ResponseEntity<ApiResponse<List<UserList>>> veiwAllUserList(@RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
@@ -321,8 +360,6 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
 	}
-
-
 
 	@PutMapping("/updateStatus")
 	public ResponseEntity<ApiResponse<UserDetailsModel>> updateStatus(@RequestBody UserStatusModel userStatusModel,
@@ -397,11 +434,11 @@ public class UserController {
 	}
 
 	@GetMapping("/veiwAllEmployee")
-	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllEmployee(
-			@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllEmployee(
+			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
-		List<UserDetails> userList = null;
+		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
@@ -416,7 +453,7 @@ public class UserController {
 
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
 
-			userList = userDetailsService.getAllUserDetailsByType("E");
+			userList = userDetailsService.getSearchUserListwithType("E", searchUserModel);
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 404);
 			} else {
@@ -436,11 +473,11 @@ public class UserController {
 	}
 
 	@GetMapping("/veiwAllSubVendor")
-	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllSubvendor(
-			@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllSubvendor(
+			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
-		List<UserDetails> userList = null;
+		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
@@ -455,7 +492,7 @@ public class UserController {
 
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
 
-			userList = userDetailsService.getAllUserDetailsByType("S");
+			userList = userDetailsService.getSearchUserListwithType("S", searchUserModel);
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 404);
 			} else {
@@ -475,10 +512,11 @@ public class UserController {
 	}
 
 	@GetMapping("/veiwAllVendor")
-	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllVendor(@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllVendor(
+			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
-		List<UserDetails> userList = null;
+		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
@@ -493,7 +531,7 @@ public class UserController {
 
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
 			System.out.println("above fun call");
-			userList = userDetailsService.getAllUserDetailsByType("V");
+			userList = userDetailsService.getSearchUserListwithType("V", searchUserModel);
 			System.out.println("Below fun call");
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 404);
@@ -514,10 +552,11 @@ public class UserController {
 	}
 
 	@GetMapping("/veiwAllAdmin")
-	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllAdmin(@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllAdmin(
+			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
-		List<UserDetails> userList = null;
+		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
@@ -532,7 +571,7 @@ public class UserController {
 
 				throw new ApiException(" Only Admin  can veiw !!", 404);
 			System.out.println("above fun call");
-			userList = userDetailsService.getAllUserDetailsByType("A");
+			userList = userDetailsService.getSearchUserListwithType("A", searchUserModel);
 			System.out.println("Below fun call");
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 404);
@@ -552,7 +591,6 @@ public class UserController {
 
 	}
 
-	
 //	@GetMapping("/veiwAllLocked")
 //	public ResponseEntity<ApiResponse<List<UserDetails>>> veiwAllLockedUser(@RequestHeader("Authorization") String token) {
 //		HttpStatus httpStatus = HttpStatus.OK;

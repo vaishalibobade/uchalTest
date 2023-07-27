@@ -41,4 +41,31 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
     @Query("SELECT ud.userId, ud.firstName, ud.middleName, ud.lastName,  ud.userType FROM UserDetails ud")
     List<Object[]> getAllUserList();
     
+////	@Query("SELECT mus.status, ud.firstName, ud.lastName, ud.middleName, ud.mobileNumber, ud.userType FROM UserDetails ud JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id  WHERE ud.mobileNumber = :mobileNumber")
+//
+//	@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName,  ud.userType, ud.mobileNumber ,ud.userId FROM UserDetails ud JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id WHERE ud.mobileNumber = :mobileNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%")
+//	List<Object[]> getDataWithPartialMatch(@Param("mobileNumber") long mobileNumber,
+//	                                       @Param("Name") String Name );
+	
+	@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId "
+		       + "FROM UserDetails ud "
+		       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
+		       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
+		       + "WHERE ud.mobileNumber = :mobileNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%")
+		List<Object[]> getDataWithPartialMatch(@Param("mobileNumber") long mobileNumber,
+		                                                  @Param("Name") String name);
+		
+		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId "
+			       + "FROM UserDetails ud "
+			       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
+			       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
+			       + "WHERE (ud.mobileNumber = :mobileNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%) "
+			       + "AND ud.userType = :userType")
+			List<Object[]> getDataWithPartialMatchAndUserType(@Param("mobileNumber") long mobileNumber,
+			                                                  @Param("Name") String name,
+			                                                  @Param("userType") String userType);
+
+
+
+    
 }

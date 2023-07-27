@@ -18,6 +18,8 @@ import com.uchal.entity.LoginDetails;
 import com.uchal.entity.UserDetails;
 import com.uchal.mapper.UserDetailsMapper;
 import com.uchal.model.ApiException;
+import com.uchal.model.SearchUserModel;
+import com.uchal.model.SearchUserOutputModel;
 import com.uchal.model.UserDetailsModel;
 import com.uchal.model.UserList;
 import com.uchal.model.UserStatusModel;
@@ -275,8 +277,55 @@ public class UserDetailsService {
 	    return userList;
 	}
 
+	public List<SearchUserOutputModel> convertToSearchList(List<Object[]> originalList) {
+	    List<SearchUserOutputModel> userList = new ArrayList<>();
+
+	    for (Object[] objArray : originalList) {
+	        String userStatus = (String) objArray[0];
+	        String firstName = (String) objArray[1];
+	        String middleName = (String) objArray[2];
+	        String lastName = (String) objArray[3];
+	        String userType = (String) objArray[4];
+	        Long mobileNumber = (Long) objArray[5];
+	        int userId = (int) objArray[6];
+
+	        SearchUserOutputModel user = new SearchUserOutputModel();
+	        user.setFirstName(firstName);
+	        user.setMiddleName(middleName);
+	        user.setLastName(lastName);
+	        user.setUserType(userType);
+	        user.setMobileNumber(mobileNumber);
+	        user.setCurrentStatus(userStatus);
+	        user.setUserId(userId);
+
+
+	        userList.add(user);
+	    }
+
+	    return userList;
+	}
+
+	
+
 	
 	
 	
 	
+	public List<SearchUserOutputModel> getSearchUserList(SearchUserModel searchUserModel){
+		
+		List<Object[]> object=userDetailsRepository.getDataWithPartialMatch(searchUserModel.getMobileNumber(),searchUserModel.getName());
+		List<SearchUserOutputModel> list=	convertToSearchList(object);
+		 
+		 return list;
+		
+	}
+	
+public List<SearchUserOutputModel> getSearchUserListwithType(String type,SearchUserModel searchUserModel){
+		
+		List<Object[]> object=userDetailsRepository.getDataWithPartialMatchAndUserType(searchUserModel.getMobileNumber(),searchUserModel.getName(),type);
+		List<SearchUserOutputModel> list=	convertToSearchList(object);
+		 
+		 return list;
+		
+	}
 }
