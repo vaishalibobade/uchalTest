@@ -172,6 +172,7 @@ public class UserDetailsService {
 		try {
 			userDetails = usermapper.mapToEntity(model);
 			userDetails.setCreatedOn(LocalDateTime.now());
+			userDetails.setCurrentStatusId(2);
 
 			loginDetails.setUsername(model.getUsername());
 			loginDetails.setPassword(model.getPassword());

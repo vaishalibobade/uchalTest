@@ -328,7 +328,7 @@ public class UserController {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<UserList> userList = null;
-		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix 
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
 		if (session != null) {
@@ -540,7 +540,7 @@ public class UserController {
 				httpStatus = HttpStatus.OK;
 				message = "User found";
 				System.out.println(userList.size());
-			}
+			} 
 
 		} else {
 			// Invalid session token or unauthorized access
