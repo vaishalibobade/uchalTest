@@ -38,4 +38,7 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 	@Query("SELECT eva, ud.firstName, ud.lastName, ud.middleName, ud.mobileNumber, ud.userType FROM UserDetails ud JOIN EmpVendorAssociation eva ON ud.userId = eva.employeeId  WHERE eva.vendorId = :id")
     List<Object[]> getEmployeeDetailsByVendorId(@Param("id") int vendorId);
 
+    @Query("SELECT ud.userId, ud.firstName, ud.middleName, ud.lastName,  ud.userType FROM UserDetails ud")
+    List<Object[]> getAllUserList();
+    
 }

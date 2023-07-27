@@ -1,6 +1,7 @@
 package com.uchal.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import com.uchal.entity.UserDetails;
 import com.uchal.mapper.UserDetailsMapper;
 import com.uchal.model.ApiException;
 import com.uchal.model.UserDetailsModel;
+import com.uchal.model.UserList;
 import com.uchal.model.UserStatusModel;
 import com.uchal.repository.LoginDetailsRepository;
 import com.uchal.repository.UserDetailsRepository;
@@ -238,4 +240,43 @@ public class UserDetailsService {
 
 	}
 
+	
+	
+	public List<UserList> getAllUserList(){
+		
+		List<Object[]> object=userDetailsRepository.getAllUserList();
+		List<UserList> list=	convertToObjectList(object);
+		 
+		 return list;
+		
+	}
+	
+	
+	public List<UserList> convertToObjectList(List<Object[]> originalList) {
+	    List<UserList> userList = new ArrayList<>();
+
+	    for (Object[] objArray : originalList) {
+	        int userId = (int) objArray[0];
+	        String firstName = (String) objArray[1];
+	        String middleName = (String) objArray[2];
+	        String lastName = (String) objArray[3];
+	        String userType = (String) objArray[4];
+
+	        UserList user = new UserList();
+	        user.setUserId(userId);
+	        user.setFirstName(firstName);
+	        user.setMiddleName(middleName);
+	        user.setLastName(lastName);
+	        user.setUserType(userType);
+
+	        userList.add(user);
+	    }
+
+	    return userList;
+	}
+
+	
+	
+	
+	
 }
