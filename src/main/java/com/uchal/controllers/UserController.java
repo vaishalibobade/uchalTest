@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uchal.entity.UserDetails;
@@ -284,9 +285,9 @@ public class UserController {
 
 	}
 
-	@GetMapping("/searchUser/{name}/{mobileNumber}")
-	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUser(@PathVariable("name") String name,
-			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+	@GetMapping("/searchUser")
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUser(@RequestParam("name") String name,
+            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
@@ -435,10 +436,10 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, user, token));
 	}
 
-	@GetMapping("/veiwAllEmployee/{name}/{mobileNumber}")
+	@GetMapping("/veiwAllEmployee")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllEmployee(
-			@PathVariable("name") String name,
-			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("name") String name,
+            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
@@ -477,10 +478,10 @@ public class UserController {
 
 	}
 
-	@GetMapping("/veiwAllSubVendor/{name}/{mobileNumber}")
+	@GetMapping("/veiwAllSubVendor")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllSubvendor(
-			@PathVariable("name") String name,
-			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("name") String name,
+            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
@@ -519,10 +520,10 @@ public class UserController {
 
 	}
 
-	@GetMapping("/veiwAllVendor/{name}/{mobileNumber}")
+	@GetMapping("/veiwAllVendor")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllVendor(
-			@PathVariable("name") String name,
-			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("name") String name,
+            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
@@ -562,10 +563,10 @@ public class UserController {
 
 	}
 
-	@GetMapping("/veiwAllAdmin/{name}/{mobileNumber}")
+	@GetMapping("/veiwAllAdmin")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllAdmin(
-			@PathVariable("name") String name,
-			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("name") String name,
+            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
