@@ -73,7 +73,7 @@ public class LoginController {
 		HttpStatus httpStatus = null;
 		String message = null;
 		LoginDetails loginDetailsresponse = null;
-		try {
+//		try {
 
 			logger.info("Into login controller with logger");
 			if (loginDetailsService.validateUserToLogin(user)) // If user status is Active
@@ -102,12 +102,12 @@ public class LoginController {
 
 
 			}
-		} catch (Exception e) {
-			loginResponse.setAuthenticated(false);
-			httpStatus = HttpStatus.UNAUTHORIZED;
-			throw new ApiException("Invalid Username/Password !!", 404);
-
-		}
+//		} catch (Exception e) {
+//			loginResponse.setAuthenticated(false);
+//			httpStatus = HttpStatus.UNAUTHORIZED;
+//			throw new ApiException("Invalid Username/Password !!", 404);
+//
+//		}
 		if (loginDetailsresponse!=null)
 		loginDetailsresponse.setPassword(null);
 		return ResponseEntity.status(httpStatus)

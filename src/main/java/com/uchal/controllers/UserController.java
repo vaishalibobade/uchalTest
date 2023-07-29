@@ -284,15 +284,17 @@ public class UserController {
 
 	}
 
-	@GetMapping("/searchUser")
-	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUser(
-			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
+	@GetMapping("/searchUser/{name}/{mobileNumber}")
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUser(@PathVariable("name") String name,
+			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
-
+		SearchUserModel searchUserModel = new SearchUserModel();
+		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request
 //        @SuppressWarnings("removal")
@@ -328,7 +330,7 @@ public class UserController {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<UserList> userList = null;
-		String sessionToken = token.substring(7); // Remove "Bearer " prefix 
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
 		if (session != null) {
@@ -433,15 +435,18 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, user, token));
 	}
 
-	@GetMapping("/veiwAllEmployee")
+	@GetMapping("/veiwAllEmployee/{name}/{mobileNumber}")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllEmployee(
-			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
+			@PathVariable("name") String name,
+			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
-
+		SearchUserModel searchUserModel = new SearchUserModel();
+		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request
 //        @SuppressWarnings("removal")
@@ -472,15 +477,18 @@ public class UserController {
 
 	}
 
-	@GetMapping("/veiwAllSubVendor")
+	@GetMapping("/veiwAllSubVendor/{name}/{mobileNumber}")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllSubvendor(
-			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
+			@PathVariable("name") String name,
+			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
-
+		SearchUserModel searchUserModel = new SearchUserModel();
+		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request
 //        @SuppressWarnings("removal")
@@ -511,15 +519,18 @@ public class UserController {
 
 	}
 
-	@GetMapping("/veiwAllVendor")
+	@GetMapping("/veiwAllVendor/{name}/{mobileNumber}")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllVendor(
-			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
+			@PathVariable("name") String name,
+			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
-
+		SearchUserModel searchUserModel = new SearchUserModel();
+		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request
 //        @SuppressWarnings("removal")
@@ -540,7 +551,7 @@ public class UserController {
 				httpStatus = HttpStatus.OK;
 				message = "User found";
 				System.out.println(userList.size());
-			} 
+			}
 
 		} else {
 			// Invalid session token or unauthorized access
@@ -551,15 +562,18 @@ public class UserController {
 
 	}
 
-	@GetMapping("/veiwAllAdmin")
+	@GetMapping("/veiwAllAdmin/{name}/{mobileNumber}")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllAdmin(
-			@RequestBody SearchUserModel searchUserModel, @RequestHeader("Authorization") String token) {
+			@PathVariable("name") String name,
+			@PathVariable("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
-
+		SearchUserModel searchUserModel = new SearchUserModel();
+		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request
 //        @SuppressWarnings("removal")
