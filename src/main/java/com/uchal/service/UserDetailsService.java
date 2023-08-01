@@ -267,9 +267,10 @@ public class UserDetailsService {
 
 	        UserList user = new UserList();
 	        user.setUserId(userId);
-	        user.setFirstName(firstName);
-	        user.setMiddleName(middleName);
-	        user.setLastName(lastName);
+	        String name=firstName+" "+middleName+" "+lastName;
+	        user.setFirstName(name);
+//	        user.setMiddleName(middleName);
+//	        user.setLastName(lastName);
 	        user.setUserType(userType);
 
 	        userList.add(user);
