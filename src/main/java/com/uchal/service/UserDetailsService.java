@@ -68,10 +68,8 @@ public class UserDetailsService {
 		return userDetailsRepository.findByFirstName(username);
 
 	}
-	
-	
-	public List<Object[]> getAllEmployeeDetailsWithAssociation(int vendorId)
-	{
+
+	public List<Object[]> getAllEmployeeDetailsWithAssociation(int vendorId) {
 		return userDetailsRepository.getEmployeeDetailsByVendorId(vendorId);
 	}
 
@@ -243,91 +241,108 @@ public class UserDetailsService {
 
 	}
 
-	
-	
-	public List<UserList> getAllUserList(){
-		
-		List<Object[]> object=userDetailsRepository.getAllUserList();
-		List<UserList> list=	convertToObjectList(object);
-		 
-		 return list;
-		
+	public List<UserList> getAllUserList() {
+
+		List<Object[]> object = userDetailsRepository.getAllUserList();
+		List<UserList> list = convertToObjectList(object);
+
+		return list;
+
 	}
-	
-	
+
 	public List<UserList> convertToObjectList(List<Object[]> originalList) {
-	    List<UserList> userList = new ArrayList<>();
+		List<UserList> userList = new ArrayList<>();
 
-	    for (Object[] objArray : originalList) {
-	        int userId = (int) objArray[0];
-	        String firstName = (String) objArray[1];
-	        String middleName = (String) objArray[2];
-	        String lastName = (String) objArray[3];
-	        String userType = (String) objArray[4];
+		for (Object[] objArray : originalList) {
+			int userId = (int) objArray[0];
+			String firstName = (String) objArray[1];
+			String middleName = (String) objArray[2];
+			String lastName = (String) objArray[3];
+			String userType = (String) objArray[4];
 
-	        UserList user = new UserList();
-	        user.setUserId(userId);
-	        String name=firstName+" "+middleName+" "+lastName;
-	        user.setFirstName(name);
+			UserList user = new UserList();
+			user.setUserId(userId);
+			String name = firstName + " " + middleName + " " + lastName;
+			user.setFirstName(name);
 //	        user.setMiddleName(middleName);
 //	        user.setLastName(lastName);
-	        user.setUserType(userType);
+			user.setUserType(userType);
 
-	        userList.add(user);
-	    }
+			userList.add(user);
+		}
 
-	    return userList;
+		return userList;
 	}
 
 	public List<SearchUserOutputModel> convertToSearchList(List<Object[]> originalList) {
-	    List<SearchUserOutputModel> userList = new ArrayList<>();
+		List<SearchUserOutputModel> userList = new ArrayList<>();
 
-	    for (Object[] objArray : originalList) {
-	        String userStatus = (String) objArray[0];
-	        String firstName = (String) objArray[1];
-	        String middleName = (String) objArray[2];
-	        String lastName = (String) objArray[3];
-	        String userType = (String) objArray[4];
-	        Long mobileNumber = (Long) objArray[5];
-	        int userId = (int) objArray[6];
+		for (Object[] objArray : originalList) {
+			String userStatus = (String) objArray[0];
+			String firstName = (String) objArray[1];
+			String middleName = (String) objArray[2];
+			String lastName = (String) objArray[3];
+			String userType = (String) objArray[4];
+			Long mobileNumber = (Long) objArray[5];
+			int userId = (int) objArray[6];
 
-	        SearchUserOutputModel user = new SearchUserOutputModel();
-	        user.setFirstName(firstName);
-	        user.setMiddleName(middleName);
-	        user.setLastName(lastName);
-	        user.setUserType(userType);
-	        user.setMobileNumber(mobileNumber);
-	        user.setCurrentStatus(userStatus);
-	        user.setUserId(userId);
+			SearchUserOutputModel user = new SearchUserOutputModel();
+			user.setFirstName(firstName);
+			user.setMiddleName(middleName);
+			user.setLastName(lastName);
+			user.setUserType(userType);
+			user.setMobileNumber(mobileNumber);
+			user.setCurrentStatus(userStatus);
+			user.setUserId(userId);
 
+			userList.add(user);
+		}
 
-	        userList.add(user);
-	    }
-
-	    return userList;
+		return userList;
 	}
 
-	
+	public List<UserDetailsModel> convertToUserDetails(List<Object[]> objList) {
+		List<UserDetailsModel> userList = new ArrayList<>();
+		UserDetailsMapper mapper = new UserDetailsMapper();
 
-	
-	
-	
-	
-	public List<SearchUserOutputModel> getSearchUserList(SearchUserModel searchUserModel){
-		
-		List<Object[]> object=userDetailsRepository.getDataWithPartialMatch(searchUserModel.getMobileNumber(),searchUserModel.getName());
-		List<SearchUserOutputModel> list=	convertToSearchList(object);
-		 
-		 return list;
-		
+		for (Object[] objArray : objList) {
+			UserDetails userDetails = (UserDetails) objArray[0];
+			String currentStatus = (String) objArray[1];
+			String userType = (String) objArray[2];
+
+//		        UserDetailsModel user = new UserDetailsModel();
+			UserDetailsModel user = mapper.mapToModel(userDetails);
+			user.setCurrentStatus(currentStatus);
+			user.setUserType(userType);
+			userList.add(user);
+		}
+		return userList;
 	}
-	
-public List<SearchUserOutputModel> getSearchUserListwithType(String type,SearchUserModel searchUserModel){
-		
-		List<Object[]> object=userDetailsRepository.getDataWithPartialMatchAndUserType(searchUserModel.getMobileNumber(),searchUserModel.getName(),type);
-		List<SearchUserOutputModel> list=	convertToSearchList(object);
-		 
-		 return list;
-		
+
+	public UserDetailsModel getProfileDetails(int userId) {
+		List<Object[]> objList = userDetailsRepository.getUserDetailsById(userId);
+		UserDetailsModel userDetails = convertToUserDetails(objList).get(0);
+
+		return userDetails;
+	}
+
+	public List<SearchUserOutputModel> getSearchUserList(SearchUserModel searchUserModel) {
+
+		List<Object[]> object = userDetailsRepository.getDataWithPartialMatch(searchUserModel.getMobileNumber(),
+				searchUserModel.getName());
+		List<SearchUserOutputModel> list = convertToSearchList(object);
+
+		return list;
+
+	}
+
+	public List<SearchUserOutputModel> getSearchUserListwithType(String type, SearchUserModel searchUserModel) {
+
+		List<Object[]> object = userDetailsRepository
+				.getDataWithPartialMatchAndUserType(searchUserModel.getMobileNumber(), searchUserModel.getName(), type);
+		List<SearchUserOutputModel> list = convertToSearchList(object);
+
+		return list;
+
 	}
 }

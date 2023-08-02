@@ -147,6 +147,7 @@ public class UserController {
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
+		
 		if (session != null) {
 			// User is authenticated, process the protected resource request
 //        @SuppressWarnings("removal")
@@ -154,11 +155,11 @@ public class UserController {
 			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
 //			System.out.println(session.getUserId());
 //			System.out.println(loggedUser.getUserType());
-			UserDetails userDetails = userDetailsService.getUserDetailsById(loggedUser.getUserId());
+			UserDetailsModel userDetails = userDetailsService.getProfileDetails(loggedUser.getUserId());
 			if (userDetails == null) {
 				throw new ApiException("User not found", 404);
 			} else {
-				user = mapper.mapToModel(userDetails);
+				user = userDetails;
 				httpStatus = HttpStatus.OK;
 				message = "User found";
 			}
@@ -230,11 +231,11 @@ public class UserController {
 
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
 
-			UserDetails userDetails = userDetailsService.getUserDetailsById(id);
+			UserDetailsModel userDetails = userDetailsService.getProfileDetails(id);
 			if (userDetails == null) {
 				throw new ApiException("User not found", 404);
 			} else {
-				user = mapper.mapToModel(userDetails);
+				user = userDetails;
 				httpStatus = HttpStatus.OK;
 				message = "User found";
 			}

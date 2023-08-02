@@ -21,6 +21,7 @@ public class UserDetailsModel {
     private String username;
     private String password;
     private int currentStatusId;
+    private String currentStatus;
 
 
     // Getters and Setters
@@ -144,6 +145,12 @@ public class UserDetailsModel {
 	}
 	public void setCurrentStatusId(int currentStatusId) {
 		this.currentStatusId = currentStatusId;
+	}
+	public String getCurrentStatus() {
+		return currentStatus;
+	}
+	public void setCurrentStatus(String currentStatus) {
+		this.currentStatus = currentStatus;
 	}
 	
 }

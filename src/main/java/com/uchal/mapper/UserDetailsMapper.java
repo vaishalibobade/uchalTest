@@ -52,7 +52,7 @@ public class UserDetailsMapper {
         userDetailsModel.setCountry(userDetails.getCountry());
         userDetailsModel.setMobileNumber(userDetails.getMobileNumber());
         userDetailsModel.setAdharNumber(userDetails.getAdharNumber());
-//         userDetailsModel.setAdharImage(userDetails.getAdharImage());
+         userDetailsModel.setAdharImage(userDetails.getAdharImage());
         userDetailsModel.setBloodgroup(userDetails.getBloodgroup());
         userDetailsModel.setCreatedBy(userDetails.getCreatedBy());
 //        userDetailsModel.setCreatedOn(userDetails.getCreatedOn());
