@@ -287,9 +287,11 @@ public class UserDetailsService {
 			int userId = (int) objArray[6];
 
 			SearchUserOutputModel user = new SearchUserOutputModel();
-			user.setFirstName(firstName);
-			user.setMiddleName(middleName);
-			user.setLastName(lastName);
+			String name = firstName + " " + middleName + " " + lastName;
+
+			user.setFirstName(name);
+//			user.setMiddleName(middleName);
+//			user.setLastName(lastName);
 			user.setUserType(userType);
 			user.setMobileNumber(mobileNumber);
 			user.setCurrentStatus(userStatus);
