@@ -119,7 +119,7 @@ public class LoginDetailsService {
 	}
 
 	public LoginDetails updatePassword(ChangePassword changePassword) {
-		LoginDetails loginDetails = loginDetailsRepository.findByUsername(changePassword.getUsername());
+		LoginDetails loginDetails = loginDetailsRepository.findByUsername(changePassword.getUserName());
 
 		loginDetails.setPassword(changePassword.getPassword());
 		loginDetailsRepository.save(loginDetails);

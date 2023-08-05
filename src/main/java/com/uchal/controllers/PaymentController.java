@@ -75,12 +75,12 @@ public class PaymentController {
 			System.out.println(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E")) {
 				logger.error("Logged In User is not Admin or Vendor  !!!!!!!!!!!!!!!!!! Throw Exception");
-				throw new ApiException("Only Vendor or Admin can make  payment .....!!", 404);
+				throw new ApiException("Only Vendor or Admin can make  payment .....!!", 400);
 			}
 			empVendorAssociationModel.setVendorId(loggedUser.getUserId());
 			empVendorAssociationModel = empVendorAssociationService.savePaymentDetails(empVendorAssociationModel);
 			if (empVendorAssociationModel == null) {
-				throw new ApiException("Issue While saving data !!", 404);
+				throw new ApiException("Issue While saving data !!", 401);
 			}
 			httpStatus = HttpStatus.OK;
 			message = "Payment Done Successfull !!!!!";
@@ -88,7 +88,7 @@ public class PaymentController {
 		} else {
 //			httpStatus = HttpStatus.UNAUTHORIZED;
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 403);
 		}
 		return ResponseEntity.status(httpStatus)
 				.body(new ApiResponse<>(httpStatus, message, empVendorAssociationModel, token));
@@ -172,12 +172,12 @@ public class PaymentController {
 			System.out.println(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E")) {
 				logger.error("Logged In User is not Admin or Vendor  !!!!!!!!!!!!!!!!!! Throw Exception");
-				throw new ApiException("Only Vendor or Admin can make  payment .....!!", 404);
+				throw new ApiException("Only Vendor or Admin can make  payment .....!!", 400);
 			}
 			empVendorAssociationModel.setVendorId(loggedUser.getUserId());
 			empVendorAssociationModel = empVendorAssociationService.savePaymentDetails(empVendorAssociationModel);
 			if (empVendorAssociationModel == null) {
-				throw new ApiException("Issue While saving data !!", 404);
+				throw new ApiException("Issue While saving data !!", 401);
 			}
 			httpStatus = HttpStatus.OK;
 			message = "Payment updated  Successfull !!!!!";
@@ -185,7 +185,7 @@ public class PaymentController {
 		} else {
 //			httpStatus = HttpStatus.UNAUTHORIZED;
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 		return ResponseEntity.status(httpStatus)
 				.body(new ApiResponse<>(httpStatus, message, empVendorAssociationModel, token));

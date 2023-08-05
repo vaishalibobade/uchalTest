@@ -95,6 +95,13 @@ public class UserDetailsService {
 		return true;
 	}
 
+	
+	
+	public UserDetails getUserDetailsByMobile(long mobileNumber) {
+	return userDetailsRepository.findAllByMobileNumber(mobileNumber).get(0);
+			
+	}
+
 	public String validateUserDetails(UserDetailsModel userDetailsModel) {
 		String message = null;
 

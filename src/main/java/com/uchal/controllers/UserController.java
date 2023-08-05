@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uchal.entity.LoginDetails;
 import com.uchal.entity.UserDetails;
 import com.uchal.mapper.UserDetailsMapper;
 import com.uchal.model.ApiException;
 import com.uchal.model.ApiResponse;
+import com.uchal.model.ChangePassword;
 import com.uchal.model.SearchUserModel;
 import com.uchal.model.SearchUserOutputModel;
 import com.uchal.model.SessionToken;
@@ -113,10 +115,10 @@ public class UserController {
 			System.out.println(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E") && loggedUser.getUserId() != userDetailsModel.getUserId())
 
-				throw new ApiException("Only Vendor/ Admin can update !!", 404);
+				throw new ApiException("Only Vendor/ Admin can update !!", 400);
 
 		} else {
-			throw new ApiException("Session cannot be null !!!!!!", 404);
+			throw new ApiException("Session cannot be null !!!!!!", 401);
 
 		}
 		message = userDetailsService.validateUpdateUserDetails(mapper.mapToEntity(userDetailsModel), loggedUser);
@@ -128,7 +130,7 @@ public class UserController {
 				message = "User Updated successfully";
 				httpStatus = HttpStatus.OK;
 			} else {
-				throw new ApiException("Issue while updating User", 404);
+				throw new ApiException("Issue while updating User", 402);
 			}
 		} else {
 			throw new ApiException(message, 404);
@@ -157,7 +159,7 @@ public class UserController {
 //			System.out.println(loggedUser.getUserType());
 			UserDetailsModel userDetails = userDetailsService.getProfileDetails(loggedUser.getUserId());
 			if (userDetails == null) {
-				throw new ApiException("User not found", 404);
+				throw new ApiException("User not found", 400);
 			} else {
 				user = userDetails;
 				httpStatus = HttpStatus.OK;
@@ -165,7 +167,7 @@ public class UserController {
 			}
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 401);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, user, token));
@@ -184,12 +186,12 @@ public class UserController {
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 		if (session == null)
-			throw new ApiException("Session cannot be null !!!!!!", 404);
+			throw new ApiException("Session cannot be null !!!!!!", 400);
 		loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
 		System.out.println(session.getUserId());
 		System.out.println(loggedUser.getUserType());
 		if (loggedUser.getUserType().equals("E") && loggedUser.getUserId() != userDetailsModel.getUserId())
-			throw new ApiException("Only Vendor/ Admin can update !!", 404);
+			throw new ApiException("Only Vendor/ Admin can update !!", 401);
 		userDetailsModel.setUserId(loggedUser.getUserId());
 		message = userDetailsService.validateUpdateUserDetails(mapper.mapToEntity(userDetailsModel), loggedUser);
 //		System.out.println("in update111");
@@ -200,10 +202,10 @@ public class UserController {
 				message = "User Updated successfully";
 				httpStatus = HttpStatus.OK;
 			} else {
-				throw new ApiException("Issue while updating User", 404);
+				throw new ApiException("Issue while updating User", 402);
 			}
 		} else {
-			throw new ApiException(message, 404);
+			throw new ApiException(message, 403);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userDetailsModel, token));
@@ -229,11 +231,11 @@ public class UserController {
 			System.out.println(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E"))
 
-				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 
 			UserDetailsModel userDetails = userDetailsService.getProfileDetails(id);
 			if (userDetails == null) {
-				throw new ApiException("User not found", 404);
+				throw new ApiException("User not found", 401);
 			} else {
 				user = userDetails;
 				httpStatus = HttpStatus.OK;
@@ -241,7 +243,7 @@ public class UserController {
 			}
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, user, token));
@@ -265,11 +267,11 @@ public class UserController {
 			logger.info(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E"))
 
-				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 
 			userList = userDetailsService.getAllUserDetails();
 			if (userList.isEmpty()) {
-				throw new ApiException("No record found", 404);
+				throw new ApiException("No record found", 401);
 			} else {
 //				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;
@@ -279,7 +281,7 @@ public class UserController {
 
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
@@ -306,11 +308,11 @@ public class UserController {
 			logger.info(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E"))
 
-				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 
 			userList = userDetailsService.getSearchUserList(searchUserModel);
 			if (userList.isEmpty()) {
-				throw new ApiException("No record found", 404);
+				throw new ApiException("No record found", 401);
 			} else {
 //				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;
@@ -320,7 +322,7 @@ public class UserController {
 
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
@@ -344,11 +346,11 @@ public class UserController {
 			logger.info(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E"))
 
-				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 
 			userList = userDetailsService.getAllUserList();
 			if (userList.isEmpty()) {
-				throw new ApiException("No record found", 404);
+				throw new ApiException("No record found", 401);
 			} else {
 //				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;
@@ -358,7 +360,7 @@ public class UserController {
 
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
@@ -383,11 +385,11 @@ public class UserController {
 			System.out.println(loggedUser.getUserType());
 			if (!loggedUser.getUserType().equals("A")) {
 				logger.error("Logged In User is not Admin !!!!!!!!!!!!!!!!!! Throw Exception");
-				throw new ApiException("Only Admin can change status .....!!", 404);
+				throw new ApiException("Only Admin can change status .....!!", 400);
 			}
 //			UserDetails userDetails = userDetailsService.getUserDetailsById(userStatusModel.getUserId());
 			if (userDetailsService.getUserDetailsById(userStatusModel.getUserId()) == null) {
-				throw new ApiException("User not found", 404);
+				throw new ApiException("User not found", 401);
 			} else {
 				userStatusModel.setUpdatedBy(loggedUser.getUserId());
 				UserDetails userDetails = userDetailsService.updateCurrentStatus(userStatusModel);
@@ -397,7 +399,7 @@ public class UserController {
 			}
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, user, token));
@@ -418,7 +420,7 @@ public class UserController {
 			System.out.println(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E")) {
 				logger.error("Logged In User is not Admin or Vendor !!!!!!!!!!!!!!!!!! Throw Exception");
-				throw new ApiException("Only Admin/Vendor can unlock user .....!!", 404);
+				throw new ApiException("Only Admin/Vendor can unlock user .....!!", 400);
 			}
 
 			user = userDetailsService.unlockUser(loggedUser.getUserId(), id);
@@ -426,12 +428,12 @@ public class UserController {
 				httpStatus = HttpStatus.OK;
 				message = "User Unlocked Successfully !!";
 			} else {
-				throw new ApiException("User is not locked  !!", 404);
+				throw new ApiException("User is not locked  !!", 401);
 			}
 
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, user, token));
@@ -458,7 +460,7 @@ public class UserController {
 			logger.info(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E"))
 
-				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 
 			userList = userDetailsService.getSearchUserListwithType("E", searchUserModel);
 			if (userList.isEmpty()) {
@@ -472,7 +474,7 @@ public class UserController {
 
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 401);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
@@ -500,11 +502,11 @@ public class UserController {
 			logger.info(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E"))
 
-				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 
 			userList = userDetailsService.getSearchUserListwithType("S", searchUserModel);
 			if (userList.isEmpty()) {
-				throw new ApiException("No record found", 404);
+				throw new ApiException("No record found", 401);
 			} else {
 //				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;
@@ -514,7 +516,7 @@ public class UserController {
 
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
@@ -542,12 +544,12 @@ public class UserController {
 			logger.info(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E") || loggedUser.getUserType().equals("S"))
 
-				throw new ApiException(" Only Admin/Vendor can veiw !!", 404);
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 			System.out.println("above fun call");
 			userList = userDetailsService.getSearchUserListwithType("V", searchUserModel);
 			System.out.println("Below fun call");
 			if (userList.isEmpty()) {
-				throw new ApiException("No record found", 404);
+				throw new ApiException("No record found", 401);
 			} else {
 //				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;
@@ -557,7 +559,7 @@ public class UserController {
 
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
@@ -585,12 +587,12 @@ public class UserController {
 			logger.info(loggedUser.getUserType());
 			if (!loggedUser.getUserType().equals("A"))
 
-				throw new ApiException(" Only Admin  can veiw !!", 404);
+				throw new ApiException(" Only Admin  can veiw !!", 400);
 			System.out.println("above fun call");
 			userList = userDetailsService.getSearchUserListwithType("A", searchUserModel);
 			System.out.println("Below fun call");
 			if (userList.isEmpty()) {
-				throw new ApiException("No record found", 404);
+				throw new ApiException("No record found", 401);
 			} else {
 //				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;
@@ -600,11 +602,42 @@ public class UserController {
 
 		} else {
 			// Invalid session token or unauthorized access
-			throw new ApiException("Invalid session token or unauthorized access", 404);
+			throw new ApiException("Invalid session token or unauthorized access", 402);
 		}
 
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
+	}
+	
+	
+	@PutMapping("/changePassword")
+	public ResponseEntity<ApiResponse<LoginDetails>> forgotPassword(@RequestBody ChangePassword  changePasswordModel)
+	{
+		String message=null;
+//		HttpStatus httpStatus = null;
+		
+		 LoginDetails loginDetails =null;
+
+		UserDetails user = userDetailsService.getUserDetailsByMobile(Long.parseLong(changePasswordModel.getMobileNumber()));
+		if (user==null)
+			throw new ApiException("Invalid Mobile number !!", 400);
+		
+		else
+		{
+			changePasswordModel.setUserName(user.getLoginDetails().getUsername())  ; 
+			
+			
+		  loginDetails =	loginDetailsService.updatePassword(changePasswordModel);
+		}
+		if (user!=null)
+			message ="Password updated Successfully !!!";
+		else 
+			throw new ApiException("Issue while changing password ......", 401);
+
+
+		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, message, null, null));
+
+		
 	}
 
 //	@GetMapping("/veiwAllLocked")

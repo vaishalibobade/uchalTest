@@ -93,12 +93,12 @@ public class LoginController {
 					LoginDetails loginDetails = loginDetailsService.updateLoginAttempts(request.getUsername());
 					// Authentication failed
 					loginResponse.setAuthenticated(false);
-					throw new ApiException("Invalid Username/Password !!", 404);
+					throw new ApiException("Invalid Username/Password !!", 400);
 				}
 			}
 			if (!loginDetailsService.validateUserToLogin(user)) {
 				loginResponse.setAuthenticated(false);
-				throw new ApiException("Account is Locked !!", 404);
+				throw new ApiException("Account is Locked !!", 401);
 
 
 			}
@@ -115,28 +115,7 @@ public class LoginController {
 
 	}
 
-	@PutMapping("/changePassword")
-	public ResponseEntity<ApiResponse<LoginDetails>> forgotPassword(@RequestBody ChangePassword  changePasswordModel)
-	{
-		String message=null;
-//		HttpStatus httpStatus = null;
-
-		LoginDetails user = loginDetailsService.getByUsername(changePasswordModel.getUsername());
-		if (user==null)
-			throw new ApiException("Invalid Username !!", 404);
-		
-		else
-		 user =	loginDetailsService.updatePassword(changePasswordModel);
-		if (user!=null)
-			message ="Password updated Successfully !!!";
-		else 
-			throw new ApiException("Issue while changing password ......", 404);
-
-
-		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, message, user, null));
-
-		
-	}
+	
 	
 	
 	

@@ -2,18 +2,12 @@ package com.uchal.model;
 
 public class ChangePassword {
 	
-	
-	private String username;
+	 private String userName;
+	private String mobileNumber;
 	
 	private String password;
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
+	
 
 	public String getPassword() {
 		return password;
@@ -21,6 +15,24 @@ public class ChangePassword {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
 	}
 
 }
