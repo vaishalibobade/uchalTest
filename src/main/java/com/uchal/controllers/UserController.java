@@ -58,6 +58,45 @@ public class UserController {
 
 	}
 
+	@PostMapping("/signUp")
+	public ResponseEntity<ApiResponse<UserDetailsModel>> signUpUser(@RequestBody UserDetailsModel userDetailsModel) {
+		UserDetailsMapper mapper = new UserDetailsMapper();
+		HttpStatus httpStatus;
+		String message = null;
+		
+//			String sessionToken = token.substring(7); // Remove "Bearer " prefix
+//			SessionToken session = sessionManager.getSessionToken(sessionToken);
+//			if (session != null) {
+//				UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+//				System.out.println(session.getUserId());
+//				System.out.println(loggedUser.getUserType());
+//				if (loggedUser.getUserType().equals("E"))
+//
+//					throw new ApiException("Only Vendor/ Admin can Register !!", 404);
+//				userDetailsModel.setCreatedBy(loggedUser.getUserId());
+//
+//			}
+		
+
+		message = userDetailsService.validateUserDetails(userDetailsModel);
+		if (message == null) {
+			UserDetails savedUser = userDetailsService.registerUser(userDetailsModel);
+
+			if (savedUser != null) {
+				userDetailsModel = mapper.mapToModel(savedUser);
+				message = "User registered successfully";
+				httpStatus = HttpStatus.OK;
+			} else {
+				httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+				message = "Issue while registering User";
+			}
+		} else {
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+		}
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userDetailsModel, null));
+
+	}
+
 	@PostMapping("/register")
 	public ResponseEntity<ApiResponse<UserDetailsModel>> registerUser(@RequestBody UserDetailsModel userDetailsModel,
 			@RequestHeader("Authorization") String token) {
@@ -149,7 +188,6 @@ public class UserController {
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
-		
 		if (session != null) {
 			// User is authenticated, process the protected resource request
 //        @SuppressWarnings("removal")
@@ -290,7 +328,7 @@ public class UserController {
 
 	@GetMapping("/searchUser")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUser(@RequestParam("name") String name,
-            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
@@ -349,6 +387,55 @@ public class UserController {
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 
 			userList = userDetailsService.getAllUserList();
+			if (userList.isEmpty()) {
+				throw new ApiException("No record found", 401);
+			} else {
+//				user = mapper.mapToModel(userDetails);
+				httpStatus = HttpStatus.OK;
+				message = "User found";
+				System.out.println(userList.size());
+			}
+
+		} else {
+			// Invalid session token or unauthorized access
+			throw new ApiException("Invalid session token or unauthorized access", 402);
+		}
+
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
+
+	}
+	
+	
+	@GetMapping("/veiwUserforPaymentList")
+	public ResponseEntity<ApiResponse<List<UserList>>> veiwUserforPaymentList(@RequestHeader("Authorization") String token) {
+		HttpStatus httpStatus = HttpStatus.OK;
+		String message = null;
+		List<UserList> userList = null;
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		SessionToken session = sessionManager.getSessionToken(sessionToken);
+
+		if (session != null) {
+			// User is authenticated, process the protected resource request
+//        @SuppressWarnings("removal")
+//        return "Protected Resource for User: " + userId;
+			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+			logger.info(loggedUser.getUserId());
+			logger.info(loggedUser.getUserType());
+			if (loggedUser.getUserType().equals("E"))
+
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
+			
+			
+			
+		if (loggedUser.getUserType().equals("A"))
+			userList = userDetailsService.getAllUserListbyType("V");
+		if (loggedUser.getUserType().equals("V"))
+			userList = userDetailsService.getAllVendorSubVendor();
+		if (loggedUser.getUserType().equals("S"))
+			userList = userDetailsService.getAllUserListbyType("E");
+
+
+
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 401);
 			} else {
@@ -440,9 +527,8 @@ public class UserController {
 	}
 
 	@GetMapping("/veiwAllEmployee")
-	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllEmployee(
-			@RequestParam("name") String name,
-            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllEmployee(@RequestParam("name") String name,
+			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
@@ -482,9 +568,8 @@ public class UserController {
 	}
 
 	@GetMapping("/veiwAllSubVendor")
-	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllSubvendor(
-			@RequestParam("name") String name,
-            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllSubvendor(@RequestParam("name") String name,
+			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
@@ -524,9 +609,8 @@ public class UserController {
 	}
 
 	@GetMapping("/veiwAllVendor")
-	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllVendor(
-			@RequestParam("name") String name,
-            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllVendor(@RequestParam("name") String name,
+			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
@@ -567,9 +651,8 @@ public class UserController {
 	}
 
 	@GetMapping("/veiwAllAdmin")
-	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllAdmin(
-			@RequestParam("name") String name,
-            @RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllAdmin(@RequestParam("name") String name,
+			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
@@ -608,36 +691,31 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
 	}
-	
-	
+
 	@PutMapping("/changePassword")
-	public ResponseEntity<ApiResponse<LoginDetails>> forgotPassword(@RequestBody ChangePassword  changePasswordModel)
-	{
-		String message=null;
+	public ResponseEntity<ApiResponse<LoginDetails>> forgotPassword(@RequestBody ChangePassword changePasswordModel) {
+		String message = null;
 //		HttpStatus httpStatus = null;
-		
-		 LoginDetails loginDetails =null;
 
-		UserDetails user = userDetailsService.getUserDetailsByMobile(Long.parseLong(changePasswordModel.getMobileNumber()));
-		if (user==null)
+		LoginDetails loginDetails = null;
+
+		UserDetails user = userDetailsService
+				.getUserDetailsByMobile(Long.parseLong(changePasswordModel.getMobileNumber()));
+		if (user == null)
 			throw new ApiException("Invalid Mobile number !!", 400);
-		
-		else
-		{
-			changePasswordModel.setUserName(user.getLoginDetails().getUsername())  ; 
-			
-			
-		  loginDetails =	loginDetailsService.updatePassword(changePasswordModel);
-		}
-		if (user!=null)
-			message ="Password updated Successfully !!!";
-		else 
-			throw new ApiException("Issue while changing password ......", 401);
 
+		else {
+			changePasswordModel.setUserName(user.getLoginDetails().getUsername());
+
+			loginDetails = loginDetailsService.updatePassword(changePasswordModel);
+		}
+		if (user != null)
+			message = "Password updated Successfully !!!";
+		else
+			throw new ApiException("Issue while changing password ......", 401);
 
 		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, message, null, null));
 
-		
 	}
 
 //	@GetMapping("/veiwAllLocked")

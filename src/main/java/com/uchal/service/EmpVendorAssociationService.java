@@ -53,6 +53,8 @@ public class EmpVendorAssociationService {
 	public boolean checkPaymentValidation(int employeeId, int vendorId) {
 		String payeeType = userDetailsService.getUserDetailsById(vendorId).getUserType();
 		String employeeType = userDetailsService.getUserDetailsById(employeeId).getUserType();
+		System.out.println(payeeType);
+		System.out.println(employeeType);
 		if (payeeType.equals("A") && employeeType.equals("V"))
 			return true;
 		if (payeeType.equals("V") && employeeType.equals("S"))
@@ -69,10 +71,13 @@ public class EmpVendorAssociationService {
 	public EmpVendorAssociationModel savePaymentDetails(EmpVendorAssociationModel empVendorAssociationModel) {
 //	    	EmpVendorAssociationMapper empVendorAssociationMapper=new EmpVendorAssociationMapper();
 		if (!checkPaymentValidation(empVendorAssociationModel.getUserId(), empVendorAssociationModel.getVendorId()))
+		{
+			System.out.println(empVendorAssociationModel.getUserId());
+			System.out.println(empVendorAssociationModel.getVendorId());
 			throw new ApiException(
 					"Admin can make payment to Vendor ,Vendor can make payment to Subvendor/Employee , Subvendor can make payment to Employee",
 					404);
-
+		}
 		EmpVendorAssociation empVendorAssociation = empVendorAssociationRepository
 				.save(empVendorAssociationMapper.mapToEntity(empVendorAssociationModel));
 

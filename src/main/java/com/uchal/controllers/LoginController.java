@@ -143,9 +143,4 @@ public class LoginController {
 
 	
 	
-	
-	private String generateToken() {
-		// Implement your token generation logic here
-		return "sample-token";
-	}
 }

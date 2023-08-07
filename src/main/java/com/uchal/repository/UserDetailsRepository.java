@@ -40,6 +40,10 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 
     @Query("SELECT ud.userId, ud.firstName, ud.middleName, ud.lastName,  ud.userType FROM UserDetails ud")
     List<Object[]> getAllUserList();
+    @Query("SELECT ud.userId, ud.firstName, ud.middleName, ud.lastName,  ud.userType FROM UserDetails ud WHERE ud.userType = :userType")
+    List<Object[]> getAllUserListbyType(@Param("userType") String userType );
+    @Query("SELECT ud.userId, ud.firstName, ud.middleName, ud.lastName,  ud.userType FROM UserDetails ud WHERE ud.userType = 'S' OR ud.userType = 'E' ")
+    List<Object[]> getAllVendorSubVendor();
     
 ////	@Query("SELECT mus.status, ud.firstName, ud.lastName, ud.middleName, ud.mobileNumber, ud.userType FROM UserDetails ud JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id  WHERE ud.mobileNumber = :mobileNumber")
 //

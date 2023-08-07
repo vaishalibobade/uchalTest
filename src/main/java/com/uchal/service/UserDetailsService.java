@@ -256,6 +256,26 @@ public class UserDetailsService {
 		return list;
 
 	}
+	public List<UserList> getAllUserListbyType(String type) {
+
+		List<Object[]> object = userDetailsRepository.getAllUserListbyType(type);
+		List<UserList> list = convertToObjectList(object);
+
+		return list;
+
+	}
+	public List<UserList> getAllVendorSubVendor() {
+
+		List<Object[]> object = userDetailsRepository.getAllVendorSubVendor();
+		List<UserList> list = convertToObjectList(object);
+
+		return list;
+
+	}
+	
+	
+	
+	
 
 	public List<UserList> convertToObjectList(List<Object[]> originalList) {
 		List<UserList> userList = new ArrayList<>();
