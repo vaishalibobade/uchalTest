@@ -48,13 +48,16 @@ public boolean isAuthorisedCRUD(String type, String  loggedType)
 	System.out.println(masterUserTypeRepository.findByAbreviation(type).getId());
 
 	System.out.println(masterUserTypeRepository.findByAbreviation(type).getUserType());
-
+System.out.println(loggedId);
 //	System.out.println(getMasterUserTypeById(id).getUserType());
 	List<String> belongsTo=Arrays.asList(masterUserTypeRepository.findByAbreviation(type).getUserBelongTo().split(","));
-	if (belongsTo.contains(loggedId))
+	System.out.println(belongsTo.contains(loggedId));
+	if (belongsTo.contains(String.valueOf(loggedId)))
 	{
+		System.out.println("Ture returns...");
 		return true;
 	}
+	System.out.println("False Returns.....");
 	return false;
 	
 }

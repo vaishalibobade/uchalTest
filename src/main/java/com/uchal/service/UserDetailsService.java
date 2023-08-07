@@ -145,6 +145,10 @@ public class UserDetailsService {
 
 	public String validateUpdateUserDetails(UserDetails userDetails, UserDetails loggeduser) {
 		String message = null;
+//		System.out.println(loggeduser.getUserId());
+//		System.out.println(userDetails.getUserId());
+//		System.out.println(masterUserTypeService
+//				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()));
 		if (loggeduser.getUserId() != userDetails.getUserId() && masterUserTypeService
 				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()) == false) {
 
