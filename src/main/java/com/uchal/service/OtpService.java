@@ -45,6 +45,7 @@ public class OtpService {
     }
     	catch(Exception e)
     	{
+    		System.out.println(e);
 				throw new ApiException(e.getMessage(), 405);
 
     	}
