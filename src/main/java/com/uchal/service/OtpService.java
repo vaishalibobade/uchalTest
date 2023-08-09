@@ -15,12 +15,17 @@ import com.uchal.model.ApiException;
 
 @Service
 public class OtpService {
+	
+	// Access environment variables in Java
+	private String accountSid = System.getenv("twilio_account_sid");
+	private String authToken = System.getenv("twilio_auth_token");
 
-    @Value("${twilio.account.sid}")
-    private String accountSid;
 
-    @Value("${twilio.auth.token}")
-    private String authToken;
+//    @Value("${twilio.account.sid}")
+//    private String accountSid;
+//
+//    @Value("${twilio.auth.token}")
+//    private String authToken;
 
     @Value("${twilio.phone.number}")
     private String twilioPhoneNumber;
