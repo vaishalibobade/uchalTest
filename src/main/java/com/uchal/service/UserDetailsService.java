@@ -154,36 +154,36 @@ public class UserDetailsService {
 		
 		UserDetails existingUser=userDetailsRepository.getById(updatedUser.getUserId());
 		
-		if(updatedUser.getFirstName()!=null)
+		if(updatedUser.getFirstName()!=null || updatedUser.getFirstName().equals("null"))
 			existingUser.setFirstName(updatedUser.getFirstName());
 			if(updatedUser.getAdharImage()!=null)
 			existingUser.setAdharImage(updatedUser.getAdharImage());
-			if(updatedUser.getUserType()!=null)
+			if(updatedUser.getUserType()!=null|| updatedUser.getUserType().equals("null"))
 			{
 				System.out.println(updatedUser.getUserType());
 			existingUser.setUserType(updatedUser.getUserType());
 			}
 			if(updatedUser.getAdharNumber()!=0)
 			existingUser.setAdharNumber(updatedUser.getAdharNumber());
-			if(updatedUser.getBloodgroup()!=null)
+			if(updatedUser.getBloodgroup()!=null|| updatedUser.getBloodgroup().equals("null"))
 			existingUser.setBloodgroup(updatedUser.getBloodgroup());
-			if(updatedUser.getCity()!=null)
+			if(updatedUser.getCity()!=null|| updatedUser.getCity().equals("null"))
 			existingUser.setCity(updatedUser.getCity());
-			if(updatedUser.getCountry()!=null)
+			if(updatedUser.getCountry()!=null|| updatedUser.getCountry().equals("null"))
 			existingUser.setCountry(updatedUser.getCountry());
-			if(updatedUser.getLastName()!=null)
+			if(updatedUser.getLastName()!=null|| updatedUser.getLastName().equals("null"))
 			existingUser.setLastName(updatedUser.getLastName());
-			if(updatedUser.getMiddleName()!=null)
+			if(updatedUser.getMiddleName()!=null|| updatedUser.getMiddleName().equals("null"))
 			existingUser.setMiddleName(updatedUser.getMiddleName());
 			if(updatedUser.getMobileNumber()!=0)
 			existingUser.setMobileNumber(updatedUser.getMobileNumber());
-			if(updatedUser.getState()!=null)
+			if(updatedUser.getState()!=null|| updatedUser.getState().equals("null"))
 			existingUser.setState(updatedUser.getState());
-			if(updatedUser.getStreetDetail()!=null)
+			if(updatedUser.getStreetDetail()!=null|| updatedUser.getStreetDetail().equals("null"))
 			existingUser.setStreetDetail(updatedUser.getStreetDetail());
-			if(updatedUser.getUpdatedBy()!=null)
+			if(updatedUser.getUpdatedBy()!=null|| updatedUser.getUpdatedBy().equals("null"))
 			existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
-			if(updatedUser.getUpdatedOn()!=null)
+			if(updatedUser.getUpdatedOn()!=null|| updatedUser.getUpdatedOn().equals("null"))
 			existingUser.setUpdatedOn(updatedUser.getUpdatedOn());
 			return existingUser;
 
