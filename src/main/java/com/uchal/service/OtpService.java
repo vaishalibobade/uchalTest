@@ -51,7 +51,7 @@ public class OtpService {
     	catch(Exception e)
     	{
     		System.out.println(e);
-				throw new ApiException(e.getMessage(), 405);
+				throw new ApiException(e.getMessage()+authToken+accountSid, 405);
 
     	}
     }
