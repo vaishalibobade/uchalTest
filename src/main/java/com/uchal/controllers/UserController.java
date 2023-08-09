@@ -228,9 +228,9 @@ public class UserController {
 		loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
 		System.out.println(session.getUserId());
 		System.out.println(loggedUser.getUserType());
+		userDetailsModel.setUserId(loggedUser.getUserId());
 		if (loggedUser.getUserType().equals("E") && loggedUser.getUserId() != userDetailsModel.getUserId())
 			throw new ApiException("Only Vendor/ Admin can update !!", 401);
-		userDetailsModel.setUserId(loggedUser.getUserId());
 		message = userDetailsService.validateUpdateUserDetails(mapper.mapToEntity(userDetailsModel), loggedUser);
 //		System.out.println("in update111");
 		if (message == null) {
