@@ -154,36 +154,36 @@ public class UserDetailsService {
 		
 		UserDetails existingUser=userDetailsRepository.getById(updatedUser.getUserId());
 		
-		if(updatedUser.getFirstName()!=null || updatedUser.getFirstName().equals("null"))
+		if(updatedUser.getFirstName()!=null && !updatedUser.getFirstName().equalsIgnoreCase("null"))
 			existingUser.setFirstName(updatedUser.getFirstName());
 			if(updatedUser.getAdharImage()!=null)
 			existingUser.setAdharImage(updatedUser.getAdharImage());
-			if(updatedUser.getUserType()!=null|| updatedUser.getUserType().equals("null"))
+			if(updatedUser.getUserType()!=null && !updatedUser.getUserType().equalsIgnoreCase("null"))
 			{
 				System.out.println(updatedUser.getUserType());
 			existingUser.setUserType(updatedUser.getUserType());
 			}
 			if(updatedUser.getAdharNumber()!=0)
 			existingUser.setAdharNumber(updatedUser.getAdharNumber());
-			if(updatedUser.getBloodgroup()!=null|| updatedUser.getBloodgroup().equals("null"))
+			if(updatedUser.getBloodgroup()!=null && !updatedUser.getBloodgroup().equalsIgnoreCase("null"))
 			existingUser.setBloodgroup(updatedUser.getBloodgroup());
-			if(updatedUser.getCity()!=null|| updatedUser.getCity().equals("null"))
+			if(updatedUser.getCity()!=null && !updatedUser.getCity().equalsIgnoreCase("null"))
 			existingUser.setCity(updatedUser.getCity());
-			if(updatedUser.getCountry()!=null|| updatedUser.getCountry().equals("null"))
+			if(updatedUser.getCountry()!=null && ! updatedUser.getCountry().equalsIgnoreCase("null"))
 			existingUser.setCountry(updatedUser.getCountry());
-			if(updatedUser.getLastName()!=null|| updatedUser.getLastName().equals("null"))
+			if(updatedUser.getLastName()!=null && !  updatedUser.getLastName().equalsIgnoreCase("null"))
 			existingUser.setLastName(updatedUser.getLastName());
-			if(updatedUser.getMiddleName()!=null|| updatedUser.getMiddleName().equals("null"))
+			if(updatedUser.getMiddleName()!=null && !  updatedUser.getMiddleName().equalsIgnoreCase("null"))
 			existingUser.setMiddleName(updatedUser.getMiddleName());
 			if(updatedUser.getMobileNumber()!=0)
 			existingUser.setMobileNumber(updatedUser.getMobileNumber());
-			if(updatedUser.getState()!=null|| updatedUser.getState().equals("null"))
+			if(updatedUser.getState()!=null && !  updatedUser.getState().equalsIgnoreCase("null"))
 			existingUser.setState(updatedUser.getState());
-			if(updatedUser.getStreetDetail()!=null|| updatedUser.getStreetDetail().equals("null"))
+			if(updatedUser.getStreetDetail()!=null  && !  updatedUser.getStreetDetail().equalsIgnoreCase("null"))
 			existingUser.setStreetDetail(updatedUser.getStreetDetail());
-			if(updatedUser.getUpdatedBy()!=null|| updatedUser.getUpdatedBy().equals("null"))
+			if(updatedUser.getUpdatedBy()!=null)
 			existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
-			if(updatedUser.getUpdatedOn()!=null|| updatedUser.getUpdatedOn().equals("null"))
+			if(updatedUser.getUpdatedOn()!=null)
 			existingUser.setUpdatedOn(updatedUser.getUpdatedOn());
 			return existingUser;
 
