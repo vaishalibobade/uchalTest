@@ -120,45 +120,94 @@ public class UserDetailsService {
 	}
 
 	public UserDetails updateUser(UserDetails updatedUser) {
-		Optional<UserDetails> user = userDetailsRepository.findById(updatedUser.getUserId());
-		UserDetails existingUser = user.get();
+//		Optional<UserDetails> user = userDetailsRepository.findById(updatedUser.getUserId());
+//		UserDetails existingUser = user.get();
+		
+		
+		UserDetails existingUser =checkforNulls(updatedUser);
+
 		// Update the properties of the existingUser entity with the new values from
 		// updatedUser
-		existingUser.setFirstName(updatedUser.getFirstName());
-		existingUser.setAdharImage(updatedUser.getAdharImage());
-		existingUser.setUserType(updatedUser.getUserType());
-		existingUser.setAdharNumber(updatedUser.getAdharNumber());
-		existingUser.setBloodgroup(updatedUser.getBloodgroup());
-		existingUser.setCity(updatedUser.getCity());
-		existingUser.setCountry(updatedUser.getCountry());
-		existingUser.setLastName(updatedUser.getLastName());
-		existingUser.setMiddleName(updatedUser.getMiddleName());
-		existingUser.setMobileNumber(updatedUser.getMobileNumber());
-		existingUser.setState(updatedUser.getState());
-		existingUser.setStreetDetail(updatedUser.getStreetDetail());
-		existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
-		existingUser.setUpdatedOn(updatedUser.getUpdatedOn());
+//		existingUser.setFirstName(updatedUser.getFirstName());
+//		existingUser.setAdharImage(updatedUser.getAdharImage());
+//		existingUser.setUserType(updatedUser.getUserType());
+//		existingUser.setAdharNumber(updatedUser.getAdharNumber());
+//		existingUser.setBloodgroup(updatedUser.getBloodgroup());
+//		existingUser.setCity(updatedUser.getCity());
+//		existingUser.setCountry(updatedUser.getCountry());
+//		existingUser.setLastName(updatedUser.getLastName());
+//		existingUser.setMiddleName(updatedUser.getMiddleName());
+//		existingUser.setMobileNumber(updatedUser.getMobileNumber());
+//		existingUser.setState(updatedUser.getState());
+//		existingUser.setStreetDetail(updatedUser.getStreetDetail());
+//		existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
+//		existingUser.setUpdatedOn(updatedUser.getUpdatedOn());
 
 		// Save the updated entity
 		return userDetailsRepository.save(existingUser);
 	}
 
+	
+	
+	public UserDetails checkforNulls(UserDetails updatedUser)
+	{
+		
+		UserDetails existingUser=userDetailsRepository.getById(updatedUser.getUserId());
+		
+		if(updatedUser.getFirstName()!=null)
+			existingUser.setFirstName(updatedUser.getFirstName());
+			if(updatedUser.getAdharImage()!=null)
+			existingUser.setAdharImage(updatedUser.getAdharImage());
+			if(updatedUser.getUserType()!=null)
+			{
+				System.out.println(updatedUser.getUserType());
+			existingUser.setUserType(updatedUser.getUserType());
+			}
+			if(updatedUser.getAdharNumber()!=0)
+			existingUser.setAdharNumber(updatedUser.getAdharNumber());
+			if(updatedUser.getBloodgroup()!=null)
+			existingUser.setBloodgroup(updatedUser.getBloodgroup());
+			if(updatedUser.getCity()!=null)
+			existingUser.setCity(updatedUser.getCity());
+			if(updatedUser.getCountry()!=null)
+			existingUser.setCountry(updatedUser.getCountry());
+			if(updatedUser.getLastName()!=null)
+			existingUser.setLastName(updatedUser.getLastName());
+			if(updatedUser.getMiddleName()!=null)
+			existingUser.setMiddleName(updatedUser.getMiddleName());
+			if(updatedUser.getMobileNumber()!=0)
+			existingUser.setMobileNumber(updatedUser.getMobileNumber());
+			if(updatedUser.getState()!=null)
+			existingUser.setState(updatedUser.getState());
+			if(updatedUser.getStreetDetail()!=null)
+			existingUser.setStreetDetail(updatedUser.getStreetDetail());
+			if(updatedUser.getUpdatedBy()!=null)
+			existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
+			if(updatedUser.getUpdatedOn()!=null)
+			existingUser.setUpdatedOn(updatedUser.getUpdatedOn());
+			return existingUser;
+
+	}
 	public String validateUpdateUserDetails(UserDetails userDetails, UserDetails loggeduser) {
 		String message = null;
+		if (userDetailsRepository.findById(userDetails.getUserId()).isEmpty()) {
+
+			System.out.println("In validate fun start 1");
+			message = "User not found with ID: " + userDetails.getUserId();
+			return message;
+		}
 //		System.out.println(loggeduser.getUserId());
 //		System.out.println(userDetails.getUserId());
 //		System.out.println(masterUserTypeService
 //				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()));
+		userDetails=checkforNulls(userDetails);
+				
 		if (loggeduser.getUserId() != userDetails.getUserId() && masterUserTypeService
 				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()) == false) {
 
 			return "you are not Authorised to update details !!!!!!";
 		}
-		if (userDetailsRepository.findById(userDetails.getUserId()).isEmpty()) {
-
-			System.out.println("In validate fun start 1");
-			message = "User not found with ID: " + userDetails.getUserId();
-		}
+		
 		if (!userDetailsRepository.findByAdharIdNotEqual(userDetails.getUserId(), userDetails.getAdharNumber())
 				.isEmpty() && message == null) {
 			message = "Adhar Number is Already Exists";
