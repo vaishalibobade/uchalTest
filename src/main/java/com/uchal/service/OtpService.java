@@ -16,10 +16,10 @@ import com.uchal.model.ApiException;
 @Service
 public class OtpService {
 
-    @Value("${twilio.account.sid}")
+    @Value("${SIDtwilio}")
     private String accountSid;
 
-    @Value("${twilio.auth.token}")
+    @Value("${tokentwilio}")
     private String authToken;
 
     @Value("${twilio.phone.number}")
