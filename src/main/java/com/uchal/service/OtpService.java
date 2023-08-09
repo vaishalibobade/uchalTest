@@ -16,10 +16,10 @@ import com.uchal.model.ApiException;
 @Service
 public class OtpService {
 
-    @Value("${SIDtwilio}")
+    @Value("${twilio.account.sid}")
     private String accountSid;
 
-    @Value("${tokentwilio}")
+    @Value("${twilio.auth.token}")
     private String authToken;
 
     @Value("${twilio.phone.number}")
@@ -53,14 +53,14 @@ public class OtpService {
     
     
         public void generateOtp(String phoneNumber) {
-//            String otp = generateRandomOtp(OTP_LENGTH);  // need to uncoment
-        	String otp="123456";
+            String otp = generateRandomOtp(OTP_LENGTH);  // need to uncoment
+//        	String otp="123456";
             long expirationTime = System.currentTimeMillis() + OTP_EXPIRATION_DURATION;
             phoneNumberToOtpMap.put(phoneNumber, new OtpData(otp, expirationTime));
 //            phoneNumberToOtpMap.put(phoneNumber, otp);
             // Here, you should use a messaging service provider (e.g., Twilio) to send the OTP to the user's phone.
             // For this example, we'll skip the actual OTP sending part.
-//            sendOtp(phoneNumber,otp);//send otp  // need to uncoment
+            sendOtp(phoneNumber,otp);//send otp  // need to uncoment
             System.out.println("OTP for " + phoneNumber + ": " + otp);
         }
 
