@@ -539,8 +539,8 @@ public class UserController {
 				userStatusModel.setUpdatedBy(loggedUser.getUserId());
 				UserDetails userDetails = userDetailsService.updateCurrentStatus(userStatusModel);
 				user = mapper.mapToModel(userDetails);
-				httpStatus = HttpStatus.OK;
-				message = "User found";
+				httpStatus = HttpStatus.CREATED;
+				message = "User Status updated Successfully";
 			}
 		} else {
 			// Invalid session token or unauthorized access

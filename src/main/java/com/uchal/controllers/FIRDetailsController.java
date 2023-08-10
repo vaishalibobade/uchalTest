@@ -47,7 +47,7 @@ public class FIRDetailsController {
 	}
 
 	@PostMapping("/uploadFIR")
-	public ResponseEntity<ApiResponse<UserDetailsModel>> createFIRDetails(@RequestBody FIRDetails firDetails,
+	public ResponseEntity<ApiResponse<FIRDetails>> createFIRDetails(@RequestBody FIRDetails firDetails,
 			@RequestHeader("Authorization") String token) {
 		FIRDetails createdFIRDetails = null;
 		if (token != null) {
@@ -76,12 +76,13 @@ public class FIRDetailsController {
 		} catch (Exception e) {
 			throw new ApiException(e.getMessage(), 400);
 		}
+		return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(HttpStatus.CREATED, "FIR Uploaded Successfully", createdFIRDetails, token));
 
-		return new ResponseEntity(createdFIRDetails, HttpStatus.CREATED);
+//		return new ResponseEntity(createdFIRDetails, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/getAllFIRList")
-	public ResponseEntity<List<FIRDetails>> getAllFIRDetails(@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<FIRDetails>>> getAllFIRDetails(@RequestHeader("Authorization") String token) {
 		List<FIRDetails> allFIRDetails = null;
 		if (token != null) {
 			String sessionToken = token.substring(7); // Remove "Bearer " prefix
@@ -105,14 +106,19 @@ public class FIRDetailsController {
 
 		}
 		if (allFIRDetails.isEmpty())
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			throw new ApiException("No Record Found !!", 403);
 
-		return new ResponseEntity<>(allFIRDetails, HttpStatus.OK);
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(HttpStatus.NOT_FOUND, "Record Not Found", allFIRDetails, token));
+		
+		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, "Record Found", allFIRDetails, token));
+
+
+//		return new ResponseEntity<>(allFIRDetails, HttpStatus.OK);
 
 	}
 
 	@GetMapping("/getFIRdetails")
-	public ResponseEntity<List<FIRDetailsModel>> getFIRDetailsById(@RequestParam("userId") int userId,@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<FIRDetailsModel>>> getFIRDetailsById(@RequestParam("userId") int userId,@RequestHeader("Authorization") String token) {
 		FIRDetails allFIRDetails = null;
 		List<FIRDetailsModel> model=null;
 		if (token != null) {
@@ -137,9 +143,15 @@ public class FIRDetailsController {
 
 		}
 		if (model==null)
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			throw new ApiException("No Record Found !!", 403);
 
-		return new ResponseEntity<>(model, HttpStatus.OK);
+//			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(HttpStatus.NOT_FOUND, "Record Not Found", model, token));
+//		
+		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, "Record Found", model, token));
+
+
+//		return new ResponseEntity<>(model, HttpStatus.OK);
 
 	}
 	// Add other controller methods as needed
