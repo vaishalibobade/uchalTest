@@ -273,6 +273,7 @@ public class UserDetailsService {
 			user.setCurrentStatusId(status.getCurrentStatusId());
 			user.setUpdatedBy(status.getUpdatedBy());
 			user.setUpdatedOn(LocalDateTime.now());
+			user.setStatusRemarks(status.getRemarks());
 			logger.info(user);
 			logger.error("Saving user details...........");
 			userDetailsRepository.save(user);
@@ -317,6 +318,17 @@ public class UserDetailsService {
 		return list;
 
 	}
+	
+	
+//	public List<UserList> getAllUserListbyType(String type) {
+//
+//		List<Object[]> object = userDetailsRepository.getAllUserListbyType(type);
+//		List<UserList> list = convertToObjectList(object);
+//
+//		return list;
+//
+//	}
+	
 	public List<UserList> getAllVendorSubVendor() {
 
 		List<Object[]> object = userDetailsRepository.getAllVendorSubVendor();
@@ -325,6 +337,17 @@ public class UserDetailsService {
 		return list;
 
 	}
+	
+	public 	List<SearchUserOutputModel> getsearchSubVendorEmployeeList(SearchUserModel searchUserModel) {
+
+		List<Object[]> object = userDetailsRepository.getDataWithPartialMatchAndMultipleUserType(searchUserModel.getMobileNumber(),
+				searchUserModel.getName());
+		List<SearchUserOutputModel> list = convertToSearchList(object);
+
+		return list;
+
+	}
+	
 	
 	
 	

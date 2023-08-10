@@ -69,6 +69,16 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 			                                                  @Param("Name") String name,
 			                                                  @Param("userType") String userType);
 			
+			@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId "
+				       + "FROM UserDetails ud "
+				       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
+				       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
+				       + "WHERE (ud.mobileNumber = :mobileNumber OR ud.firstName LIKE CONCAT('%', :Name, '%') OR ud.middleName LIKE CONCAT('%', :Name, '%') OR ud.lastName LIKE CONCAT('%', :Name, '%')) "
+				       + "AND (ud.userType = 'S' OR ud.userType = 'E')")
+				List<Object[]> getDataWithPartialMatchAndMultipleUserType(@Param("mobileNumber") long mobileNumber,
+				                                                          @Param("Name") String Name);
+
+			
 			@Query("SELECT ud, mus.status, mut.userType "
 				       + "FROM UserDetails ud "
 				       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "

@@ -8,6 +8,7 @@ public class UserStatusModel {
 	private int currentStatusId;
 	private int updatedBy;
 	private Date updateOn;
+	private String remarks;
 	public int getUserId() {
 		return userId;
 	}
@@ -32,6 +33,12 @@ public class UserStatusModel {
 	}
 	public void setUpdateOn(Date updateOn) {
 		this.updateOn = updateOn;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 	
 

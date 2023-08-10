@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uchal.entity.FIRDetails;
 import com.uchal.entity.UserDetails;
 import com.uchal.model.ApiException;
 import com.uchal.model.ApiResponse;
+import com.uchal.model.FIRDetailsModel;
+import com.uchal.model.FIRDetailsModel;
 import com.uchal.model.SessionToken;
 import com.uchal.model.UserDetailsModel;
 import com.uchal.repository.SessionManager;
@@ -108,5 +111,36 @@ public class FIRDetailsController {
 
 	}
 
+	@GetMapping("/getFIRdetails")
+	public ResponseEntity<List<FIRDetailsModel>> getFIRDetailsById(@RequestParam("userId") int userId,@RequestHeader("Authorization") String token) {
+		FIRDetails allFIRDetails = null;
+		List<FIRDetailsModel> model=null;
+		if (token != null) {
+			String sessionToken = token.substring(7); // Remove "Bearer " prefix
+			SessionToken session = sessionManager.getSessionToken(sessionToken);
+			if (session != null) {
+				UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+				System.out.println(session.getUserId());
+				System.out.println(loggedUser.getUserType());
+				if (loggedUser.getUserType().equals("E"))
+
+					throw new ApiException("Only Vendor/ Admin can view FIR !!", 404);
+
+				model = firDetailsService.getFIRDetailsByUserId(userId);
+
+			} else {
+				throw new ApiException("Session cannot be null !!", 401);
+
+			}
+		} else {
+			throw new ApiException("Token cannot be null !!", 402);
+
+		}
+		if (model==null)
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+		return new ResponseEntity<>(model, HttpStatus.OK);
+
+	}
 	// Add other controller methods as needed
 }

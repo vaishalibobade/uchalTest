@@ -41,6 +41,7 @@ public class UserDetails {
     private Integer updatedBy;
     private LocalDateTime  updatedOn;
     private String streetDetail;
+    private String statusRemarks;
 //    @OneToMany()
     private int currentStatusId;
     
@@ -202,6 +203,14 @@ public class UserDetails {
 
 	public void setCurrentStatusId(int currentStatusId) {
 		this.currentStatusId = currentStatusId;
+	}
+
+	public String getStatusRemarks() {
+		return statusRemarks;
+	}
+
+	public void setStatusRemarks(String statusRemarks) {
+		this.statusRemarks = statusRemarks;
 	}
 }
 

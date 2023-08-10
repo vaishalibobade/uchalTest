@@ -325,6 +325,9 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
 	}
+	
+	
+	//Search Employee for Update status,...............Admin User.
 
 	@GetMapping("/searchUser")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUser(@RequestParam("name") String name,
@@ -454,6 +457,61 @@ public class UserController {
 
 	}
 
+	///Search User for Upload FIR Fuctionality.
+	
+	@GetMapping("/veiwUserforFIRList")
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUserFIRupload(@RequestParam("name") String name,
+			@RequestParam("mobileNumber") long mobileNumber,@RequestHeader("Authorization") String token) {
+		HttpStatus httpStatus = HttpStatus.OK;
+		String message = null;
+		List<SearchUserOutputModel> userList = null;
+		SearchUserModel searchUserModel=new SearchUserModel();
+		searchUserModel.setName(name);
+		searchUserModel.setMobileNumber(mobileNumber);
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		SessionToken session = sessionManager.getSessionToken(sessionToken);
+
+		if (session != null) {
+			// User is authenticated, process the protected resource request
+//        @SuppressWarnings("removal")
+//        return "Protected Resource for User: " + userId;
+			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+			logger.info(loggedUser.getUserId());
+			logger.info(loggedUser.getUserType());
+			if (loggedUser.getUserType().equals("E"))
+
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
+			
+			
+			
+		if (loggedUser.getUserType().equals("A"))
+			userList = userDetailsService.getSearchUserList(searchUserModel);
+		if (loggedUser.getUserType().equals("V"))
+			userList = userDetailsService.getsearchSubVendorEmployeeList(searchUserModel);
+		if (loggedUser.getUserType().equals("S"))
+			userList = userDetailsService.getSearchUserListwithType("E",searchUserModel);
+
+
+
+			if (userList.isEmpty()) {
+				throw new ApiException("No record found", 401);
+			} else {
+//				user = mapper.mapToModel(userDetails);
+				httpStatus = HttpStatus.OK;
+				message = "User found";
+				System.out.println(userList.size());
+			}
+
+		} else {
+			// Invalid session token or unauthorized access
+			throw new ApiException("Invalid session token or unauthorized access", 402);
+		}
+
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
+
+	}
+
+	
 	@PutMapping("/updateStatus")
 	public ResponseEntity<ApiResponse<UserDetailsModel>> updateStatus(@RequestBody UserStatusModel userStatusModel,
 			@RequestHeader("Authorization") String token) {
