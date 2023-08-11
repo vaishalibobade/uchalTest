@@ -64,7 +64,7 @@ public class UserController {
 		UserDetailsMapper mapper = new UserDetailsMapper();
 		HttpStatus httpStatus;
 		String message = null;
-		
+
 //			String sessionToken = token.substring(7); // Remove "Bearer " prefix
 //			SessionToken session = sessionManager.getSessionToken(sessionToken);
 //			if (session != null) {
@@ -77,7 +77,6 @@ public class UserController {
 //				userDetailsModel.setCreatedBy(loggedUser.getUserId());
 //
 //			}
-		
 
 		message = userDetailsService.validateUserDetails(userDetailsModel);
 		if (message == null) {
@@ -326,9 +325,8 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
 	}
-	
-	
-	//Search Employee for Update status,...............Admin User.
+
+	// Search Employee for Update status,...............Admin User.
 
 	@GetMapping("/searchUser")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUser(@RequestParam("name") String name,
@@ -408,11 +406,10 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
 	}
-	
-	
-	
+
 	@GetMapping("/veiwUserforPaymentList")
-	public ResponseEntity<ApiResponse<List<UserList>>> veiwUserforPaymentList(@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<UserList>>> veiwUserforPaymentList(
+			@RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<UserList> userList = null;
@@ -429,17 +426,13 @@ public class UserController {
 			if (loggedUser.getUserType().equals("E"))
 
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
-			
-			
-			
-		if (loggedUser.getUserType().equals("A"))
-			userList = userDetailsService.getAllUserListbyType("V");
-		if (loggedUser.getUserType().equals("V"))
-			userList = userDetailsService.getAllVendorSubVendor();
-		if (loggedUser.getUserType().equals("S"))
-			userList = userDetailsService.getAllUserListbyType("E");
 
-
+			if (loggedUser.getUserType().equals("A"))
+				userList = userDetailsService.getAllUserListbyType("V");
+			if (loggedUser.getUserType().equals("V"))
+				userList = userDetailsService.getAllVendorSubVendor();
+			if (loggedUser.getUserType().equals("S"))
+				userList = userDetailsService.getAllUserListbyType("E");
 
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 401);
@@ -459,19 +452,16 @@ public class UserController {
 
 	}
 
-	
-	
-	
-	
-	///Search User for Upload FIR Fuctionality.
-	
+	/// Search User for Upload FIR Fuctionality.
+
 	@GetMapping("/veiwUserforFIRList")
-	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUserFIRupload(@RequestParam("name") String name,
-			@RequestParam("mobileNumber") long mobileNumber,@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUserFIRupload(
+			@RequestParam("name") String name, @RequestParam("mobileNumber") long mobileNumber,
+			@RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
-		SearchUserModel searchUserModel=new SearchUserModel();
+		SearchUserModel searchUserModel = new SearchUserModel();
 		searchUserModel.setName(name);
 		searchUserModel.setMobileNumber(mobileNumber);
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
@@ -487,17 +477,13 @@ public class UserController {
 			if (loggedUser.getUserType().equals("E"))
 
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
-			
-			
-			
-		if (loggedUser.getUserType().equals("A"))
-			userList = userDetailsService.getSearchUserList(searchUserModel);
-		if (loggedUser.getUserType().equals("V"))
-			userList = userDetailsService.getsearchSubVendorEmployeeList(searchUserModel);
-		if (loggedUser.getUserType().equals("S"))
-			userList = userDetailsService.getSearchUserListwithType("E",searchUserModel);
 
-
+			if (loggedUser.getUserType().equals("A"))
+				userList = userDetailsService.getSearchUserList(searchUserModel);
+			if (loggedUser.getUserType().equals("V"))
+				userList = userDetailsService.getsearchSubVendorEmployeeList(searchUserModel);
+			if (loggedUser.getUserType().equals("S"))
+				userList = userDetailsService.getSearchUserListwithType("E", searchUserModel);
 
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 401);
@@ -517,7 +503,6 @@ public class UserController {
 
 	}
 
-	
 	@PutMapping("/updateStatus")
 	public ResponseEntity<ApiResponse<UserDetailsModel>> updateStatus(@RequestBody UserStatusModel userStatusModel,
 			@RequestHeader("Authorization") String token) {
@@ -781,12 +766,10 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, message, null, null));
 
 	}
-	
-	
-	
-	
+
 	@GetMapping("/getPaidUserList")
-	public ResponseEntity<ApiResponse<List<UserDetailsWithSumModel>>> viewPaidUserList(@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<UserDetailsWithSumModel>>> viewPaidUserList(
+			@RequestParam("userId") int userId, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<UserDetailsWithSumModel> userList = null;
@@ -803,17 +786,16 @@ public class UserController {
 			if (loggedUser.getUserType().equals("E"))
 
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
-			
-			
-			
+
 //		if (loggedUser.getUserType().equals("A"))
 //			userList = userDetailsService.getAllUserListbyType("V");
 //		if (loggedUser.getUserType().equals("V"))
 //			userList = userDetailsService.getAllVendorSubVendor();
 //		if (loggedUser.getUserType().equals("S"))
+			if (userId==0)
 			userList = userDetailsService.getUserDetailsWithSumAmountPaidByVendor(loggedUser.getUserId());
-
-
+			else
+				userList = userDetailsService.getUserDetailsWithSumAmountPaidByVendor(userId);
 
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 401);
