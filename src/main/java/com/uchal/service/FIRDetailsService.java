@@ -41,11 +41,28 @@ public class FIRDetailsService {
 //	    
 	    
 	    
-	    public List<byte[]> getFIRImagesByEmployeeId(int employeeId) {
+	    public List<FIRDetailsModel> getFIRImagesByEmployeeId(int employeeId) {
 	    	
 	    	
 	    	
-	        return firDetailsRepository.findFIRImagesByEmployeeId(employeeId);
+	    	
+	    	
+	    	List<byte[]> result = firDetailsRepository.findFIRImagesByEmployeeId(employeeId);
+			List<FIRDetailsModel> models = new ArrayList<>();
+			for (byte[] objects : result) {
+//			     UserDetails userDetails = (UserDetails) objects[0];
+//			     EmpVendorAssociation empVendorAssociation = (EmpVendorAssociation) objects[1];
+				FIRDetailsModel records = new FIRDetailsModel();
+				records.setFirImage(objects);
+
+//				records.setName((String) objects[1]+" "+(String) objects[2]+" "+(String) objects[3]);
+//				records.setMobileNumber((Long) objects[4]);
+//				records.setUserType((String) objects[5]);
+				models.add(records);
+			}
+			return models;
+	    	
+//	        return firDetailsRepository.findFIRImagesByEmployeeId(employeeId);
 	    }
 	    
 	    

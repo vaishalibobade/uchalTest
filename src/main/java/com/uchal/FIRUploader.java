@@ -29,7 +29,7 @@ public class FIRUploader {
 
 	        // Prepare headers
 	        HttpHeaders headers = new HttpHeaders();
-	        headers.setBearerAuth("0255661a-2163-4601-b24e-162aa4f4b544");
+	        headers.setBearerAuth("ab335db1-6c93-4588-8516-f1539b59cd1e");
 //	        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 	        headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -38,7 +38,7 @@ public class FIRUploader {
 	        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 	      
 	     String jsonString = "{\n" +
-	               "\"employeeId\":\"9\"\n" +
+	               "\"employeeId\":\"8\"\n" +
 	             "}";
 	     ObjectMapper objectMapper = new ObjectMapper();
 	     try {

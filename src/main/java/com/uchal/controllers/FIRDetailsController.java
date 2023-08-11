@@ -118,9 +118,9 @@ public class FIRDetailsController {
 	}
 
 	@GetMapping("/getFIRdetails")
-	public ResponseEntity<ApiResponse<List<byte[]>>> getFIRDetailsById(@RequestParam("userId") int userId,@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<List<FIRDetailsModel>>> getFIRDetailsById(@RequestParam("userId") int userId,@RequestHeader("Authorization") String token) {
 		FIRDetails allFIRDetails = null;
-		List<byte[]> model=null;
+		List<FIRDetailsModel> model=null;
 		if (token != null) {
 			String sessionToken = token.substring(7); // Remove "Bearer " prefix
 			SessionToken session = sessionManager.getSessionToken(sessionToken);
