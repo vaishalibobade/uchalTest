@@ -25,7 +25,7 @@ public class UserStatusController {
 	private final MasterUserStatusService masterUserStatusService;
 
 	@Autowired
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(UserStatusController.class);
 
 	public UserStatusController(MasterUserStatusService masterUserStatusService) {
 		this.masterUserStatusService = masterUserStatusService;

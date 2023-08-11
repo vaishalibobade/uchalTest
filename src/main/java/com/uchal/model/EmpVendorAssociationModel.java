@@ -1,12 +1,13 @@
 package com.uchal.model;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 public class EmpVendorAssociationModel {
  
 	private int id;
 	private int userId;
-	private int amountPaid;
+	private BigDecimal amountPaid;
 	private int durationDays;
 	private int userStatus;
 	private int paymentstatus;
@@ -19,12 +20,7 @@ public class EmpVendorAssociationModel {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	public int getAmountPaid() {
-		return amountPaid;
-	}
-	public void setAmountPaid(int amountPaid) {
-		this.amountPaid = amountPaid;
-	}
+
 	public int getDurationDays() {
 		return durationDays;
 	}
@@ -66,6 +62,13 @@ public class EmpVendorAssociationModel {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public BigDecimal getAmountPaid() {
+	    return amountPaid; // Assuming amount_paid is an integer or another numeric type
+	  }
+
+	public void setAmountPaid(BigDecimal amount_paid) {
+		this.amountPaid = amount_paid;
 	}
 	
 }

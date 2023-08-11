@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uchal.entity.MasterPaymentStatus;
@@ -25,6 +26,7 @@ import com.uchal.model.EmpVendorAssociationModel;
 import com.uchal.model.PaymentDetailsModel;
 import com.uchal.model.SessionToken;
 import com.uchal.model.UserDetailsModel;
+import com.uchal.model.UserList;
 import com.uchal.repository.SessionManager;
 import com.uchal.service.EmpVendorAssociationService;
 import com.uchal.service.LoginDetailsService;
@@ -41,7 +43,7 @@ public class PaymentController {
 	private SessionManager sessionManager;
 	private final MasterPaymentStatusService masterPaymentStatusService;
 	@Autowired
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(PaymentController.class);
 
 	public PaymentController(SessionManager sessionManager, LoginDetailsService loginDetailsService,
 			EmpVendorAssociationService empVendorAssociationService,
@@ -109,8 +111,8 @@ public class PaymentController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, paymentStatus, null));
 	}
 
-	@GetMapping("/getAllPayment")
-	public ResponseEntity<ApiResponse<List<PaymentDetailsModel>>> getAllPayment(
+	@GetMapping("/getPaymentDetails")
+	public ResponseEntity<ApiResponse<List<PaymentDetailsModel>>> getAllPayment(@RequestParam("userId") int userId,
 			@RequestHeader("Authorization") String token) {
 //		System.out.println("User status List !!!!!!!!!!!!!!");
 
@@ -138,12 +140,19 @@ public class PaymentController {
 //		HttpStatus httpStatus = HttpStatus.OK;
 //		String message = "Lis of All Payment  Found";
 		if (loggedUser != null)
-			paymentList = empVendorAssociationService.setpaymentModel(loggedUser.getUserId());
+		{
+			paymentList = empVendorAssociationService.getPaymentDetailsByEmployeeId(userId);
 		if (paymentList == null) {
 			httpStatus = HttpStatus.NOT_FOUND;
 			message = "No List for Payment  Found";
 		}
-		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, paymentList, null));
+		else {
+			httpStatus = HttpStatus.FOUND;
+			message = " Payment List Found";
+			
+		}
+		}
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, paymentList, token));
 
 	}
 	
@@ -191,5 +200,11 @@ public class PaymentController {
 				.body(new ApiResponse<>(httpStatus, message, empVendorAssociationModel, token));
 
 	}
+	
+	
+	
+
+
+
 
 }

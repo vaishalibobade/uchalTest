@@ -1,6 +1,8 @@
 package com.uchal.entity;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,6 +26,10 @@ public class UserDetails {
 	@JsonIgnore
 	@OneToOne(mappedBy = "userDetails", cascade = CascadeType.ALL)
 	private LoginDetails loginDetails;
+	
+	
+	@OneToMany(mappedBy = "employeeId")
+    private List<EmpVendorAssociation> empVendorAssociations;
 	
     private String firstName;
     private String lastName;
@@ -211,6 +218,11 @@ public class UserDetails {
 
 	public void setStatusRemarks(String statusRemarks) {
 		this.statusRemarks = statusRemarks;
+	}
+
+	public List<EmpVendorAssociation> getEmpVendorAssociations() {
+		// TODO Auto-generated method stub
+		return this.empVendorAssociations;
 	}
 }
 

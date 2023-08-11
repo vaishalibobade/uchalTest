@@ -30,7 +30,7 @@ public class UserTypeController {
 
 	private SessionManager sessionManager;
 	@Autowired
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(UserTypeController.class);
 	public UserTypeController(SessionManager sessionManager,MasterUserTypeService masterUserTypeService) {
 		this.sessionManager = sessionManager;
 		this.masterUserTypeService=masterUserTypeService;

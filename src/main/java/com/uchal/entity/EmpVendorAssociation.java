@@ -1,5 +1,6 @@
 package com.uchal.entity;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
@@ -23,7 +24,7 @@ public class EmpVendorAssociation {
    
   private int vendorId;
   private int employeeId;
-  private int amount_paid;
+  private BigDecimal amount_paid;
   private int duration_days;
   
   @ManyToOne
@@ -68,13 +69,7 @@ public void setEmployeeId(int employeeId) {
 	this.employeeId = employeeId;
 }
 
-public int getAmount_paid() {
-	return amount_paid;
-}
 
-public void setAmount_paid(int amount_paid) {
-	this.amount_paid = amount_paid;
-}
 
 public int getDuration_days() {
 	return duration_days;
@@ -146,6 +141,14 @@ public MasterPaymentStatus getPaymentStatus() {
 
 public void setPaymentStatus(MasterPaymentStatus paymentStatus) {
 	this.paymentStatus = paymentStatus;
+}
+
+public BigDecimal getAmountPaid() {
+    return this.amount_paid; // Assuming amount_paid is an integer or another numeric type
+  }
+
+public void setAmount_paid(BigDecimal amount_paid) {
+	this.amount_paid = amount_paid;
 }
 
 

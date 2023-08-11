@@ -12,6 +12,7 @@ public class PaymentDetailsModel {
     private String middleName;
     private long mobileNumber;
 	private EmpVendorAssociation paymentDetails;
+	private String userStatus;
 	/**
 	 * @return the userType
 	 */
@@ -83,6 +84,12 @@ public class PaymentDetailsModel {
 	 */
 	public void setPaymentDetails(EmpVendorAssociation paymentDetails) {
 		this.paymentDetails = paymentDetails;
+	}
+	public String getUserStatus() {
+		return userStatus;
+	}
+	public void setUserStatus(String userStatus) {
+		this.userStatus = userStatus;
 	}
 
 	

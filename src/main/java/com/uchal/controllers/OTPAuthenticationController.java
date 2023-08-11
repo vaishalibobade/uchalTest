@@ -26,7 +26,7 @@ import com.uchal.service.UserDetailsService;
 public class OTPAuthenticationController {
 
 	private SessionManager sessionManager;
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(OTPAuthenticationController.class);
 	private final UserDetailsService userDetailsService;
 	private final OtpService otpService;
 

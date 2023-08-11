@@ -30,6 +30,7 @@ import com.uchal.model.SearchUserModel;
 import com.uchal.model.SearchUserOutputModel;
 import com.uchal.model.SessionToken;
 import com.uchal.model.UserDetailsModel;
+import com.uchal.model.UserDetailsWithSumModel;
 import com.uchal.model.UserList;
 import com.uchal.model.UserStatusModel;
 import com.uchal.repository.SessionManager;
@@ -48,7 +49,7 @@ public class UserController {
 	private SessionManager sessionManager;
 
 	@Autowired
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(UserController.class);
 
 	public UserController(UserDetailsService userDetailsService, LoginDetailsService loginDetailsService,
 			SessionManager sessionManager) {
@@ -409,6 +410,7 @@ public class UserController {
 	}
 	
 	
+	
 	@GetMapping("/veiwUserforPaymentList")
 	public ResponseEntity<ApiResponse<List<UserList>>> veiwUserforPaymentList(@RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
@@ -457,6 +459,10 @@ public class UserController {
 
 	}
 
+	
+	
+	
+	
 	///Search User for Upload FIR Fuctionality.
 	
 	@GetMapping("/veiwUserforFIRList")
@@ -773,6 +779,57 @@ public class UserController {
 			throw new ApiException("Issue while changing password ......", 401);
 
 		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, message, null, null));
+
+	}
+	
+	
+	
+	
+	@GetMapping("/getPaidUserList")
+	public ResponseEntity<ApiResponse<List<UserDetailsWithSumModel>>> viewPaidUserList(@RequestHeader("Authorization") String token) {
+		HttpStatus httpStatus = HttpStatus.OK;
+		String message = null;
+		List<UserDetailsWithSumModel> userList = null;
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		SessionToken session = sessionManager.getSessionToken(sessionToken);
+
+		if (session != null) {
+			// User is authenticated, process the protected resource request
+//        @SuppressWarnings("removal")
+//        return "Protected Resource for User: " + userId;
+			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+			logger.info(loggedUser.getUserId());
+			logger.info(loggedUser.getUserType());
+			if (loggedUser.getUserType().equals("E"))
+
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
+			
+			
+			
+//		if (loggedUser.getUserType().equals("A"))
+//			userList = userDetailsService.getAllUserListbyType("V");
+//		if (loggedUser.getUserType().equals("V"))
+//			userList = userDetailsService.getAllVendorSubVendor();
+//		if (loggedUser.getUserType().equals("S"))
+			userList = userDetailsService.getUserDetailsWithSumAmountPaidByVendor(loggedUser.getUserId());
+
+
+
+			if (userList.isEmpty()) {
+				throw new ApiException("No record found", 401);
+			} else {
+//				user = mapper.mapToModel(userDetails);
+				httpStatus = HttpStatus.OK;
+				message = "User found";
+				System.out.println(userList.size());
+			}
+
+		} else {
+			// Invalid session token or unauthorized access
+			throw new ApiException("Invalid session token or unauthorized access", 402);
+		}
+
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
 	}
 

@@ -12,17 +12,17 @@ import com.uchal.controllers.LoginController;
 import com.uchal.entity.EmpVendorAssociation;
 import com.uchal.mapper.EmpVendorAssociationMapper;
 import com.uchal.model.ApiException;
-import com.uchal.model.DashboardStatusCount;
 import com.uchal.model.EmpVendorAssociationModel;
 import com.uchal.model.PaymentDetailsModel;
 import com.uchal.repository.EmpVendorAssociationRepository;
 
 @Service
+
 public class EmpVendorAssociationService {
 	private final EmpVendorAssociationRepository empVendorAssociationRepository;
 	private final EmpVendorAssociationMapper empVendorAssociationMapper;
 	private final UserDetailsService userDetailsService;
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(EmpVendorAssociationService.class);
 
 	@Autowired
 	public EmpVendorAssociationService(UserDetailsService userDetailsService,
@@ -89,9 +89,9 @@ public class EmpVendorAssociationService {
 
 	}
 
-	public List<PaymentDetailsModel> setpaymentModel(int loggedId) {
+	public List<PaymentDetailsModel> getPaymentDetailsByEmployeeId(int employeeId) {
 //		 return userDetailsService.getAllEmployeeDetailsWithAssociation(loggedId);
-		List<Object[]> result = userDetailsService.getAllEmployeeDetailsWithAssociation(loggedId);
+		List<Object[]> result = userDetailsService.getAllEmployeeDetailsWithAssociation(employeeId);
 		List<PaymentDetailsModel> models = new ArrayList<>();
 		for (Object[] objects : result) {
 //		     UserDetails userDetails = (UserDetails) objects[0];
@@ -99,11 +99,12 @@ public class EmpVendorAssociationService {
 			PaymentDetailsModel records = new PaymentDetailsModel();
 			records.setPaymentDetails((EmpVendorAssociation) objects[0]);
 
-			records.setFirstName((String) objects[1]);
-			records.setLastName((String) objects[2]);
-			records.setMiddleName((String) objects[3]);
+			records.setFirstName((String) objects[1]+" "+(String) objects[2]+" "+(String) objects[3]);
+//			records.setLastName((String) objects[2]);
+//			records.setMiddleName((String) objects[3]);
 			records.setMobileNumber((Long) objects[4]);
 			records.setUserType((String) objects[5]);
+			records.setUserStatus((String)objects[6]);
 			models.add(records);
 		}
 		return models;
@@ -163,6 +164,13 @@ public class EmpVendorAssociationService {
 
 		return count;
 
+	}
+	
+	
+	
+	public List<Object[]> getPaidEmployeeList(int vendorId)
+	{
+	return	null;//empVendorAssociationRepository.getUserDetailsWithSumAmountPaidByVendor(vendorId);
 	}
 
 }

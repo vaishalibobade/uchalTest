@@ -33,7 +33,7 @@ public class AddDetailsEntityController {
 
 	private final SessionManager sessionManager;
 	@Autowired
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(AddDetailsEntityController.class);
 
 	public AddDetailsEntityController(AddDetailsEntityService addDetailsEntityService,
 			LoginDetailsService loginDetailsService, SessionManager sessionManager) {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ import com.uchal.service.LoginDetailsService;
 import com.uchal.service.MasterPaymentStatusService;
 
 @RestController
-@Component
+@ComponentScan
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
 		RequestMethod.DELETE })
 
@@ -34,17 +35,16 @@ public class DashboardController {
 	private final LoginDetailsService loginDetailsService;
 	private final EmpVendorAssociationService empVendorAssociationService;
 	private SessionManager sessionManager;
-	private final MasterPaymentStatusService masterPaymentStatusService;
+//	private final MasterPaymentStatusService masterPaymentStatusService;
 	@Autowired
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+//	private  final Logger logger = LogManager.getLogger(DashboardController.class);
 
 	public DashboardController(SessionManager sessionManager, LoginDetailsService loginDetailsService,
-			EmpVendorAssociationService empVendorAssociationService,
-			MasterPaymentStatusService masterPaymentStatusService) {
+			EmpVendorAssociationService empVendorAssociationService) {
 		this.sessionManager = sessionManager;
 		this.loginDetailsService = loginDetailsService;
 		this.empVendorAssociationService = empVendorAssociationService;
-		this.masterPaymentStatusService = masterPaymentStatusService;
+//		this.masterPaymentStatusService = masterPaymentStatusService;
 
 	}
 

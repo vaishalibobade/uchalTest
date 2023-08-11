@@ -27,7 +27,7 @@ public class EmpVendorAssociationMapper {
 	{
 		EmpVendorAssociationModel empVendorAssociationModel = new EmpVendorAssociationModel();
 		empVendorAssociationModel.setId(empVendorAssociation.getId());
-		empVendorAssociationModel.setAmountPaid(empVendorAssociation.getAmount_paid());
+		empVendorAssociationModel.setAmountPaid(empVendorAssociation.getAmountPaid());
 		empVendorAssociationModel.setDurationDays(empVendorAssociation.getDuration_days());
 		empVendorAssociationModel.setEndDate(empVendorAssociation.getEnd_date());
 		empVendorAssociationModel.setPaymentstatus(empVendorAssociation.getPaymentStatus().getId());

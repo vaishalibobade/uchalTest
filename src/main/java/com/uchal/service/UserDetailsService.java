@@ -1,5 +1,6 @@
 package com.uchal.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uchal.controllers.LoginController;
+import com.uchal.entity.EmpVendorAssociation;
 import com.uchal.entity.LoginDetails;
 import com.uchal.entity.UserDetails;
 import com.uchal.mapper.UserDetailsMapper;
@@ -21,6 +23,7 @@ import com.uchal.model.ApiException;
 import com.uchal.model.SearchUserModel;
 import com.uchal.model.SearchUserOutputModel;
 import com.uchal.model.UserDetailsModel;
+import com.uchal.model.UserDetailsWithSumModel;
 import com.uchal.model.UserList;
 import com.uchal.model.UserStatusModel;
 import com.uchal.repository.LoginDetailsRepository;
@@ -32,7 +35,7 @@ public class UserDetailsService {
 	private final LoginDetailsRepository loginDetailsRepository;
 	private final LoginDetailsService loginDetailsService;
 	private final MasterUserTypeService masterUserTypeService;
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(UserDetailsService.class);
 
 	@Autowired
 	private EntityManager entityManager;
@@ -69,8 +72,8 @@ public class UserDetailsService {
 
 	}
 
-	public List<Object[]> getAllEmployeeDetailsWithAssociation(int vendorId) {
-		return userDetailsRepository.getEmployeeDetailsByVendorId(vendorId);
+	public List<Object[]> getAllEmployeeDetailsWithAssociation(int employeeId) {
+		return userDetailsRepository.getEmployeeDetailsByEmployeeId(employeeId);
 	}
 
 	public List<UserDetails> getAllUserDetailsByType(String userType) {
@@ -450,4 +453,53 @@ public class UserDetailsService {
 		return list;
 
 	}
+	
+	
+	// Calculate the sum of amountPaid for each user based on the retrieved list
+    public List<UserDetailsWithSumModel> getUserDetailsWithSumAmountPaidByVendor(int vendorId) {
+        List<Object[]> userDetailsList = userDetailsRepository.getUserDetailsByVendor(vendorId);
+
+        List<UserDetailsWithSumModel> result = new ArrayList<>();
+
+        for (Object[] object : userDetailsList) {
+        	UserDetails userDetails=(UserDetails) object[0];
+            BigDecimal sumAmountPaid = userDetails.getEmpVendorAssociations()
+                .stream()
+                .map(EmpVendorAssociation::getAmountPaid)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            UserDetailsWithSumModel userDetailsWithSum = new UserDetailsWithSumModel();
+            userDetailsWithSum.setName(userDetails.getFirstName()+" "+userDetails.getMiddleName()+" "+userDetails.getLastName());
+            userDetailsWithSum.setTotalAmountPaid(sumAmountPaid);
+            userDetailsWithSum.setUserId(userDetails.getUserId());
+            userDetailsWithSum.setUserTpe((String)object[1]);
+            
+            result.add(userDetailsWithSum);
+        }
+
+        return result;
+    }
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+	
+
 }

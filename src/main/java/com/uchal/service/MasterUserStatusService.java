@@ -17,7 +17,7 @@ import com.uchal.repository.MasterUserStatusRepository;
  public class MasterUserStatusService {
 	
 	
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(MasterUserStatusService.class);
 private final MasterUserStatusRepository  masterUserStatusRepository;
 
 

@@ -18,7 +18,7 @@ import com.uchal.repository.LoginDetailsRepository;
 @Service
 public class LoginDetailsService {
 	private final LoginDetailsRepository loginDetailsRepository;
-	private static final Logger logger = LogManager.getLogger(LoginController.class);
+	private static final Logger logger = LogManager.getLogger(LoginDetailsService.class);
 
 	@Autowired
 	public LoginDetailsService(LoginDetailsRepository loginDetailsRepository) {

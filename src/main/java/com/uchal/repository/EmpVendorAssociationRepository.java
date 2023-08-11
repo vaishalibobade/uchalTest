@@ -44,4 +44,12 @@ public interface EmpVendorAssociationRepository  extends JpaRepository<EmpVendor
 	@Query("SELECT COUNT(a) FROM EmpVendorAssociation a")
 	Long getTotalStatusCount();
 
+	
+//	@Query("SELECT SUM(a.amount_paid) FROM EmpVendorAssociation a WHERE a.vendorId = :vendorId GROUP BY a.employeeId")	
+//	@Query("SELECT ud.firstName, ud.lastName, ud.middleName, ud.mobileNumber, ud.userType, (SELECT SUM(eva.amountPaid) FROM EmpVendorAssociation eva WHERE eva.employeeId = ud.userId) "
+//		       + "FROM UserDetails ud "
+//		       + "WHERE ud.userId IN (SELECT DISTINCT eva.employeeId FROM EmpVendorAssociation eva WHERE eva.vendorId = :vendorId)")
+//		List<Object[]> getUserDetailsWithSumAmountPaidByVendor(@Param("vendorId") int vendorId);
+
+
 }
