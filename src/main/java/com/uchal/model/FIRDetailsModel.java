@@ -1,25 +1,27 @@
 package com.uchal.model;
 
+import java.util.List;
+
 import com.uchal.entity.FIRDetails;
 
 public class FIRDetailsModel {
 
-	private FIRDetails FIRDetails;
 	private String name;
 	private Long mobileNumber;
 	private String userType;
-	/**
-	 * @return the fIRDetails
-	 */
-	public FIRDetails getFIRDetails() {
-		return FIRDetails;
-	}
-	/**
-	 * @param fIRDetails the fIRDetails to set
-	 */
-	public void setFIRDetails(FIRDetails fIRDetails) {
-		FIRDetails = fIRDetails;
-	}
+	private byte[] firImage;
+//	/**
+//	 * @return the fIRDetails
+//	 */
+//	public FIRDetails getFIRDetails() {
+//		return FIRDetails;
+//	}
+//	/**
+//	 * @param fIRDetails the fIRDetails to set
+//	 */
+//	public void setFIRDetails(FIRDetails fIRDetails) {
+//		FIRDetails = fIRDetails;
+//	}
 	/**
 	 * @return the name
 	 */
@@ -56,6 +58,13 @@ public class FIRDetailsModel {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
+	public byte[] getFirImage() {
+		return firImage;
+	}
+	public void setFirImage(byte[] firImage) {
+		this.firImage = firImage;
+	}
+	
 	
 
 }

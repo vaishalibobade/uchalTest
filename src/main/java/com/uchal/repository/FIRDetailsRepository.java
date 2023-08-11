@@ -15,8 +15,14 @@ public interface FIRDetailsRepository extends JpaRepository<FIRDetails, Integer>
 
 	@Query("SELECT u FROM FIRDetails u WHERE u.createdBy = :createdBy ")
 	List<FIRDetails> findAllFIRDetailsByID(@Param("createdBy") int createdBy);
+//
+//	@Query("SELECT u.firImage FROM FIRDetails u WHERE u.employeeId = :employeeId ")
+//	List<Object[]> findFIRDetailsByemployeeId(@Param("employeeId") int employeeId);
+	
+	
+	
+	 @Query("SELECT u.firImage FROM FIRDetails u WHERE u.employeeId = :employeeId")
+	    List<byte[]> findFIRImagesByEmployeeId(@Param("employeeId") int employeeId);
+	}
 
-	@Query("SELECT u, ud.firstName, ud.lastName, ud.middleName, ud.mobileNumber, mut.userType  FROM FIRDetails u JOIN UserDetails ud ON u.employeeId = ud.userId LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation  WHERE u.employeeId = :employeeId ")
-	List<Object[]> findFIRDetailsByemployeeId(@Param("employeeId") int employeeId);
 
-}
