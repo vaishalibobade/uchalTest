@@ -391,7 +391,9 @@ public class UserDetailsService {
 			String userType = (String) objArray[4];
 			Long mobileNumber = (Long) objArray[5];
 			int userId = (int) objArray[6];
-
+			int createdBy=(int) objArray[7];
+			UserDetails registrationUnderObj =userDetailsRepository.getById(createdBy);
+			String registrationUnder=registrationUnderObj.getFirstName()+ " " +registrationUnderObj.getMiddleName()  + " " + registrationUnderObj.getLastName();
 			SearchUserOutputModel user = new SearchUserOutputModel();
 			String name = firstName + " " + middleName + " " + lastName;
 
@@ -402,6 +404,8 @@ public class UserDetailsService {
 			user.setMobileNumber(mobileNumber);
 			user.setCurrentStatus(userStatus);
 			user.setUserId(userId);
+			user.setRegistrationUnder(registrationUnder);
+			user.setRegistrationUnderType(registrationUnderObj.getUserType());
 
 			userList.add(user);
 		}

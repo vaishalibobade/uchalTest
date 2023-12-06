@@ -640,7 +640,7 @@ public class UserController {
 
 			userList = userDetailsService.getSearchUserListwithType("S", searchUserModel);
 			if (userList.isEmpty()) {
-				throw new ApiException("No record found", 401);
+ 				throw new ApiException("No record found", 401);
 			} else {
 //				user = mapper.mapToModel(userDetails);
 				httpStatus = HttpStatus.OK;

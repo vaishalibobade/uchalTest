@@ -74,7 +74,7 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 		List<Object[]> getDataWithPartialMatch(@Param("mobileNumber") long mobileNumber,
 		                                                  @Param("Name") String name);
 		
-		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId "
+		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId, ud.createdBy "
 			       + "FROM UserDetails ud "
 			       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
 			       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "

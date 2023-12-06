@@ -9,6 +9,10 @@ public class SearchUserOutputModel {
 	private long mobileNumber;
     private String userType;
     private String currentStatus;
+    private String registrationUnder;
+    private String registrationUnderType;
+    
+    
 	/**
 	 * @return the firstName
 	 */
@@ -86,6 +90,18 @@ public class SearchUserOutputModel {
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	public String getRegistrationUnder() {
+		return registrationUnder;
+	}
+	public void setRegistrationUnder(String registrationUnder) {
+		this.registrationUnder = registrationUnder;
+	}
+	public String getRegistrationUnderType() {
+		return registrationUnderType;
+	}
+	public void setRegistrationUnderType(String registrationUnderType) {
+		this.registrationUnderType = registrationUnderType;
 	}
 
     
