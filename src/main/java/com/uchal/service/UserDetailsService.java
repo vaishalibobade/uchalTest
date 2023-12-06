@@ -405,7 +405,7 @@ public class UserDetailsService {
 			user.setCurrentStatus(userStatus);
 			user.setUserId(userId);
 			user.setRegistrationUnder(registrationUnder);
-			user.setRegistrationUnderType(registrationUnderObj.getUserType());
+			user.setRegistrationUnderType(masterUserTypeService.getMasterUserTypeByAbreviation(registrationUnderObj.getUserType()).getUserType());
 
 			userList.add(user);
 		}

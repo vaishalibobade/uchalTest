@@ -26,7 +26,9 @@ public class MasterUserTypeService {
     public MasterUserType getMasterUserTypeById(int id) {
         return masterUserTypeRepository.findById(id).orElse(null);
     }
-
+    public MasterUserType getMasterUserTypeByAbreviation(String abreviation ) {
+        return masterUserTypeRepository.findByAbreviation(abreviation);
+    }
     
     public List<MasterUserType> getAllMasterUserTypes() {
         return masterUserTypeRepository.findAll();
