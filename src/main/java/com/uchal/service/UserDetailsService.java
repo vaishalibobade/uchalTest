@@ -421,9 +421,13 @@ public class UserDetailsService {
 			UserDetails userDetails = (UserDetails) objArray[0];
 			String currentStatus = (String) objArray[1];
 			String userType = (String) objArray[2];
-
+			UserDetails registrationUnderObj =userDetailsRepository.getById(userDetails.getCreatedBy());
+			String registrationUnder=registrationUnderObj.getFirstName()+ " " +registrationUnderObj.getMiddleName()  + " " + registrationUnderObj.getLastName();
 //		        UserDetailsModel user = new UserDetailsModel();
 			UserDetailsModel user = mapper.mapToModel(userDetails);
+			user.setRegistrationUnder(registrationUnder);
+			user.setRegistrationUnderType(masterUserTypeService.getMasterUserTypeByAbreviation(registrationUnderObj.getUserType()).getUserType());
+
 			user.setCurrentStatus(currentStatus);
 			user.setUserType(userType);
 			userList.add(user);

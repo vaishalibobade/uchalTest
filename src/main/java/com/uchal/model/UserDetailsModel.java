@@ -22,6 +22,8 @@ public class UserDetailsModel {
     private String password;
     private int currentStatusId;
     private String currentStatus;
+    private String registrationUnder;
+    private String registrationUnderType;
 
 
     // Getters and Setters
@@ -151,6 +153,18 @@ public class UserDetailsModel {
 	}
 	public void setCurrentStatus(String currentStatus) {
 		this.currentStatus = currentStatus;
+	}
+	public String getRegistrationUnder() {
+		return registrationUnder;
+	}
+	public void setRegistrationUnder(String registrationUnder) {
+		this.registrationUnder = registrationUnder;
+	}
+	public String getRegistrationUnderType() {
+		return registrationUnderType;
+	}
+	public void setRegistrationUnderType(String registrationUnderType) {
+		this.registrationUnderType = registrationUnderType;
 	}
 	
 }
