@@ -405,8 +405,10 @@ public class UserDetailsService {
 			user.setCurrentStatus(userStatus);
 			user.setUserId(userId);
 			user.setRegistrationUnder(registrationUnder);
+			if(registrationUnderObj.getUserType()==null) 
+			{
 			user.setRegistrationUnderType(masterUserTypeService.getMasterUserTypeByAbreviation(registrationUnderObj.getUserType()).getUserType());
-
+			}
 			userList.add(user);
 		}
 
