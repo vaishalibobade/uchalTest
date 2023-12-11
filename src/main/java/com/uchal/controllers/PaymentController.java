@@ -147,7 +147,7 @@ public class PaymentController {
 			message = "No List for Payment  Found";
 		}
 		else {
-			httpStatus = HttpStatus.FOUND;
+			httpStatus = HttpStatus.OK;
 			message = " Payment List Found";
 			
 		}

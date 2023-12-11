@@ -44,7 +44,7 @@ public class UserTypeController {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = "Payment Status List Found";
 
-		List<MasterUserType> userType = masterUserTypeService.getAllMasterUserTypes();
+		List<MasterUserType> userType = masterUserTypeService.getAllMasterUserTypesExceptAdmin();
 		if (userType.isEmpty()) {
 			httpStatus = HttpStatus.NOT_FOUND;
 			message = "No List for Payment Status Found";

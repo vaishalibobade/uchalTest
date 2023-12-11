@@ -29,6 +29,7 @@ import com.uchal.model.ChangePassword;
 import com.uchal.model.SearchUserModel;
 import com.uchal.model.SearchUserOutputModel;
 import com.uchal.model.SessionToken;
+import com.uchal.model.SignupModel;
 import com.uchal.model.UserDetailsModel;
 import com.uchal.model.UserDetailsWithSumModel;
 import com.uchal.model.UserList;
@@ -60,7 +61,7 @@ public class UserController {
 	}
 
 	@PostMapping("/signUp")
-	public ResponseEntity<ApiResponse<UserDetailsModel>> signUpUser(@RequestBody UserDetailsModel userDetailsModel) {
+	public ResponseEntity<ApiResponse<SignupModel>> signUpUser(@RequestBody SignupModel signupModel) {
 		UserDetailsMapper mapper = new UserDetailsMapper();
 		HttpStatus httpStatus;
 		String message = null;
@@ -78,22 +79,24 @@ public class UserController {
 //
 //			}
 
-		message = userDetailsService.validateUserDetails(userDetailsModel);
+		message = userDetailsService.validateSignUpDetails(signupModel);
 		if (message == null) {
-			UserDetails savedUser = userDetailsService.registerUser(userDetailsModel);
+			UserDetails savedUser = userDetailsService.signupUser(signupModel);
 
 			if (savedUser != null) {
-				userDetailsModel = mapper.mapToModel(savedUser);
 				message = "User registered successfully";
 				httpStatus = HttpStatus.OK;
 			} else {
 				httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 				message = "Issue while registering User";
+				
+				return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, null, null));
+
 			}
 		} else {
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
 		}
-		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userDetailsModel, null));
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, signupModel, null));
 
 	}
 
@@ -191,6 +194,7 @@ public class UserController {
 		if (session != null) {
 			// User is authenticated, process the protected resource request
 //        @SuppressWarnings("removal")
+			
 //        return "Protected Resource for User: " + userId;
 			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
 //			System.out.println(session.getUserId());

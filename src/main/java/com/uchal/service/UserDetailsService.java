@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -14,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.uchal.controllers.LoginController;
 import com.uchal.entity.EmpVendorAssociation;
 import com.uchal.entity.LoginDetails;
 import com.uchal.entity.UserDetails;
@@ -22,6 +20,7 @@ import com.uchal.mapper.UserDetailsMapper;
 import com.uchal.model.ApiException;
 import com.uchal.model.SearchUserModel;
 import com.uchal.model.SearchUserOutputModel;
+import com.uchal.model.SignupModel;
 import com.uchal.model.UserDetailsModel;
 import com.uchal.model.UserDetailsWithSumModel;
 import com.uchal.model.UserList;
@@ -104,6 +103,25 @@ public class UserDetailsService {
 	return userDetailsRepository.findAllByMobileNumber(mobileNumber).get(0);
 			
 	}
+	
+	
+	
+
+	public String validateSignUpDetails(SignupModel signupModel) {
+		String message = null;
+
+		if (loginDetailsService.checkUsernameExist(signupModel.getUsername())) {
+			message = "Username is Already Exists";
+		}
+
+		
+		if (checkIfMobileExist(signupModel.getMobileNumber())) {
+			message = "Mobile Number is Already Exist";
+		}
+//         System.out.println(message);
+		return message;
+	}
+	
 
 	public String validateUserDetails(UserDetailsModel userDetailsModel) {
 		String message = null;
@@ -223,6 +241,59 @@ public class UserDetailsService {
 		return message;
 
 	}
+	
+	
+	@Transactional
+	public UserDetails signupUser(SignupModel model) {
+		UserDetails userDetails = new UserDetails();
+		LoginDetails loginDetails = new LoginDetails();
+
+		UserDetailsMapper usermapper = new UserDetailsMapper();
+		try {
+			userDetails = usermapper.mapSignupToEntity(model);
+			userDetails.setCreatedOn(LocalDateTime.now());
+			userDetails.setCurrentStatusId(2);
+			userDetails.setRegistrationPaymentAmount(0);
+			userDetails.setRegistrationPaymentStatus("Pending");
+			userDetails.setRegistrationUnder(0);
+			
+			
+			loginDetails.setUsername(model.getUsername());
+			loginDetails.setPassword(model.getPassword());
+			loginDetails.setUserStatus("A");
+			loginDetails.setLoginAttempts(0);
+//    	user.setLoginDetails(loginDetails);
+//    	UserDetails mergedUserDetails = entityManager.merge(user);
+			loginDetails.setUserDetails(userDetails);
+
+//    	user.setLoginDetails(loginDetails);
+
+			// Establish the one-to-one relationship
+			userDetails.setLoginDetails(loginDetails);
+			loginDetails.setUserDetails(userDetails);
+
+			// Save the records
+			logger.error("tring to save UserDetails");
+//    	String enableIdentityInsertSql = "SET IDENTITY_INSERT user_details ON";
+//    	entityManager.createNativeQuery(enableIdentityInsertSql).executeUpdate();
+
+			userDetailsRepository.save(userDetails);
+
+//    	user=userDetailsRepository.save(user);
+//    	loginDetailsRepository.save(loginDetails);
+			logger.error("saved UserDetails");
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+//String disableIdentityInsertSql = "SET IDENTITY_INSERT user_details OFF";
+//entityManager.createNativeQuery(disableIdentityInsertSql).executeUpdate();
+		return userDetails;
+	}
+	
+	
+	
 
 	@Transactional
 	public UserDetails registerUser(UserDetailsModel model) {
@@ -234,6 +305,10 @@ public class UserDetailsService {
 			userDetails = usermapper.mapToEntity(model);
 			userDetails.setCreatedOn(LocalDateTime.now());
 			userDetails.setCurrentStatusId(2);
+			userDetails.setRegistrationPaymentAmount(0);
+			userDetails.setRegistrationPaymentStatus("Pending");
+			userDetails.setRegistrationUnder(userDetails.getCreatedBy());
+			
 
 			loginDetails.setUsername(model.getUsername());
 			loginDetails.setPassword(model.getPassword());

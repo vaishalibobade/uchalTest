@@ -30,8 +30,8 @@ public class MasterUserTypeService {
         return masterUserTypeRepository.findByAbreviation(abreviation);
     }
     
-    public List<MasterUserType> getAllMasterUserTypes() {
-        return masterUserTypeRepository.findAll();
+    public List<MasterUserType> getAllMasterUserTypesExceptAdmin() {
+        return masterUserTypeRepository.findByUserTypeNotEqual("Admin");
     }
 
     

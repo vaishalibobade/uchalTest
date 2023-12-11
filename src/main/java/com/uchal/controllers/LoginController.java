@@ -110,6 +110,7 @@ public class LoginController {
 //		}
 		if (loginDetailsresponse!=null)
 		loginDetailsresponse.setPassword(null);
+		loginDetailsresponse.getUserDetails().setAdharImage(null);
 		return ResponseEntity.status(httpStatus)
 				.body(new ApiResponse<>(httpStatus, message, loginDetailsresponse, token));
 

@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
 //import org.springframework.mock.web.MockMultipartFile;
 
-
 import com.uchal.entity.UserDetails;
+import com.uchal.model.SignupModel;
 import com.uchal.model.UserDetailsModel;
 
 public class UserDetailsMapper {
@@ -63,6 +63,39 @@ public class UserDetailsMapper {
         userDetailsModel.setCurrentStatusId(userDetails.getCurrentStatusId());
         return userDetailsModel;
     }
+    
+    
+    
+    public UserDetails mapSignupToEntity(SignupModel signUpModel) {
+        UserDetails userDetails = new UserDetails();
+//        userDetails.setUserId(signUpModel.getUserId());
+        userDetails.setFirstName(signUpModel.getFirstName());
+        userDetails.setLastName(signUpModel.getLastName());
+        userDetails.setMiddleName(signUpModel.getMiddleName());
+        userDetails.setCity(signUpModel.getCity());
+        userDetails.setState(signUpModel.getState());
+        userDetails.setCountry(signUpModel.getCountry());
+        userDetails.setMobileNumber(signUpModel.getMobileNumber());
+   
+     //   userDetails.setCreatedOn(new Date(userDetailsModel.getCreatedOn()));
+        userDetails.setStreetDetail(signUpModel.getStreetDetail());
+       // userDetails.setUpdatedOn(new Date(userDetailsModel.getUpdatedOn()));
+        userDetails.setUserType(signUpModel.getUserType());
+        
+        
+        
+        
+        
+        // Map other fields as needed
+
+        return userDetails;
+    }
+    
+    
+    
+    
+    
+    
     public static byte[] convertMultipartFileToByteArray(MultipartFile multipartFile) {
         try {
             return multipartFile.getBytes();

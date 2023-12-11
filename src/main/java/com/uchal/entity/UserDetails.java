@@ -16,8 +16,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 @Entity
 @Table(name = "user_details")
+
 public class UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +53,14 @@ public class UserDetails {
     private String statusRemarks;
 //    @OneToMany()
     private int currentStatusId;
+    
+    
+    //New Added feilds
+    private Integer  registrationUnder=0;
+    private String registrationPaymentStatus;
+    private Integer registrationPaymentAmount;
+    
+    
     
 //    @OneToOne
 //    @JoinColumn(name = "login_dtl_id")
@@ -223,6 +233,32 @@ public class UserDetails {
 	public List<EmpVendorAssociation> getEmpVendorAssociations() {
 		// TODO Auto-generated method stub
 		return this.empVendorAssociations;
+	}
+
+	public int getRegistrationUnder() {
+		return registrationUnder;
+	}
+
+	public void setRegistrationUnder(int registrationUnder) {
+		this.registrationUnder = registrationUnder;
+	}
+
+	
+
+	public int getRegistrationPaymentAmount() {
+		return registrationPaymentAmount;
+	}
+
+	public void setRegistrationPaymentAmount(int registrationPaymentAmount) {
+		this.registrationPaymentAmount = registrationPaymentAmount;
+	}
+
+	public String getRegistrationPaymentStatus() {
+		return registrationPaymentStatus;
+	}
+
+	public void setRegistrationPaymentStatus(String registrationPaymentStatus) {
+		this.registrationPaymentStatus = registrationPaymentStatus;
 	}
 }
 
