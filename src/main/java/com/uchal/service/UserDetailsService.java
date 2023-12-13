@@ -229,7 +229,17 @@ public class UserDetailsService {
 			return "you are not Authorised to update details !!!!!!";
 		}
 		
-		if (!userDetailsRepository.findByAdharIdNotEqual(userDetails.getUserId(), userDetails.getAdharNumber())
+		System.out.println(userDetails.getAdharNumber());
+		if(userDetails.getAdharNumber()==0)
+		{
+			return "Please Enter Adhar Number";
+		}
+		if(userDetails.getMobileNumber()==0)
+		{
+			return "Please Enter Mobile Number";
+		}
+		
+			if (!userDetailsRepository.findByAdharIdNotEqual(userDetails.getUserId(), userDetails.getAdharNumber())
 				.isEmpty() && message == null) {
 			message = "Adhar Number is Already Exists";
 		}
