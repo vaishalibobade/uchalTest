@@ -334,14 +334,14 @@ public class UserController {
 
 	@GetMapping("/searchUser")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUser(@RequestParam("name") String name,
-			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("adharNumber") long adharNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 		SearchUserModel searchUserModel = new SearchUserModel();
-		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setAdharNumber(adharNumber);
 		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request
@@ -460,14 +460,14 @@ public class UserController {
 
 	@GetMapping("/veiwUserforFIRList")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUserFIRupload(
-			@RequestParam("name") String name, @RequestParam("mobileNumber") long mobileNumber,
+			@RequestParam("name") String name, @RequestParam("adharNumber") long adharNumber,
 			@RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		SearchUserModel searchUserModel = new SearchUserModel();
 		searchUserModel.setName(name);
-		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setAdharNumber(adharNumber);
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
@@ -581,14 +581,14 @@ public class UserController {
 
 	@GetMapping("/veiwAllEmployee")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllEmployee(@RequestParam("name") String name,
-			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("adharNumber") long adharNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 		SearchUserModel searchUserModel = new SearchUserModel();
-		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setAdharNumber(adharNumber);
 		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request
@@ -622,14 +622,14 @@ public class UserController {
 
 	@GetMapping("/veiwAllSubVendor")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllSubvendor(@RequestParam("name") String name,
-			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("adharNumber") long adharNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 		SearchUserModel searchUserModel = new SearchUserModel();
-		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setAdharNumber(adharNumber);
 		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request
@@ -663,14 +663,14 @@ public class UserController {
 
 	@GetMapping("/veiwAllVendor")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllVendor(@RequestParam("name") String name,
-			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("adharNumber") long adharNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 		SearchUserModel searchUserModel = new SearchUserModel();
-		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setAdharNumber(adharNumber);
 		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request
@@ -705,14 +705,14 @@ public class UserController {
 
 	@GetMapping("/veiwAllAdmin")
 	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> veiwAllAdmin(@RequestParam("name") String name,
-			@RequestParam("mobileNumber") long mobileNumber, @RequestHeader("Authorization") String token) {
+			@RequestParam("adharNumber") long adharNumber, @RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus = HttpStatus.OK;
 		String message = null;
 		List<SearchUserOutputModel> userList = null;
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 		SearchUserModel searchUserModel = new SearchUserModel();
-		searchUserModel.setMobileNumber(mobileNumber);
+		searchUserModel.setAdharNumber(adharNumber);
 		searchUserModel.setName(name);
 		if (session != null) {
 			// User is authenticated, process the protected resource request

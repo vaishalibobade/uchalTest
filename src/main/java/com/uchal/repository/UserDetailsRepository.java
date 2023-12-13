@@ -70,17 +70,17 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 		       + "FROM UserDetails ud "
 		       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
 		       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
-		       + "WHERE ud.mobileNumber = :mobileNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%")
-		List<Object[]> getDataWithPartialMatch(@Param("mobileNumber") long mobileNumber,
+		       + "WHERE ud.adharNumber = :adharNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%")
+		List<Object[]> getDataWithPartialMatch(@Param("adharNumber") long adharNumber,
 		                                                  @Param("Name") String name);
 		
 		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId, ud.createdBy "
 			       + "FROM UserDetails ud "
 			       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
 			       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
-			       + "WHERE (ud.mobileNumber = :mobileNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%) "
+			       + "WHERE (ud.adharNumber = :adharNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%) "
 			       + "AND ud.userType = :userType")
-			List<Object[]> getDataWithPartialMatchAndUserType(@Param("mobileNumber") long mobileNumber,
+			List<Object[]> getDataWithPartialMatchAndUserType(@Param("adharNumber") long adharNumber,
 			                                                  @Param("Name") String name,
 			                                                  @Param("userType") String userType);
 			
@@ -88,9 +88,9 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 				       + "FROM UserDetails ud "
 				       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
 				       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
-				       + "WHERE (ud.mobileNumber = :mobileNumber OR ud.firstName LIKE CONCAT('%', :Name, '%') OR ud.middleName LIKE CONCAT('%', :Name, '%') OR ud.lastName LIKE CONCAT('%', :Name, '%')) "
+				       + "WHERE (ud.adharNumber = :adharNumber OR ud.firstName LIKE CONCAT('%', :Name, '%') OR ud.middleName LIKE CONCAT('%', :Name, '%') OR ud.lastName LIKE CONCAT('%', :Name, '%')) "
 				       + "AND (ud.userType = 'S' OR ud.userType = 'E')")
-				List<Object[]> getDataWithPartialMatchAndMultipleUserType(@Param("mobileNumber") long mobileNumber,
+				List<Object[]> getDataWithPartialMatchAndMultipleUserType(@Param("adharNumber") long adharNumber,
 				                                                          @Param("Name") String Name);
 
 			

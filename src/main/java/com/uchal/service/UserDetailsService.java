@@ -175,32 +175,32 @@ public class UserDetailsService {
 		
 		UserDetails existingUser=userDetailsRepository.getById(updatedUser.getUserId());
 		
-		if(updatedUser.getFirstName()!=null && !updatedUser.getFirstName().equalsIgnoreCase("null"))
+		if(updatedUser.getFirstName()!=null || !updatedUser.getFirstName().equalsIgnoreCase("null"))
 			existingUser.setFirstName(updatedUser.getFirstName());
 			if(updatedUser.getAdharImage()!=null)
 			existingUser.setAdharImage(updatedUser.getAdharImage());
-			if(updatedUser.getUserType()!=null && !updatedUser.getUserType().equalsIgnoreCase("null"))
+			if(updatedUser.getUserType()==null || !updatedUser.getUserType().equalsIgnoreCase("null"))
 			{
 				System.out.println(updatedUser.getUserType());
 			existingUser.setUserType(updatedUser.getUserType());
 			}
 			if(updatedUser.getAdharNumber()!=0)
 			existingUser.setAdharNumber(updatedUser.getAdharNumber());
-			if(updatedUser.getBloodgroup()!=null && !updatedUser.getBloodgroup().equalsIgnoreCase("null"))
+			if(updatedUser.getBloodgroup()!=null || !updatedUser.getBloodgroup().equalsIgnoreCase("null"))
 			existingUser.setBloodgroup(updatedUser.getBloodgroup());
-			if(updatedUser.getCity()!=null && !updatedUser.getCity().equalsIgnoreCase("null"))
+			if(updatedUser.getCity()!=null || !updatedUser.getCity().equalsIgnoreCase("null"))
 			existingUser.setCity(updatedUser.getCity());
-			if(updatedUser.getCountry()!=null && ! updatedUser.getCountry().equalsIgnoreCase("null"))
+			if(updatedUser.getCountry()!=null || ! updatedUser.getCountry().equalsIgnoreCase("null"))
 			existingUser.setCountry(updatedUser.getCountry());
-			if(updatedUser.getLastName()!=null && !  updatedUser.getLastName().equalsIgnoreCase("null"))
+			if(updatedUser.getLastName()!=null || !  updatedUser.getLastName().equalsIgnoreCase("null"))
 			existingUser.setLastName(updatedUser.getLastName());
-			if(updatedUser.getMiddleName()!=null && !  updatedUser.getMiddleName().equalsIgnoreCase("null"))
+			if(updatedUser.getMiddleName()!=null || !  updatedUser.getMiddleName().equalsIgnoreCase("null"))
 			existingUser.setMiddleName(updatedUser.getMiddleName());
 			if(updatedUser.getMobileNumber()!=0)
 			existingUser.setMobileNumber(updatedUser.getMobileNumber());
-			if(updatedUser.getState()!=null && !  updatedUser.getState().equalsIgnoreCase("null"))
+			if(updatedUser.getState()!=null || !  updatedUser.getState().equalsIgnoreCase("null"))
 			existingUser.setState(updatedUser.getState());
-			if(updatedUser.getStreetDetail()!=null  && !  updatedUser.getStreetDetail().equalsIgnoreCase("null"))
+			if(updatedUser.getStreetDetail()!=null  || !  updatedUser.getStreetDetail().equalsIgnoreCase("null"))
 			existingUser.setStreetDetail(updatedUser.getStreetDetail());
 			if(updatedUser.getUpdatedBy()!=null)
 			existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
@@ -418,7 +418,7 @@ public class UserDetailsService {
 	
 	public 	List<SearchUserOutputModel> getsearchSubVendorEmployeeList(SearchUserModel searchUserModel) {
 
-		List<Object[]> object = userDetailsRepository.getDataWithPartialMatchAndMultipleUserType(searchUserModel.getMobileNumber(),
+		List<Object[]> object = userDetailsRepository.getDataWithPartialMatchAndMultipleUserType(searchUserModel.getAdharNumber(),
 				searchUserModel.getName());
 		List<SearchUserOutputModel> list = convertToSearchList(object);
 
@@ -524,7 +524,7 @@ public class UserDetailsService {
 
 	public List<SearchUserOutputModel> getSearchUserList(SearchUserModel searchUserModel) {
 
-		List<Object[]> object = userDetailsRepository.getDataWithPartialMatch(searchUserModel.getMobileNumber(),
+		List<Object[]> object = userDetailsRepository.getDataWithPartialMatch(searchUserModel.getAdharNumber(),
 				searchUserModel.getName());
 		List<SearchUserOutputModel> list = convertToSearchList(object);
 
@@ -535,7 +535,7 @@ public class UserDetailsService {
 	public List<SearchUserOutputModel> getSearchUserListwithType(String type, SearchUserModel searchUserModel) {
 
 		List<Object[]> object = userDetailsRepository
-				.getDataWithPartialMatchAndUserType(searchUserModel.getMobileNumber(), searchUserModel.getName(), type);
+				.getDataWithPartialMatchAndUserType(searchUserModel.getAdharNumber(), searchUserModel.getName(), type);
 		List<SearchUserOutputModel> list = convertToSearchList(object);
 
 		return list;

@@ -3,7 +3,7 @@ package com.uchal.model;
 public class SearchUserModel {
 
 	private String name;
-	private long mobileNumber;
+	private long adharNumber;
 	/**
 	 * @return the name
 	 */
@@ -16,17 +16,12 @@ public class SearchUserModel {
 	public void setName(String name) {
 		this.name = name;
 	}
-	/**
-	 * @return the mobileNumber
-	 */
-	public long getMobileNumber() {
-		return mobileNumber;
+	public long getAdharNumber() {
+		return adharNumber;
 	}
-	/**
-	 * @param mobileNumber the mobileNumber to set
-	 */
-	public void setMobileNumber(long mobileNumber) {
-		this.mobileNumber = mobileNumber;
+	public void setAdharNumber(long adharNumber) {
+		this.adharNumber = adharNumber;
 	}
+	
 	
 }
