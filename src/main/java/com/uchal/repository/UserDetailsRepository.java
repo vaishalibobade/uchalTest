@@ -74,16 +74,29 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 		List<Object[]> getDataWithPartialMatch(@Param("adharNumber") long adharNumber,
 		                                                  @Param("Name") String name);
 		
+//		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId, ud.createdBy "
+//			       + "FROM UserDetails ud "
+//			       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
+//			       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
+//			       + "WHERE (ud.adharNumber = :adharNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%) "
+//			       + "AND ud.userType = :userType")
+//			List<Object[]> getDataWithPartialMatchAndUserType(@Param("adharNumber") long adharNumber,
+//			                                                  @Param("Name") String name,
+//			                                                   @Param("userType") String userType);
 		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId, ud.createdBy "
-			       + "FROM UserDetails ud "
-			       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
-			       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
-			       + "WHERE (ud.adharNumber = :adharNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%) "
-			       + "AND ud.userType = :userType")
-			List<Object[]> getDataWithPartialMatchAndUserType(@Param("adharNumber") long adharNumber,
-			                                                  @Param("Name") String name,
-			                                                  @Param("userType") String userType);
-			
+		        + "FROM UserDetails ud "
+		        + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
+		        + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
+		        + "WHERE (ud.adharNumber = :adharNumber OR ud.firstName LIKE %:name% OR ud.middleName LIKE %:name% OR ud.lastName LIKE %:name%) "
+		        + "AND ud.userType = :userType")
+		List<Object[]> getDataWithPartialMatchAndUserType(@Param("adharNumber") long adharNumber,
+		                                                  @Param("name") String name,
+		                                                  @Param("userType") String userType);
+
+		
+		
+
+
 			@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId, ud.createdBy "
 				       + "FROM UserDetails ud "
 				       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "

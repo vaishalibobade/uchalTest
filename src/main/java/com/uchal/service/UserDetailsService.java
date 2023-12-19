@@ -543,11 +543,18 @@ public class UserDetailsService {
 	}
 
 	public List<SearchUserOutputModel> getSearchUserListwithType(String type, SearchUserModel searchUserModel) {
-
+System.out.println(searchUserModel.getName());
+System.out.println(searchUserModel.getAdharNumber());
+System.out.println(type);
 		List<Object[]> object = userDetailsRepository
-				.getDataWithPartialMatchAndUserType(searchUserModel.getAdharNumber(), searchUserModel.getName(), type);
+				.getDataWithPartialMatchAndUserType(
+						searchUserModel.getAdharNumber(),
+						searchUserModel.getName(),type);
+		
+		System.out.println("Object size");System.out.println(object.size());
 		List<SearchUserOutputModel> list = convertToSearchList(object);
-
+		System.out.println("list length");
+System.out.println(list.size());
 		return list;
 
 	}
