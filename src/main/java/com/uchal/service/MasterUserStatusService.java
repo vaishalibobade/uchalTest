@@ -1,5 +1,6 @@
 package com.uchal.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,8 @@ public MasterUserStatusService(MasterUserStatusRepository  masterUserStatusRepos
 
 
 public List<MasterUserStatus> getAllMasterUserStatuses() {
-    return masterUserStatusRepository.findAll();
+	List<Long> excludedIds = Arrays.asList(5L);
+    return masterUserStatusRepository.findAllExcpetBlock(excludedIds);
 }
 public MasterUserStatus getMasterUserStatusById(int id) {
     return masterUserStatusRepository.findById(id)

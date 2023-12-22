@@ -97,15 +97,10 @@ public class UserDetailsService {
 		return true;
 	}
 
-	
-	
 	public UserDetails getUserDetailsByMobile(long mobileNumber) {
-	return userDetailsRepository.findAllByMobileNumber(mobileNumber).get(0);
-			
+		return userDetailsRepository.findAllByMobileNumber(mobileNumber).get(0);
+
 	}
-	
-	
-	
 
 	public String validateSignUpDetails(SignupModel signupModel) {
 		String message = null;
@@ -114,14 +109,12 @@ public class UserDetailsService {
 			message = "Username is Already Exists";
 		}
 
-		
 		if (checkIfMobileExist(signupModel.getMobileNumber())) {
 			message = "Mobile Number is Already Exist";
 		}
 //         System.out.println(message);
 		return message;
 	}
-	
 
 	public String validateUserDetails(UserDetailsModel userDetailsModel) {
 		String message = null;
@@ -143,9 +136,8 @@ public class UserDetailsService {
 	public UserDetails updateUser(UserDetails updatedUser) {
 //		Optional<UserDetails> user = userDetailsRepository.findById(updatedUser.getUserId());
 //		UserDetails existingUser = user.get();
-		
-		
-		UserDetails existingUser =checkforNulls(updatedUser);
+
+		UserDetails existingUser = checkforNulls(updatedUser);
 
 		// Update the properties of the existingUser entity with the new values from
 		// updatedUser
@@ -168,47 +160,44 @@ public class UserDetailsService {
 		return userDetailsRepository.save(existingUser);
 	}
 
-	
-	
-	public UserDetails checkforNulls(UserDetails updatedUser)
-	{
-		
-		UserDetails existingUser=userDetailsRepository.getById(updatedUser.getUserId());
-		
-		if(updatedUser.getFirstName()!=null || !updatedUser.getFirstName().equalsIgnoreCase("null"))
+	public UserDetails checkforNulls(UserDetails updatedUser) {
+
+		UserDetails existingUser = userDetailsRepository.getById(updatedUser.getUserId());
+
+		if (updatedUser.getFirstName() != null || !updatedUser.getFirstName().equalsIgnoreCase("null"))
 			existingUser.setFirstName(updatedUser.getFirstName());
-			if(updatedUser.getAdharImage()!=null)
+		if (updatedUser.getAdharImage() != null)
 			existingUser.setAdharImage(updatedUser.getAdharImage());
-			if(updatedUser.getUserType()==null || !updatedUser.getUserType().equalsIgnoreCase("null"))
-			{
-				System.out.println(updatedUser.getUserType());
+		if (updatedUser.getUserType() == null || !updatedUser.getUserType().equalsIgnoreCase("null")) {
+			System.out.println(updatedUser.getUserType());
 			existingUser.setUserType(updatedUser.getUserType());
-			}
-			if(updatedUser.getAdharNumber()!=0)
+		}
+		if (updatedUser.getAdharNumber() != 0)
 			existingUser.setAdharNumber(updatedUser.getAdharNumber());
-			if(updatedUser.getBloodgroup()!=null || !updatedUser.getBloodgroup().equalsIgnoreCase("null"))
+		if (updatedUser.getBloodgroup() != null || !updatedUser.getBloodgroup().equalsIgnoreCase("null"))
 			existingUser.setBloodgroup(updatedUser.getBloodgroup());
-			if(updatedUser.getCity()!=null || !updatedUser.getCity().equalsIgnoreCase("null"))
+		if (updatedUser.getCity() != null || !updatedUser.getCity().equalsIgnoreCase("null"))
 			existingUser.setCity(updatedUser.getCity());
-			if(updatedUser.getCountry()!=null || ! updatedUser.getCountry().equalsIgnoreCase("null"))
+		if (updatedUser.getCountry() != null || !updatedUser.getCountry().equalsIgnoreCase("null"))
 			existingUser.setCountry(updatedUser.getCountry());
-			if(updatedUser.getLastName()!=null || !  updatedUser.getLastName().equalsIgnoreCase("null"))
+		if (updatedUser.getLastName() != null || !updatedUser.getLastName().equalsIgnoreCase("null"))
 			existingUser.setLastName(updatedUser.getLastName());
-			if(updatedUser.getMiddleName()!=null || !  updatedUser.getMiddleName().equalsIgnoreCase("null"))
+		if (updatedUser.getMiddleName() != null || !updatedUser.getMiddleName().equalsIgnoreCase("null"))
 			existingUser.setMiddleName(updatedUser.getMiddleName());
-			if(updatedUser.getMobileNumber()!=0)
+		if (updatedUser.getMobileNumber() != 0)
 			existingUser.setMobileNumber(updatedUser.getMobileNumber());
-			if(updatedUser.getState()!=null || !  updatedUser.getState().equalsIgnoreCase("null"))
+		if (updatedUser.getState() != null || !updatedUser.getState().equalsIgnoreCase("null"))
 			existingUser.setState(updatedUser.getState());
-			if(updatedUser.getStreetDetail()!=null  || !  updatedUser.getStreetDetail().equalsIgnoreCase("null"))
+		if (updatedUser.getStreetDetail() != null || !updatedUser.getStreetDetail().equalsIgnoreCase("null"))
 			existingUser.setStreetDetail(updatedUser.getStreetDetail());
-			if(updatedUser.getUpdatedBy()!=null)
+		if (updatedUser.getUpdatedBy() != null)
 			existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
-			if(updatedUser.getUpdatedOn()!=null)
+		if (updatedUser.getUpdatedOn() != null)
 			existingUser.setUpdatedOn(updatedUser.getUpdatedOn());
-			return existingUser;
+		return existingUser;
 
 	}
+
 	public String validateUpdateUserDetails(UserDetails userDetails, UserDetails loggeduser) {
 		String message = null;
 		if (userDetailsRepository.findById(userDetails.getUserId()).isEmpty()) {
@@ -221,25 +210,23 @@ public class UserDetailsService {
 //		System.out.println(userDetails.getUserId());
 //		System.out.println(masterUserTypeService
 //				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()));
-		userDetails=checkforNulls(userDetails);
-				
+		userDetails = checkforNulls(userDetails);
+
 		if (loggeduser.getUserId() != userDetails.getUserId() && masterUserTypeService
 				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()) == false) {
 
 			return "you are not Authorised to update details !!!!!!";
 		}
-		
+
 		System.out.println(userDetails.getAdharNumber());
-		if(userDetails.getAdharNumber()==0)
-		{
+		if (userDetails.getAdharNumber() == 0) {
 			return "Please Enter Adhar Number";
 		}
-		if(userDetails.getMobileNumber()==0)
-		{
+		if (userDetails.getMobileNumber() == 0) {
 			return "Please Enter Mobile Number";
 		}
-		
-			if (!userDetailsRepository.findByAdharIdNotEqual(userDetails.getUserId(), userDetails.getAdharNumber())
+
+		if (!userDetailsRepository.findByAdharIdNotEqual(userDetails.getUserId(), userDetails.getAdharNumber())
 				.isEmpty() && message == null) {
 			message = "Adhar Number is Already Exists";
 		}
@@ -251,8 +238,7 @@ public class UserDetailsService {
 		return message;
 
 	}
-	
-	
+
 	@Transactional
 	public UserDetails signupUser(SignupModel model) {
 		UserDetails userDetails = new UserDetails();
@@ -266,8 +252,7 @@ public class UserDetailsService {
 			userDetails.setRegistrationPaymentAmount(0);
 			userDetails.setRegistrationPaymentStatus("Pending");
 			userDetails.setRegistrationUnder(0);
-			
-			
+
 			loginDetails.setUsername(model.getUsername());
 			loginDetails.setPassword(model.getPassword());
 			loginDetails.setUserStatus("A");
@@ -301,9 +286,6 @@ public class UserDetailsService {
 //entityManager.createNativeQuery(disableIdentityInsertSql).executeUpdate();
 		return userDetails;
 	}
-	
-	
-	
 
 	@Transactional
 	public UserDetails registerUser(UserDetailsModel model) {
@@ -318,7 +300,6 @@ public class UserDetailsService {
 			userDetails.setRegistrationPaymentAmount(0);
 			userDetails.setRegistrationPaymentStatus("Pending");
 			userDetails.setRegistrationUnder(userDetails.getCreatedBy());
-			
 
 			loginDetails.setUsername(model.getUsername());
 			loginDetails.setPassword(model.getPassword());
@@ -398,6 +379,7 @@ public class UserDetailsService {
 		return list;
 
 	}
+
 	public List<UserList> getAllUserListbyType(String type) {
 
 		List<Object[]> object = userDetailsRepository.getAllUserListbyType(type);
@@ -406,8 +388,7 @@ public class UserDetailsService {
 		return list;
 
 	}
-	
-	
+
 //	public List<UserList> getAllUserListbyType(String type) {
 //
 //		List<Object[]> object = userDetailsRepository.getAllUserListbyType(type);
@@ -416,7 +397,7 @@ public class UserDetailsService {
 //		return list;
 //
 //	}
-	
+
 	public List<UserList> getAllVendorSubVendor() {
 
 		List<Object[]> object = userDetailsRepository.getAllVendorSubVendor();
@@ -425,21 +406,16 @@ public class UserDetailsService {
 		return list;
 
 	}
-	
-	public 	List<SearchUserOutputModel> getsearchSubVendorEmployeeList(SearchUserModel searchUserModel) {
 
-		List<Object[]> object = userDetailsRepository.getDataWithPartialMatchAndMultipleUserType(searchUserModel.getAdharNumber(),
-				searchUserModel.getName());
+	public List<SearchUserOutputModel> getsearchSubVendorEmployeeList(SearchUserModel searchUserModel) {
+
+		List<Object[]> object = userDetailsRepository.getDataWithPartialMatchAndMultipleUserType(
+				searchUserModel.getAdharNumber(), searchUserModel.getName());
 		List<SearchUserOutputModel> list = convertToSearchList(object);
 
 		return list;
 
 	}
-	
-	
-	
-	
-	
 
 	public List<UserList> convertToObjectList(List<Object[]> originalList) {
 		List<UserList> userList = new ArrayList<>();
@@ -476,9 +452,10 @@ public class UserDetailsService {
 			String userType = (String) objArray[4];
 			Long mobileNumber = (Long) objArray[5];
 			int userId = (int) objArray[6];
-			int createdBy=(int) objArray[7];
-			UserDetails registrationUnderObj =userDetailsRepository.getById(createdBy);
-			String registrationUnder=registrationUnderObj.getFirstName()+ " " +registrationUnderObj.getMiddleName()  + " " + registrationUnderObj.getLastName();
+			int createdBy = (int) objArray[7];
+			UserDetails registrationUnderObj = userDetailsRepository.getById(createdBy);
+			String registrationUnder = registrationUnderObj.getFirstName() + " " + registrationUnderObj.getMiddleName()
+					+ " " + registrationUnderObj.getLastName();
 			SearchUserOutputModel user = new SearchUserOutputModel();
 			String name = firstName + " " + middleName + " " + lastName;
 
@@ -490,9 +467,9 @@ public class UserDetailsService {
 			user.setCurrentStatus(userStatus);
 			user.setUserId(userId);
 			user.setRegistrationUnder(registrationUnder);
-			if(registrationUnderObj.getUserType()==null) 
-			{
-			user.setRegistrationUnderType(masterUserTypeService.getMasterUserTypeByAbreviation(registrationUnderObj.getUserType()).getUserType());
+			if (registrationUnderObj.getUserType() == null) {
+				user.setRegistrationUnderType(masterUserTypeService
+						.getMasterUserTypeByAbreviation(registrationUnderObj.getUserType()).getUserType());
 			}
 			userList.add(user);
 		}
@@ -509,14 +486,15 @@ public class UserDetailsService {
 			String currentStatus = (String) objArray[1];
 			String userType = (String) objArray[2];
 			UserDetailsModel user = mapper.mapToModel(userDetails);
-			if(userDetails.getRegistrationUnder()!=0)
-			{
-			UserDetails registrationUnderObj =userDetailsRepository.getById(userDetails.getRegistrationUnder());
-			String registrationUnder=registrationUnderObj.getFirstName()+ " " +registrationUnderObj.getMiddleName()  + " " + registrationUnderObj.getLastName();
+			if (userDetails.getRegistrationUnder() != 0) {
+				UserDetails registrationUnderObj = userDetailsRepository.getById(userDetails.getRegistrationUnder());
+				String registrationUnder = registrationUnderObj.getFirstName() + " "
+						+ registrationUnderObj.getMiddleName() + " " + registrationUnderObj.getLastName();
 //		        UserDetailsModel user = new UserDetailsModel();
-			
-			user.setRegistrationUnder(registrationUnder);
-			user.setRegistrationUnderType(masterUserTypeService.getMasterUserTypeByAbreviation(registrationUnderObj.getUserType()).getUserType());
+
+				user.setRegistrationUnder(registrationUnder);
+				user.setRegistrationUnderType(masterUserTypeService
+						.getMasterUserTypeByAbreviation(registrationUnderObj.getUserType()).getUserType());
 			}
 			user.setCurrentStatus(currentStatus);
 			user.setUserType(userType);
@@ -543,68 +521,64 @@ public class UserDetailsService {
 	}
 
 	public List<SearchUserOutputModel> getSearchUserListwithType(String type, SearchUserModel searchUserModel) {
-System.out.println(searchUserModel.getName());
-System.out.println(searchUserModel.getAdharNumber());
-System.out.println(type);
+		System.out.println(searchUserModel.getName());
+		System.out.println(searchUserModel.getAdharNumber());
+		System.out.println(type);
 		List<Object[]> object = userDetailsRepository
-				.getDataWithPartialMatchAndUserType(
-						searchUserModel.getAdharNumber(),
-						searchUserModel.getName(),type);
-		
-		System.out.println("Object size");System.out.println(object.size());
+				.getDataWithPartialMatchAndUserType(searchUserModel.getAdharNumber(), searchUserModel.getName(), type);
+
+		System.out.println("Object size");
+		System.out.println(object.size());
 		List<SearchUserOutputModel> list = convertToSearchList(object);
 		System.out.println("list length");
-System.out.println(list.size());
+		System.out.println(list.size());
 		return list;
 
 	}
-	
-	
+
 	// Calculate the sum of amountPaid for each user based on the retrieved list
-    public List<UserDetailsWithSumModel> getUserDetailsWithSumAmountPaidByVendor(int vendorId) {
-        List<Object[]> userDetailsList = userDetailsRepository.getUserDetailsByVendor(vendorId);
+	public List<UserDetailsWithSumModel> getUserDetailsWithSumAmountPaidByVendor(int vendorId) {
+		List<Object[]> userDetailsList = userDetailsRepository.getUserDetailsByVendor(vendorId);
 
-        List<UserDetailsWithSumModel> result = new ArrayList<>();
+		List<UserDetailsWithSumModel> result = new ArrayList<>();
 
-        for (Object[] object : userDetailsList) {
-        	UserDetails userDetails=(UserDetails) object[0];
-            BigDecimal sumAmountPaid = userDetails.getEmpVendorAssociations()
-                .stream()
-                .map(EmpVendorAssociation::getAmountPaid)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+		for (Object[] object : userDetailsList) {
+			UserDetails userDetails = (UserDetails) object[0];
+			BigDecimal sumAmountPaid = userDetails.getEmpVendorAssociations().stream()
+					.map(EmpVendorAssociation::getAmountPaid).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            UserDetailsWithSumModel userDetailsWithSum = new UserDetailsWithSumModel();
-            userDetailsWithSum.setName(userDetails.getFirstName()+" "+userDetails.getMiddleName()+" "+userDetails.getLastName());
-            userDetailsWithSum.setTotalAmountPaid(sumAmountPaid);
-            userDetailsWithSum.setUserId(userDetails.getUserId());
-            userDetailsWithSum.setUserTpe((String)object[1]);
-            
-            result.add(userDetailsWithSum);
-        }
+			UserDetailsWithSumModel userDetailsWithSum = new UserDetailsWithSumModel();
+			userDetailsWithSum.setName(
+					userDetails.getFirstName() + " " + userDetails.getMiddleName() + " " + userDetails.getLastName());
+			userDetailsWithSum.setTotalAmountPaid(sumAmountPaid);
+			userDetailsWithSum.setUserId(userDetails.getUserId());
+			userDetailsWithSum.setUserTpe((String) object[1]);
 
-        return result;
-    }
+			result.add(userDetailsWithSum);
+		}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		return result;
+	}
 
+	public UserDetails updateUserStatus(int userId, int statusId) {
+		UserDetails userDetails = userDetailsRepository.getById(userId);
+		userDetails.setCurrentStatusId(statusId);
+		try {
+			userDetails = userDetailsRepository.save(userDetails);
+		} catch (Exception e) {
+			throw new ApiException("Issue While updating user status", 400);
+		}
+		return userDetails;
 
+	}
+
+	public boolean checkRegistrationUnder(int userId, int registrationUnderId)
+	{
+		UserDetails user= userDetailsRepository.getById(userId);
+		if( user.getRegistrationUnder()==registrationUnderId)
+			return true;
+		else 
+			return false;
+	}
 	
-
 }
