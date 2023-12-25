@@ -13,7 +13,7 @@ public interface MasterUserStatusRepository extends JpaRepository<MasterUserStat
 	MasterUserStatus save(MasterUserStatus masterUserStatus);
 	
 	@Query("SELECT u FROM MasterUserStatus u WHERE u.id NOT IN :idList")
-	List<MasterUserStatus> findAllExcpetBlock(@Param("idList") List<Long> idList);
+	List<MasterUserStatus> findAllExcpetBlock(@Param("idList") List<Integer> idList);
 
 
 }

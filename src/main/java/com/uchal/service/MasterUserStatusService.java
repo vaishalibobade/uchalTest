@@ -29,7 +29,7 @@ public MasterUserStatusService(MasterUserStatusRepository  masterUserStatusRepos
 
 
 public List<MasterUserStatus> getAllMasterUserStatuses() {
-	List<Long> excludedIds = Arrays.asList(5L);
+	List<Integer> excludedIds = Arrays.asList(5);
     return masterUserStatusRepository.findAllExcpetBlock(excludedIds);
 }
 public MasterUserStatus getMasterUserStatusById(int id) {
