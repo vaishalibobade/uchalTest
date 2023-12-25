@@ -442,9 +442,11 @@ public class UserDetailsService {
 	}
 
 	public List<SearchUserOutputModel> convertToSearchList(List<Object[]> originalList) {
+		try {
 		List<SearchUserOutputModel> userList = new ArrayList<>();
 
 		for (Object[] objArray : originalList) {
+			SearchUserOutputModel user = new SearchUserOutputModel();
 			String userStatus = (String) objArray[0];
 			String firstName = (String) objArray[1];
 			String middleName = (String) objArray[2];
@@ -452,11 +454,19 @@ public class UserDetailsService {
 			String userType = (String) objArray[4];
 			Long mobileNumber = (Long) objArray[5];
 			int userId = (int) objArray[6];
-			int createdBy = (int) objArray[7];
-			UserDetails registrationUnderObj = userDetailsRepository.getById(createdBy);
+			int registrationUnderId = (int) objArray[7];
+			if (registrationUnderId!=0)
+			{
+			UserDetails registrationUnderObj = userDetailsRepository.getById(registrationUnderId);
 			String registrationUnder = registrationUnderObj.getFirstName() + " " + registrationUnderObj.getMiddleName()
 					+ " " + registrationUnderObj.getLastName();
-			SearchUserOutputModel user = new SearchUserOutputModel();
+			user.setRegistrationUnder(registrationUnder);
+			if (registrationUnderObj.getUserType() == null) {
+				user.setRegistrationUnderType(masterUserTypeService
+						.getMasterUserTypeByAbreviation(registrationUnderObj.getUserType()).getUserType());
+			}
+			}
+			
 			String name = firstName + " " + middleName + " " + lastName;
 
 			user.setFirstName(name);
@@ -466,15 +476,19 @@ public class UserDetailsService {
 			user.setMobileNumber(mobileNumber);
 			user.setCurrentStatus(userStatus);
 			user.setUserId(userId);
-			user.setRegistrationUnder(registrationUnder);
-			if (registrationUnderObj.getUserType() == null) {
-				user.setRegistrationUnderType(masterUserTypeService
-						.getMasterUserTypeByAbreviation(registrationUnderObj.getUserType()).getUserType());
-			}
+			
 			userList.add(user);
 		}
-
 		return userList;
+
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			System.out.println("Issue while fetching data");
+			throw new ApiException("Issue while fetching data", 400);
+		}
+
 	}
 
 	public List<UserDetailsModel> convertToUserDetails(List<Object[]> objList) {
@@ -520,12 +534,13 @@ public class UserDetailsService {
 
 	}
 
-	public List<SearchUserOutputModel> getSearchUserListwithType(String type, SearchUserModel searchUserModel) {
+	public List<SearchUserOutputModel> getSearchUserListwithType(String type, SearchUserModel searchUserModel,int loggedId) {
 		System.out.println(searchUserModel.getName());
 		System.out.println(searchUserModel.getAdharNumber());
 		System.out.println(type);
 		List<Object[]> object = userDetailsRepository
-				.getDataWithPartialMatchAndUserType(searchUserModel.getAdharNumber(), searchUserModel.getName(), type);
+//				.getDataWithPartialMatchAndUserType(searchUserModel.getAdharNumber(), searchUserModel.getName(), type,loggedId);
+		.getDataWithPartialMatchAndUserType(type,searchUserModel.getAdharNumber(),searchUserModel.getName(),loggedId);
 
 		System.out.println("Object size");
 		System.out.println(object.size());
@@ -559,7 +574,7 @@ public class UserDetailsService {
 
 		return result;
 	}
-
+	@Transactional
 	public UserDetails updateUserStatus(int userId, int statusId) {
 		UserDetails userDetails = userDetailsRepository.getById(userId);
 		userDetails.setCurrentStatusId(statusId);

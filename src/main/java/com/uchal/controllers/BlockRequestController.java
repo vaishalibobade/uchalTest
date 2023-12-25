@@ -21,6 +21,7 @@ import com.uchal.entity.BlockRequestEntity;
 import com.uchal.entity.UserDetails;
 import com.uchal.model.ApiException;
 import com.uchal.model.ApiResponse;
+import com.uchal.model.BlockRequestModel;
 import com.uchal.model.SessionToken;
 import com.uchal.repository.SessionManager;
 import com.uchal.service.BlockRequestService;
@@ -78,7 +79,7 @@ public class BlockRequestController {
 	}
 
 	@GetMapping("/allActiveBlockRequest")
-	public ResponseEntity<ApiResponse<List<BlockRequestEntity>>> getAllActiveBlockRequests(
+	public ResponseEntity<ApiResponse<List<BlockRequestModel>>> getAllActiveBlockRequests(
 			@RequestHeader("Authorization") String token) {
 //    public ResponseEntity<List<BlockRequestEntity>> getAllActiveBlockRequests() {
 		HttpStatus httpStatus;
@@ -99,7 +100,7 @@ public class BlockRequestController {
 			throw new ApiException("Session cannot be null !!!!!!", 401);
 
 		}
-		List<BlockRequestEntity> blockRequests = blockRequestService.getAllActiveBlockRequests();
+		List<BlockRequestModel> blockRequests = blockRequestService.getAllActiveBlockRequests();
 //        return new ResponseEntity<>(blockRequests, HttpStatus.OK);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new ApiResponse<>(HttpStatus.OK, message, blockRequests, token));

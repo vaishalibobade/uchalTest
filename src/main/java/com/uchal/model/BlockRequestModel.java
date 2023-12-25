@@ -1,20 +1,9 @@
-package com.uchal.entity;
+package com.uchal.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-@Entity
-@Table(name = "block_request")
-
-public class BlockRequestEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class BlockRequestModel {
 	private int requestId;
-	
 	private int userToBlock;
 	private String userToBlockName;
 	private int requestedBy;
@@ -22,7 +11,27 @@ public class BlockRequestEntity {
 	private String requestStatus;
 	private int createdBy;
 	private LocalDateTime createdOn;
-	private Integer updatedBy;
+	
+	
+	public BlockRequestModel(
+            int requestId,
+            int userToBlock,
+            String userToBlockName,
+            int requestedBy,
+            String remark,
+            String requestStatus,
+            int createdBy,
+            LocalDateTime createdOn
+    ) {
+        this.requestId = requestId;
+        this.userToBlock = userToBlock;
+        this.userToBlockName = userToBlockName;
+        this.requestedBy = requestedBy;
+        this.remark = remark;
+        this.requestStatus = requestStatus;
+        this.createdBy = createdBy;
+        this.createdOn = createdOn;
+    }
 	public int getRequestId() {
 		return requestId;
 	}
@@ -34,6 +43,12 @@ public class BlockRequestEntity {
 	}
 	public void setUserToBlock(int userToBlock) {
 		this.userToBlock = userToBlock;
+	}
+	public String getUserToBlockName() {
+		return userToBlockName;
+	}
+	public void setUserToBlockName(String userToBlockName) {
+		this.userToBlockName = userToBlockName;
 	}
 	public int getRequestedBy() {
 		return requestedBy;
@@ -47,6 +62,12 @@ public class BlockRequestEntity {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	public String getRequestStatus() {
+		return requestStatus;
+	}
+	public void setRequestStatus(String requestStatus) {
+		this.requestStatus = requestStatus;
+	}
 	public int getCreatedBy() {
 		return createdBy;
 	}
@@ -59,30 +80,6 @@ public class BlockRequestEntity {
 	public void setCreatedOn(LocalDateTime createdOn) {
 		this.createdOn = createdOn;
 	}
-	public Integer getUpdatedBy() {
-		return updatedBy;
-	}
-	public void setUpdatedBy(Integer updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-	public LocalDateTime getUpdatedOn() {
-		return updatedOn;
-	}
-	public void setUpdatedOn(LocalDateTime updatedOn) {
-		this.updatedOn = updatedOn;
-	}
-	public String getRequestStatus() {
-		return requestStatus;
-	}
-	public void setRequestStatus(String requestStatus) {
-		this.requestStatus = requestStatus;
-	}
-	public String getUserToBlockName() {
-		return userToBlockName;
-	}
-	public void setUserToBlockName(String userToBlockName) {
-		this.userToBlockName = userToBlockName;
-	}
-	private LocalDateTime updatedOn;
+	
 
 }

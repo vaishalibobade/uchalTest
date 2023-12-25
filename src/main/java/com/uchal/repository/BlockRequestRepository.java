@@ -13,7 +13,15 @@ import com.uchal.entity.BlockRequestEntity;
 @Repository
 public interface BlockRequestRepository extends JpaRepository<BlockRequestEntity, Integer> {
 	
+	@Query("SELECT a, CONCAT(u.firstName, ' ', COALESCE(u.middleName, ''), ' ', u.lastName) AS userToBlockName " +
+	        "FROM BlockRequestEntity a " +
+	        "JOIN UserDetails u ON a.userToBlock = u.userId " +
+	        "WHERE a.requestStatus = 'Active'")
+	List<Object[]> findAllByStatusWithUserDetails();
 
+	
+	
+	
 	@Query("SELECT a FROM BlockRequestEntity a WHERE  a.requestStatus ='Active'")
 	 List<BlockRequestEntity> findAllByStatus();	
 	

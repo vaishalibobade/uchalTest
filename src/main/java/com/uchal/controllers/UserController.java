@@ -487,7 +487,7 @@ public class UserController {
 			if (loggedUser.getUserType().equals("V"))
 				userList = userDetailsService.getsearchSubVendorEmployeeList(searchUserModel);
 			if (loggedUser.getUserType().equals("S"))
-				userList = userDetailsService.getSearchUserListwithType("E", searchUserModel);
+				userList = userDetailsService.getSearchUserListwithType("E", searchUserModel,loggedUser.getUserId());
 
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 401);
@@ -599,9 +599,9 @@ public class UserController {
 			logger.info(loggedUser.getUserType());
 			if (loggedUser.getUserType().equals("E"))
 
-				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
+				throw new ApiException(" Only Admin/Vendor/Subvendor can veiw !!", 400);
 
-			userList = userDetailsService.getSearchUserListwithType("E", searchUserModel);
+			userList = userDetailsService.getSearchUserListwithType("E", searchUserModel,loggedUser.getUserId());
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 404);
 			} else {
@@ -642,7 +642,7 @@ public class UserController {
 
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 
-			userList = userDetailsService.getSearchUserListwithType("S", searchUserModel);
+			userList = userDetailsService.getSearchUserListwithType("S", searchUserModel,loggedUser.getUserId());
 			if (userList.isEmpty()) {
  				throw new ApiException("No record found", 401);
 			} else {
@@ -683,7 +683,7 @@ public class UserController {
 
 				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
 			System.out.println("above fun call");
-			userList = userDetailsService.getSearchUserListwithType("V", searchUserModel);
+			userList = userDetailsService.getSearchUserListwithType("V", searchUserModel,loggedUser.getUserId());
 			System.out.println("Below fun call");
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 401);
@@ -725,7 +725,7 @@ public class UserController {
 
 				throw new ApiException(" Only Admin  can veiw !!", 400);
 			System.out.println("above fun call");
-			userList = userDetailsService.getSearchUserListwithType("A", searchUserModel);
+			userList = userDetailsService.getSearchUserListwithType("A", searchUserModel,loggedUser.getUserId());
 			System.out.println("Below fun call");
 			if (userList.isEmpty()) {
 				throw new ApiException("No record found", 401);
