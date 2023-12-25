@@ -52,6 +52,12 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
     List<Object[]> getEmployeeDetailsByEmployeeId(@Param("employeeId") int employeeId);
 
 	
+	@Query("SELECT COUNT(u) FROM UserDetails u WHERE u.userType = 'E'")
+	long getEmployeeCount();
+    
+	@Query("SELECT COUNT(u) FROM UserDetails u WHERE u.userType = 'E' AND u.registrationUnder=:registrationUnder ")
+	long getEmployeeCountUnderUser(@Param("registrationUnder") int registrationUnder);
+	
 	
     @Query("SELECT ud.userId, ud.firstName, ud.middleName, ud.lastName,  ud.userType FROM UserDetails ud")
     List<Object[]> getAllUserList();

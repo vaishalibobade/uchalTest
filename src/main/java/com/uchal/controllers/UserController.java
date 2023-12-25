@@ -411,6 +411,34 @@ public class UserController {
 
 	}
 
+	@GetMapping("/totalemployeecount")
+	public ResponseEntity<Long> getTotalEmployeeCount() {
+		return ResponseEntity.status(HttpStatus.OK).body( userDetailsService.getRegisteredEmployeeCount());
+
+	}
+	
+	@GetMapping("/totalemployeeCountRegisteredUnder")
+	public ResponseEntity<Long> getTotalEmployeeCountUnderUser(@RequestHeader("Authorization") String token) {
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		SessionToken session = sessionManager.getSessionToken(sessionToken);
+
+		if (session == null) {
+			throw new ApiException("Invalid session token or unauthorized access", 402);
+			// User is authenticated, process the protected resource request
+//        @SuppressWarnings("removal")
+//        return "Protected Resource for User: " + userId;
+			
+			
+		} 
+		UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+		logger.info(loggedUser.getUserId());
+		logger.info(loggedUser.getUserType());
+		return ResponseEntity.status(HttpStatus.OK).body( userDetailsService.getRegisteredEmployeeCountunderUser(loggedUser.getUserId()));
+
+	}
+	
+	
+	
 	@GetMapping("/veiwUserforPaymentList")
 	public ResponseEntity<ApiResponse<List<UserList>>> veiwUserforPaymentList(
 			@RequestHeader("Authorization") String token) {

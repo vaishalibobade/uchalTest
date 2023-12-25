@@ -380,6 +380,20 @@ public class UserDetailsService {
 
 	}
 
+	
+	
+	public Long getRegisteredEmployeeCount()
+	{
+		return userDetailsRepository.getEmployeeCount();
+	}
+	
+	public Long getRegisteredEmployeeCountunderUser(int id)
+	{
+		return userDetailsRepository.getEmployeeCountUnderUser(id);
+	}
+	
+	
+	
 	public List<UserList> getAllUserListbyType(String type) {
 
 		List<Object[]> object = userDetailsRepository.getAllUserListbyType(type);
