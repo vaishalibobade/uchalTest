@@ -601,6 +601,12 @@ public class UserDetailsService {
 
 	}
 
+	 public int getCurrentStatusId(int userId)
+	 {
+		 return userDetailsRepository.getById(userId).getCurrentStatusId();
+	 }
+	
+	
 	public boolean checkRegistrationUnder(int userId, int registrationUnderId)
 	{
 		UserDetails user= userDetailsRepository.getById(userId);
