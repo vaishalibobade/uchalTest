@@ -18,14 +18,14 @@ import com.uchal.repository.LoginDetailsRepository;
 @Service
 public class LoginDetailsService {
 	private final LoginDetailsRepository loginDetailsRepository;
-	private final UserDetailsService userDetailsService;
+//	private final UserDetailsService userDetailsService;
 
 	private static final Logger logger = LogManager.getLogger(LoginDetailsService.class);
 
 	@Autowired
-	public LoginDetailsService(LoginDetailsRepository loginDetailsRepository, UserDetailsService userDetailsService) {
+	public LoginDetailsService(LoginDetailsRepository loginDetailsRepository) {
 		this.loginDetailsRepository = loginDetailsRepository;
-		this.userDetailsService = userDetailsService;
+//		this.userDetailsService = userDetailsService;
 	}
 
 	public LoginDetails saveLoginDetails(LoginDetails loginDetails) {
@@ -77,9 +77,9 @@ public class LoginDetailsService {
 	}
 
 	public boolean validateUserToLogin(LoginDetails loginDetails) {
-		if (userDetailsService.getCurrentStatusId(loginDetails.getUserDetails().getUserId()) == 5) {
-			throw new ApiException("Your profile is blocked.Please contact to vendor", 405); 
-		}
+//		System.out.println(userDetailsService.getCurrentStatusId(loginDetails.getUserDetails().getUserId()));
+//		System.out.println("Your profile is blocked.Please contact to vendor");
+//		
 		if (loginDetails.getUserStatus().trim().equals("A")) {
 			return true;
 		}

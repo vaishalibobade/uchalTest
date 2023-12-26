@@ -23,6 +23,7 @@ import com.uchal.model.LoginResponse;
 import com.uchal.model.SessionToken;
 import com.uchal.repository.SessionManager;
 import com.uchal.service.LoginDetailsService;
+import com.uchal.service.UserDetailsService;
 
 @RestController
 @Component
@@ -38,11 +39,13 @@ public class LoginController {
 //    }
 
 	private final LoginDetailsService loginDetailsService;
+private final UserDetailsService userDetailsService;
 
 	@Autowired
-	public LoginController(LoginDetailsService loginDetailsRepository, SessionManager sessionManager) {
+	public LoginController(LoginDetailsService loginDetailsRepository, SessionManager sessionManager,UserDetailsService userDetailsService) {
 		this.loginDetailsService = loginDetailsRepository;
 		this.sessionManager = sessionManager;
+	this.userDetailsService=userDetailsService;
 	}
 
 //    @PostMapping("/login")
@@ -78,6 +81,11 @@ public class LoginController {
 			logger.info("Into login controller with logger");
 			if (loginDetailsService.validateUserToLogin(user)) // If user status is Active
 			{
+				if (userDetailsService.getCurrentStatusId(user.getUserDetails().getUserId()) == 5) {
+					System.out.println(userDetailsService.getCurrentStatusId(user.getUserDetails().getUserId()));
+							
+					throw new ApiException("Your profile is blocked.Please contact to vendor", 405); 
+				}
 //        	System.out.println(loginDetailsService.validateUserToLogin(user));
 				if (user != null && user.getPassword().equals(request.getPassword())) {
 					loginDetailsService.setLoggedInUser(user);
