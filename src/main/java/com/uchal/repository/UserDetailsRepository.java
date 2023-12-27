@@ -92,16 +92,21 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 //		                                                  @Param("userType") String userType,
 //		                                                  @Param("registrationUnder") int registrationUnder);
 //
+//		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId, ud.registrationUnder "
+//+ "FROM com.uchal.entity.UserDetails ud "
+//+ "JOIN com.uchal.entity.MasterUserStatus mus ON ud.currentStatusId = mus.id "
+//+ "LEFT JOIN com.uchal.entity.MasterUserType mut ON ud.userType = mut.abreviation "
+//+ "WHERE ud.userType = :userType AND (CAST(ud.adharNumber AS string) LIKE %:adharNumber% OR CONCAT(ud.firstName, ' ', COALESCE(ud.middleName, ''), ' ', ud.lastName) LIKE %:name%)")
 //		
+		
+		
 		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId, ud.registrationUnder "
 		        + "FROM com.uchal.entity.UserDetails ud "
 		        + "JOIN com.uchal.entity.MasterUserStatus mus ON ud.currentStatusId = mus.id "
 		        + "LEFT JOIN com.uchal.entity.MasterUserType mut ON ud.userType = mut.abreviation "
-		        + "WHERE ud.userType = :userType AND (CAST(ud.adharNumber AS string) LIKE %:adharNumber% OR CONCAT(ud.firstName, ' ', COALESCE(ud.middleName, ''), ' ', ud.lastName) LIKE %:name%)")
-		List<Object[]> getDataWithPartialMatchAndUserType(@Param("userType") String userType,
-		                                                  @Param("adharNumber") long adharNumber,
-		                                                  @Param("name") String name);
-
+		        + "WHERE ud.userType = :userType AND (ud.adharNumber = :adharNumber OR CONCAT(ud.firstName, ' ', COALESCE(ud.middleName, ''), ' ', ud.lastName) LIKE %:name%)")
+		List<Object[]> getDataWithExactAdharAndPartialName(@Param("userType") String userType,
+		        @Param("adharNumber") long adharNumber, @Param("name") String name);
 
 
 
