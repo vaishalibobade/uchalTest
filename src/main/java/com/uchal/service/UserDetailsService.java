@@ -168,7 +168,7 @@ public class UserDetailsService {
 			existingUser.setFirstName(updatedUser.getFirstName());
 		if (updatedUser.getAdharImage() != null)
 			existingUser.setAdharImage(updatedUser.getAdharImage());
-		if (updatedUser.getUserType() == null || !updatedUser.getUserType().equalsIgnoreCase("null")) {
+		if (updatedUser.getUserType() != null ) {
 			System.out.println(updatedUser.getUserType());
 			existingUser.setUserType(updatedUser.getUserType());
 		}
@@ -212,14 +212,14 @@ public class UserDetailsService {
 //				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()));
 		userDetails = checkforNulls(userDetails);
 
-		if (loggeduser.getUserId() != userDetails.getUserId() && masterUserTypeService
-				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()) == false) {
-
-			return "you are not Authorised to update details !!!!!!";
-		}
+//		if (loggeduser.getUserId() != userDetails.getUserId() && masterUserTypeService
+//				.isAuthorisedCRUD(userDetails.getUserType(), loggeduser.getUserType()) == false) {
+//
+//			return "you are not Authorised to update details !!!!!!";
+//		}
 
 		System.out.println(userDetails.getAdharNumber());
-		if (userDetails.getAdharNumber() == 0) {
+		if (userDetails.getAdharNumber() == 0) { 
 			return "Please Enter Adhar Number";
 		}
 		if (userDetails.getMobileNumber() == 0) {
