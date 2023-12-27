@@ -135,7 +135,8 @@ public class BlockRequestController {
 	}
 
 	@PostMapping("/generateRequest")
-	public ResponseEntity<BlockRequestEntity> createBlockRequest(@RequestBody BlockRequestEntity blockRequest,
+	
+	public ResponseEntity<ApiResponse<BlockRequestEntity>> createBlockRequest(@RequestBody BlockRequestEntity blockRequest,
 			@RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus;
 		UserDetails loggedUser = null;
@@ -160,7 +161,9 @@ public class BlockRequestController {
 		if (!userDetailsService.checkRegistrationUnder(blockRequest.getUserToBlock(), blockRequest.getRequestedBy()))
 			throw new ApiException("Requested Employee is not registered under you", 402);
 		BlockRequestEntity createdBlockRequest = blockRequestService.createBlockRequest(blockRequest);
-		return new ResponseEntity<>(createdBlockRequest, HttpStatus.CREATED);
+//		return new ResponseEntity<>(createdBlockRequest, HttpStatus.CREATED);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new ApiResponse<>(HttpStatus.OK, "Request sent successfully !!", createdBlockRequest, token));
 	}
 
 	@PutMapping("/updateblockRequest/{requestId}")
