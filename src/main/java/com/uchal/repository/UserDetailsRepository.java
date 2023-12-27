@@ -97,11 +97,10 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 		        + "FROM com.uchal.entity.UserDetails ud "
 		        + "JOIN com.uchal.entity.MasterUserStatus mus ON ud.currentStatusId = mus.id "
 		        + "LEFT JOIN com.uchal.entity.MasterUserType mut ON ud.userType = mut.abreviation "
-		        + "WHERE ud.userType = :userType AND (CAST(ud.adharNumber AS string) LIKE %:adharNumber% OR CONCAT(ud.firstName, ' ', COALESCE(ud.middleName, ''), ' ', ud.lastName) LIKE %:name%) AND ud.registrationUnder = :registrationUnder")
+		        + "WHERE ud.userType = :userType AND (CAST(ud.adharNumber AS string) LIKE %:adharNumber% OR CONCAT(ud.firstName, ' ', COALESCE(ud.middleName, ''), ' ', ud.lastName) LIKE %:name%)")
 		List<Object[]> getDataWithPartialMatchAndUserType(@Param("userType") String userType,
 		                                                  @Param("adharNumber") long adharNumber,
-		                                                  @Param("name") String name,
-		                                                  @Param("registrationUnder") int registrationUnder);
+		                                                  @Param("name") String name);
 
 
 

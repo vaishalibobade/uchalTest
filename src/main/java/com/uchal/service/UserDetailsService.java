@@ -554,7 +554,7 @@ public class UserDetailsService {
 		System.out.println(type);
 		List<Object[]> object = userDetailsRepository
 //				.getDataWithPartialMatchAndUserType(searchUserModel.getAdharNumber(), searchUserModel.getName(), type,loggedId);
-		.getDataWithPartialMatchAndUserType(type,searchUserModel.getAdharNumber(),searchUserModel.getName(),loggedId);
+		.getDataWithPartialMatchAndUserType(type,searchUserModel.getAdharNumber(),searchUserModel.getName());
 
 		System.out.println("Object size");
 		System.out.println(object.size());
