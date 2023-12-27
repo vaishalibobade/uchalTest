@@ -12,6 +12,9 @@ import com.uchal.entity.AddDetailsEntity;
 @Repository
 public interface AddDetailsEntityRepository extends JpaRepository<AddDetailsEntity, Integer> {
 
-	@Query("SELECT a FROM AddDetailsEntity a WHERE  a.startDate + a.durationDays >=  GETDATE()")
-	public List<AddDetailsEntity> getAllAvailableAdds();	
+	@Query("SELECT a FROM AddDetailsEntity a WHERE DATEADD(DAY, a.durationDays, a.startDate) >= GETDATE()")
+	public List<AddDetailsEntity> getAllAvailableAdds();
+
+
+	
 }
