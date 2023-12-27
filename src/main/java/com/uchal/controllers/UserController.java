@@ -412,13 +412,13 @@ public class UserController {
 	}
 
 	@GetMapping("/totalemployeecount")
-	public ResponseEntity<ApiResponse<Long>> getTotalEmployeeCount() {
+	public ResponseEntity<ApiResponse<String>> getTotalEmployeeCount() {
 //		return ResponseEntity.status(HttpStatus.OK).body( userDetailsService.getRegisteredEmployeeCount());
-		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, null, userDetailsService.getRegisteredEmployeeCount(), null));
+		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, null, String.valueOf(userDetailsService.getRegisteredEmployeeCount()), null));
 	}
 	
 	@GetMapping("/totalemployeeCountRegisteredUnder")
-	public ResponseEntity<ApiResponse<Long>> getTotalEmployeeCountUnderUser(@RequestHeader("Authorization") String token) {
+	public ResponseEntity<ApiResponse<String>> getTotalEmployeeCountUnderUser(@RequestHeader("Authorization") String token) {
 		String sessionToken = token.substring(7); // Remove "Bearer " prefix
 		SessionToken session = sessionManager.getSessionToken(sessionToken);
 
@@ -433,7 +433,7 @@ public class UserController {
 		UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
 		logger.info(loggedUser.getUserId());
 		logger.info(loggedUser.getUserType());
-		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, null, userDetailsService.getRegisteredEmployeeCountunderUser(loggedUser.getUserId()), null));
+		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK, null, String.valueOf(userDetailsService.getRegisteredEmployeeCountunderUser(loggedUser.getUserId())), null));
 
 //		return ResponseEntity.status(HttpStatus.OK).body( userDetailsService.getRegisteredEmployeeCountunderUser(loggedUser.getUserId()));
 
