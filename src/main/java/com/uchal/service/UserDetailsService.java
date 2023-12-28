@@ -194,6 +194,10 @@ public class UserDetailsService {
 			existingUser.setUpdatedBy(updatedUser.getUpdatedBy());
 		if (updatedUser.getUpdatedOn() != null)
 			existingUser.setUpdatedOn(updatedUser.getUpdatedOn());
+		if (updatedUser.getRegistrationUnder()!=0)
+		{
+			existingUser.setRegistrationUnder(updatedUser.getRegistrationUnder());
+		}
 		return existingUser;
 
 	}

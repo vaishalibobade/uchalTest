@@ -31,6 +31,13 @@ public class UserDetailsMapper {
        // userDetails.setUpdatedOn(new Date(userDetailsModel.getUpdatedOn()));
         userDetails.setUserType(userDetailsModel.getUserType());
         userDetails.setCurrentStatusId(userDetailsModel.getCurrentStatusId());
+        if(userDetailsModel.getMarkAsRegisteregUnder()!=0)
+        {
+        	userDetails.setRegistrationUnder(userDetailsModel.getMarkAsRegisteregUnder());
+        }
+        
+        
+        
         
         
         
