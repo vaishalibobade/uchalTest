@@ -224,7 +224,7 @@ public class BlockRequestController {
 	}
 
 	@PutMapping("/blockUser/{userId}")
-	public ResponseEntity<ApiResponse<BlockRequestEntity>> unblockUser(@PathVariable int userId,
+	public ResponseEntity<ApiResponse<BlockRequestEntity>> blockUser(@PathVariable int userId,
 			@RequestHeader("Authorization") String token) {
 		HttpStatus httpStatus;
 		UserDetails loggedUser = null;
@@ -260,41 +260,41 @@ public class BlockRequestController {
 		}
 	}
 
-	@PutMapping("/unblockUser/{userId}")
-	public ResponseEntity<ApiResponse<BlockRequestEntity>> blockUser(@PathVariable int userId,
-			@RequestBody BlockRequestEntity updatedBlockRequest, @RequestHeader("Authorization") String token) {
-		HttpStatus httpStatus;
-		UserDetails loggedUser = null;
-		UserDetails updatedUser = null;
-
-		String message = null;
-//    	System.out.println("in update");
-		String sessionToken = token.substring(7); // Remove "Bearer " prefix
-		SessionToken session = sessionManager.getSessionToken(sessionToken);
-		if (session != null) {
-			loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
-			System.out.println(session.getUserId());
-			System.out.println(loggedUser.getUserType());
-
-			if (!loggedUser.getUserType().equals("A"))
-
-				throw new ApiException("Admin can  UnBlock User !!", 400);
-
-		} else {
-			throw new ApiException("Session cannot be null !!!!!!", 401);
-
-		}
-		if (userDetailsService.getUserDetailsById(userId) == null)
-			throw new ApiException("User requested to Block is not found !!!", 401);
-		if (blockRequestService.blockUser(userId)) {
-			updatedUser = userDetailsService.updateUserStatus(userId, 2);
-		}
-		if (updatedUser != null) {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new ApiResponse<>(HttpStatus.OK, "User unblocked", null, token));
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
+//	@PutMapping("/unblockUser/{userId}")
+//	public ResponseEntity<ApiResponse<BlockRequestEntity>> blockUser(@PathVariable int userId,
+//			@RequestBody BlockRequestEntity updatedBlockRequest, @RequestHeader("Authorization") String token) {
+//		HttpStatus httpStatus;
+//		UserDetails loggedUser = null;
+//		UserDetails updatedUser = null;
+//
+//		String message = null;
+////    	System.out.println("in update");
+//		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+//		SessionToken session = sessionManager.getSessionToken(sessionToken);
+//		if (session != null) {
+//			loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+//			System.out.println(session.getUserId());
+//			System.out.println(loggedUser.getUserType());
+//
+//			if (!loggedUser.getUserType().equals("A"))
+//
+//				throw new ApiException("Admin can  UnBlock User !!", 400);
+//
+//		} else {
+//			throw new ApiException("Session cannot be null !!!!!!", 401);
+//
+//		}
+//		if (userDetailsService.getUserDetailsById(userId) == null)
+//			throw new ApiException("User requested to Block is not found !!!", 401);
+//		if (blockRequestService.blockUser(userId)) {
+//			updatedUser = userDetailsService.updateUserStatus(userId, 2);
+//		}
+//		if (updatedUser != null) {
+//			return ResponseEntity.status(HttpStatus.OK)
+//					.body(new ApiResponse<>(HttpStatus.OK, "User unblocked", null, token));
+//		} else {
+//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//		}
+//	}
 
 }
