@@ -551,6 +551,15 @@ public class UserDetailsService {
 		return list;
 
 	}
+	public List<SearchUserOutputModel> getSearchUserToUnblock(SearchUserModel searchUserModel) {
+
+		List<Object[]> object = userDetailsRepository.getUserByCurrentStatus(searchUserModel.getAdharNumber(),
+				searchUserModel.getName(),5);
+		List<SearchUserOutputModel> list = convertToSearchList(object);
+
+		return list;
+
+	}
 
 	public List<SearchUserOutputModel> getSearchUserListwithType(String type, SearchUserModel searchUserModel,int loggedId) {
 		System.out.println(searchUserModel.getName());

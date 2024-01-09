@@ -372,6 +372,46 @@ public class UserController {
 		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
 
 	}
+	@GetMapping("/searchUserToUnblock")
+	public ResponseEntity<ApiResponse<List<SearchUserOutputModel>>> searchUserToUnblock(@RequestParam("name") String name,
+			@RequestParam("adharNumber") long adharNumber, @RequestHeader("Authorization") String token) {
+		HttpStatus httpStatus = HttpStatus.OK;
+		String message = null;
+		List<SearchUserOutputModel> userList = null;
+		String sessionToken = token.substring(7); // Remove "Bearer " prefix
+		SessionToken session = sessionManager.getSessionToken(sessionToken);
+		SearchUserModel searchUserModel = new SearchUserModel();
+		searchUserModel.setAdharNumber(adharNumber);
+		searchUserModel.setName(name);
+		if (session != null) {
+			// User is authenticated, process the protected resource request
+//        @SuppressWarnings("removal")
+//        return "Protected Resource for User: " + userId;
+			UserDetails loggedUser = loginDetailsService.getByUsername(session.getUserId()).getUserDetails();
+			logger.info(loggedUser.getUserId());
+			logger.info(loggedUser.getUserType());
+			if (loggedUser.getUserType().equals("E"))
+
+				throw new ApiException(" Only Admin/Vendor can veiw !!", 400);
+
+			userList = userDetailsService.getSearchUserList(searchUserModel);
+			if (userList.isEmpty()) {
+				throw new ApiException("No record found", 401);
+			} else {
+//				user = mapper.mapToModel(userDetails);
+				httpStatus = HttpStatus.OK;
+				message = "User found";
+				System.out.println(userList.size());
+			}
+
+		} else {
+			// Invalid session token or unauthorized access
+			throw new ApiException("Invalid session token or unauthorized access", 402);
+		}
+
+		return ResponseEntity.status(httpStatus).body(new ApiResponse<>(httpStatus, message, userList, token));
+
+	}
 
 	@GetMapping("/veiwAllList")
 	public ResponseEntity<ApiResponse<List<UserList>>> veiwAllUserList(@RequestHeader("Authorization") String token) {

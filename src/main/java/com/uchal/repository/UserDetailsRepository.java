@@ -81,6 +81,15 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 		                                                  @Param("Name") String name);
 		
 
+		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId, ud.createdBy "
+			       + "FROM UserDetails ud "
+			       + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
+			       + "LEFT JOIN MasterUserType mut ON ud.userType = mut.abreviation "
+			       + "WHERE ud.currentStatusId=:currentStatusId AND ud.adharNumber = :adharNumber OR ud.firstName LIKE %:Name% OR ud.middleName LIKE %:Name% OR ud.lastName LIKE %:Name%")
+			List<Object[]> getUserByCurrentStatus(@Param("adharNumber") long adharNumber,
+			                                                  @Param("Name") String name,
+			                                                  @Param("currentStatusId") int currentStatusId);
+		
 //		@Query("SELECT mus.status, ud.firstName, ud.middleName, ud.lastName, mut.userType, ud.mobileNumber, ud.userId, ud.createdBy "
 //		        + "FROM UserDetails ud "
 //		        + "JOIN MasterUserStatus mus ON ud.currentStatusId = mus.id "
