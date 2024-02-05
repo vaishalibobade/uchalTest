@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - uachalT
+name: Build and deploy JAR app to Azure Web App - uachalt
 
 on:
   push:
@@ -48,15 +48,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DA25EA4E51A94A77A284968D857016E0 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2F573677A2E043F38EB4B8669ABE698D }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C145C393A4214CF68A48D733FEB40B21 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FA1AF43BF0884FE38F36FB8D22334599 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C9C004447EEA4B60B628BC36628F81B7 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A3EC36BA44004CF39B2B8BE194881C75 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'uachalT'
+          app-name: 'uachalt'
           slot-name: 'Production'
           package: '*.jar'
           
